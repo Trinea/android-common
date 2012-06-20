@@ -367,6 +367,10 @@ public class DropDownToRefreshListView extends ListView implements OnScrollListe
             mRefreshViewProgress.setVisibility(View.GONE);
             mRefreshViewTipsText.setText(R.string.drop_down_to_refresh_list_pull_tips);
 
+            if (isVerticalFadingEdgeEnabled()) {
+                setVerticalScrollBarEnabled(false);
+            }
+
             mCurrentRefreshState = RefreshStatusEnum.DROP_DOWN_TO_REFRESH;
         }
     }
@@ -415,9 +419,6 @@ public class DropDownToRefreshListView extends ListView implements OnScrollListe
         int pointerCount = ev.getHistorySize();
         for (int i = 0; i < pointerCount; i++) {
             if (mCurrentRefreshState == RefreshStatusEnum.RELEASE_TO_REFRESH) {
-                if (isVerticalFadingEdgeEnabled()) {
-                    setVerticalScrollBarEnabled(false);
-                }
                 mRefreshViewLayout.setPadding(mRefreshViewLayout.getPaddingLeft(),
                                               (int)(((ev.getHistoricalY(i) - mActionDownPointY) - mHeaderOriginalHeight) / HEADER_PADDING_RATE),
                                               mRefreshViewLayout.getPaddingRight(),

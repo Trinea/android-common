@@ -59,7 +59,19 @@ public class ImageCache {
     }
 
     /**
-     * load图片
+     * 见{@link #loadDrawable(String, int, View, ImageCallback)}第二个参数小于0时情况
+     * 
+     * @param imageUrl
+     * @param view
+     * @param imageCallback
+     * @return
+     */
+    public Drawable loadDrawable(final String imageUrl, final View view, final ImageCallback imageCallback) {
+        return loadDrawable(imageUrl, -1, view, imageCallback);
+    }
+
+    /**
+     * load图片，规则如下
      * <ul>
      * <li>若imageUrl为空或imageCallback为空，返回null</li>
      * <li>若图片在缓存中, 执行{@link ImageCallback#imageLoaded(String, Drawable, View)}并返回图片</li>
@@ -68,7 +80,7 @@ public class ImageCache {
      * </ul>
      * 
      * @param imageUrl 图片url
-     * @param defaultResourceId 默认资源id，在{@link ImageCallback#imageNotInCache(int, View)}中可以使用
+     * @param defaultResourceId 默认资源id，若小于0，不生效，否则做为{@link ImageCallback#imageNotInCache(int, View)}的第一个入参。
      * @param view 操作图片的view
      * @param imageCallback 图片callback，{@link ImageCallback}的实例
      * @return 若图片在缓存中返回图片，否则开启线程获取图片并返回null
@@ -105,7 +117,10 @@ public class ImageCache {
         }
 
         // 若图片不在缓存中，发送不在缓存中的message what
-        handler.sendMessage(handler.obtainMessage(IMAGE_NOT_IN_CACHE_WHAT, (Integer)defaultResourceId));
+        if (defaultResourceId >= 0) {
+            handler.sendMessage(handler.obtainMessage(IMAGE_NOT_IN_CACHE_WHAT, (Integer)defaultResourceId));
+        }
+
         new Thread("ImageCache loadDrawable whose imageUrl is " + imageUrl) {
 
             @Override
