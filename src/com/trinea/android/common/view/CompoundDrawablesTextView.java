@@ -1,4 +1,4 @@
-package com.trinea.common.view;
+package com.trinea.android.common.view;
 
 import android.content.Context;
 import android.graphics.Rect;

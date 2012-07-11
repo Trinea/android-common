@@ -1,7 +1,7 @@
 10
 
 dir
-10
+14
 https://trinea-android-common.googlecode.com/svn/trunk/lib
 https://trinea-android-common.googlecode.com/svn
 
@@ -28,14 +28,38 @@ has-props
 
 JavaCommon-2.0.0-jar-with-dependencies.jar
 file
+15
 
 
 
 
-2012-05-19T14:08:40.000000Z
-6b58d5c012227ebfe77459136fcdf903
-2012-06-18T03:02:04.148015Z
-10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+deleted
+
+JavaCommon-2.0.1-jar-with-dependencies.jar
+file
+15
+
+
+
+2012-07-11T13:50:58.000000Z
+f484a8b16d57a0ede073a4da9b592d51
+2012-07-11T14:32:51.370743Z
+15
 trinea1989@gmail.com
 has-props
 
@@ -58,5 +82,5 @@ has-props
 
 
 
-761480
+763091
 
