@@ -1,35 +1,35 @@
 K 25
 svn:wc:ra_dav:version-url
 V 64
-/svn/!svn/ver/15/trunk/src/com/trinea/android/common/serviceImpl
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/serviceImpl
 END
 RemoveTypeFileSmall.java
 K 25
 svn:wc:ra_dav:version-url
 V 89
-/svn/!svn/ver/15/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeFileSmall.java
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeFileSmall.java
 END
 FileNameRuleCurrentTime.java
 K 25
 svn:wc:ra_dav:version-url
 V 93
-/svn/!svn/ver/15/trunk/src/com/trinea/android/common/serviceImpl/FileNameRuleCurrentTime.java
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/serviceImpl/FileNameRuleCurrentTime.java
 END
 RemoveTypeDrawableSmall.java
 K 25
 svn:wc:ra_dav:version-url
 V 93
-/svn/!svn/ver/15/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeDrawableSmall.java
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeDrawableSmall.java
 END
 RemoveTypeFileLarge.java
 K 25
 svn:wc:ra_dav:version-url
 V 89
-/svn/!svn/ver/15/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeFileLarge.java
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeFileLarge.java
 END
 RemoveTypeDrawableLarge.java
 K 25
 svn:wc:ra_dav:version-url
 V 93
-/svn/!svn/ver/15/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeDrawableLarge.java
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/serviceImpl/RemoveTypeDrawableLarge.java
 END

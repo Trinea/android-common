@@ -1,4 +1,4 @@
-package com.trinea.common.view;
+package com.trinea.android.common.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.trinea.common.R;
+import com.trinea.android.common.R;
 
 /**
  * 下拉刷新的listView
@@ -138,7 +138,6 @@ public class DropDownToRefreshListView extends ListView implements OnScrollListe
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        setSecondPositionVisible();
     }
 
     @Override

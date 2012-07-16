@@ -6,6 +6,7 @@ import java.io.ObjectInputStream.GetField;
 import java.io.ObjectOutputStream;
 import java.io.ObjectOutputStream.PutField;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,10 +25,10 @@ import com.trinea.android.common.util.ImageUtils;
 import com.trinea.java.common.SerializeUtils;
 import com.trinea.java.common.StringUtils;
 import com.trinea.java.common.entity.CacheObject;
+import com.trinea.java.common.service.Cache;
 import com.trinea.java.common.service.CacheFullRemoveType;
 import com.trinea.java.common.serviceImpl.AutoGetDataCache;
 import com.trinea.java.common.serviceImpl.AutoGetDataCache.OnGetDataListener;
-import com.trinea.java.common.serviceImpl.RemoveTypeNotRemove;
 import com.trinea.java.common.serviceImpl.RemoveTypeUsedCountSmall;
 import com.trinea.java.common.serviceImpl.SimpleCache;
 
@@ -52,7 +53,7 @@ import com.trinea.java.common.serviceImpl.SimpleCache;
  * 
  * @author Trinea 2012-4-5 下午10:24:52
  */
-public class ImageCache implements Serializable {
+public class ImageCache implements Serializable, Cache<String, Drawable> {
 
     private static final long                  serialVersionUID  = 1L;
     private static final String                TAG               = "ImageCache";
@@ -147,30 +148,34 @@ public class ImageCache implements Serializable {
     /**
      * load图片，规则如下
      * <ul>
-     * <li>若imageUrl和listener皆不为空，获取图片(获取成功后执行 {@link OnImageCallListener#onImageLoaded(String, Drawable, View)})</li>
+     * <li>若imageUrl和listener皆不为空，获取图片（不在缓存中则立即网络下载），执行
+     * {@link OnImageCallListener#onImageLoaded(String, Drawable, View)})</li>
      * </ul>
      * 
      * @param imageUrl 图片url
      * @param view 操作图片的view
+     * @return 图片是否在缓存中，true表示是
      */
-    public void loadDrawable(final String imageUrl, final View view) {
-        loadDrawable(imageUrl, null, view);
+    public boolean loadDrawable(final String imageUrl, final View view) {
+        return loadDrawable(imageUrl, null, view);
     }
 
     /**
      * load图片，规则如下
      * <ul>
-     * <li>若imageUrl和listener皆不为空，获取图片(获取成功后执行 {@link OnImageCallListener#onImageLoaded(String, Drawable, View)})</li>
+     * <li>若imageUrl和listener皆不为空，获取图片（不在缓存中则立即网络下载），执行
+     * {@link OnImageCallListener#onImageLoaded(String, Drawable, View)})</li>
      * <li>按照该urlList中的url顺序获取新数据进行缓存</li>
      * </ul>
      * 
      * @param imageUrl 图片url
      * @param urlList 图片url list，按照该list中的url顺序获取新图片进行缓存，为空表示不进行缓存
      * @param view 操作图片的view
+     * @return 图片是否在缓存中，true表示是
      */
-    public void loadDrawable(final String imageUrl, final List<String> urlList, final View view) {
+    public boolean loadDrawable(final String imageUrl, final List<String> urlList, final View view) {
         if (StringUtils.isEmpty(imageUrl) || listener == null) {
-            return;
+            return false;
         }
 
         if (Looper.myLooper() == null) {
@@ -197,38 +202,32 @@ public class ImageCache implements Serializable {
                 handler.sendMessage(handler.obtainMessage(IMAGE_LOADED_WHAT, drawable));
             }
         }.start();
+        return imageCache.containsKey(imageUrl);
     }
 
     /**
-     * 向缓存中添加元素
-     * <ul>
-     * <li>若元素个数{@link SimpleCache#getSize()}小于最大容量，直接put进入，否则</li>
-     * <li>若有效元素个数{@link SimpleCache#getValidSize()}小于元素个数{@link SimpleCache#getSize()}，去除无效元素
-     * {@link SimpleCache#removeExpired()}后直接put进入，否则</li>
-     * <li>若{@link #cacheFullRemoveType}是{@link RemoveTypeNotRemove}的实例，直接返回null，否则</li>
-     * <li>按{@link #cacheFullRemoveType}删除元素后直接put进入</li>
-     * </ul>
+     * 向缓存中添加元素, key和value均不允许为空
      * 
      * @param key key
-     * @param obj 元素
-     * @return
+     * @param value 元素
+     * @return 为空表示缓存已满无法put，否则为put的value。
      */
-    public void put(String key, CacheObject<Drawable> obj) {
-        this.imageCache.put(key, obj);
+    public CacheObject<Drawable> put(String key, CacheObject<Drawable> value) {
+        return this.imageCache.put(key, value);
     }
 
     /**
-     * 向缓存中添加元素
+     * 向缓存中添加元素, key不允许为空
      * <ul>
      * <li>见{@link #put(String, CacheObject)}</li>
      * </ul>
      * 
      * @param key key
      * @param value 元素值
-     * @return
+     * @return 为空表示缓存已满无法put，否则为put的value。
      */
-    public void put(String key, Drawable value) {
-        this.imageCache.put(key, value);
+    public CacheObject<Drawable> put(String key, Drawable value) {
+        return this.imageCache.put(key, value);
     }
 
     /**
@@ -424,5 +423,55 @@ public class ImageCache implements Serializable {
             return 0;
         }
 
+    }
+
+    @Override
+    public int getSize() {
+        return imageCache.getSize();
+    }
+
+    @Override
+    public CacheObject<Drawable> get(String key) {
+        return imageCache.get(key);
+    }
+
+    @Override
+    public void putAll(Cache<String, Drawable> cache2) {
+        imageCache.putAll(cache2);
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return imageCache.containsKey(key);
+    }
+
+    @Override
+    public CacheObject<Drawable> remove(String key) {
+        return imageCache.remove(key);
+    }
+
+    @Override
+    public void clear() {
+        imageCache.clear();
+    }
+
+    @Override
+    public double getHitRate() {
+        return imageCache.getHitRate();
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return imageCache.keySet();
+    }
+
+    @Override
+    public Set<Entry<String, CacheObject<Drawable>>> entrySet() {
+        return imageCache.entrySet();
+    }
+
+    @Override
+    public Collection<CacheObject<Drawable>> values() {
+        return imageCache.values();
     }
 }

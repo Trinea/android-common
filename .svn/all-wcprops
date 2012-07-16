@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 22
-/svn/!svn/ver/14/trunk
+/svn/!svn/ver/17/trunk
 END
 default.properties
 K 25
@@ -25,5 +25,11 @@ AndroidManifest.xml
 K 25
 svn:wc:ra_dav:version-url
 V 42
-/svn/!svn/ver/15/trunk/AndroidManifest.xml
+/svn/!svn/ver/18/trunk/AndroidManifest.xml
+END
+.gitattributes
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/18/trunk/.gitattributes
 END

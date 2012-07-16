@@ -1,11 +1,17 @@
 K 25
 svn:wc:ra_dav:version-url
-V 49
-/svn/!svn/ver/9/trunk/src/com/trinea/common/cache
+V 58
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/cache
 END
 ImageCache.java
 K 25
 svn:wc:ra_dav:version-url
-V 66
-/svn/!svn/ver/14/trunk/src/com/trinea/common/cache/ImageCache.java
+V 74
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/cache/ImageCache.java
+END
+ImageSDCardCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/cache/ImageSDCardCache.java
 END

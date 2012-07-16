@@ -1,17 +1,17 @@
 K 25
 svn:wc:ra_dav:version-url
-V 48
-/svn/!svn/ver/9/trunk/src/com/trinea/common/view
+V 57
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/view
 END
 DropDownToRefreshListView.java
 K 25
 svn:wc:ra_dav:version-url
-V 80
-/svn/!svn/ver/13/trunk/src/com/trinea/common/view/DropDownToRefreshListView.java
+V 88
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/view/DropDownToRefreshListView.java
 END
 CompoundDrawablesTextView.java
 K 25
 svn:wc:ra_dav:version-url
-V 80
-/svn/!svn/ver/11/trunk/src/com/trinea/common/view/CompoundDrawablesTextView.java
+V 88
+/svn/!svn/ver/18/trunk/src/com/trinea/android/common/view/CompoundDrawablesTextView.java
 END
