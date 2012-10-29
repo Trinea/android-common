@@ -1,9 +1,9 @@
 #################
 ## Eclipse
 #################
-target/* # ignore target folder
-.svn	# ignore folder start with .
-gen		# android gen folder
+target/*
+.svn
+gen
 
 *.pydevproject
 .project

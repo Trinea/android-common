@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -58,31 +60,36 @@ import com.trinea.java.common.serviceImpl.SimpleCache;
  */
 public class ImageSDCardCache implements Serializable, Cache<String, String> {
 
-    private static final long     serialVersionUID     = 1L;
+    private static final long           serialVersionUID     = 1L;
 
-    private static final String   TAG                  = "ImageSDCardCache";
+    private static final String         TAG                  = "ImageSDCardCache";
 
     /** 默认缓存大小 **/
-    public static final int       DEFAULT_MAX_SIZE     = 128;
+    public static final int             DEFAULT_MAX_SIZE     = 128;
     /** 缓存图片保存的默认目录 **/
-    public static final String    DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath()
-                                                         + File.separator + "Trinea" + File.separator + "AndroidCommon"
-                                                         + File.separator + "ImageCache";
+    public static final String          DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath()
+                                                               + File.separator
+                                                               + "Trinea"
+                                                               + File.separator
+                                                               + "AndroidCommon" + File.separator + "ImageCache";
+    /** 线程池 **/
+    private transient ExecutorService   threadPool           = Executors.newCachedThreadPool();
+
     /** 缓存图片的保存目录 **/
-    private String                cacheFolder;
+    private String                      cacheFolder;
     /** 缓存图片保存的文件名规则 **/
-    private FileNameRule          fileNameRule         = new FileNameRuleCurrentTime(TimeRule.TO_MILLIS);
+    private FileNameRule                fileNameRule         = new FileNameRuleCurrentTime(TimeRule.TO_MILLIS);
 
     /** image获取成功的message what **/
-    private static final int      IMAGE_LOADED_WHAT    = 1;
+    private static final int            IMAGE_LOADED_WHAT    = 1;
     /** image重新获取成功的message what **/
-    private static final int      IMAGE_RELOADED_WHAT  = 2;
+    private static final int            IMAGE_RELOADED_WHAT  = 2;
 
     /** 图片缓存 **/
-    private FileSimpleCache       imageCache;
+    private final FileSimpleCache       imageCache;
 
     /** 图片获取的回调接口 **/
-    private OnImageSDCallListener listener;
+    private final OnImageSDCallListener listener;
 
     /**
      * 初始化缓存
@@ -246,8 +253,10 @@ public class ImageSDCardCache implements Serializable, Cache<String, String> {
             return false;
         }
 
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
+        synchronized (this) {
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
+            }
         }
         final Handler handler = new Handler() {
 
@@ -286,7 +295,7 @@ public class ImageSDCardCache implements Serializable, Cache<String, String> {
     private void startGetImageThread(final String imageUrl, final List<String> urlList, final Handler handler,
                                      final int messsageWhat) {
         // 获取图片并发送图片获取成功的message what
-        new Thread("ImageSDCardCache load image whose imageUrl is " + imageUrl) {
+        threadPool.execute(new Runnable() {
 
             @Override
             public void run() {
@@ -294,7 +303,7 @@ public class ImageSDCardCache implements Serializable, Cache<String, String> {
                 String savePath = (object == null ? null : object.getData());
                 handler.sendMessage(handler.obtainMessage(messsageWhat, savePath));
             }
-        }.start();
+        });
     }
 
     /**
@@ -398,7 +407,7 @@ public class ImageSDCardCache implements Serializable, Cache<String, String> {
      * 
      * @author Trinea 2012-6-30 下午09:42:00
      */
-    public class FileSimpleCache extends AutoGetDataCache<String, String> {
+    class FileSimpleCache extends AutoGetDataCache<String, String> {
 
         private static final long serialVersionUID = 1L;
 

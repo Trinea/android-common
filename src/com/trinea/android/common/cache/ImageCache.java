@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -63,6 +65,8 @@ public class ImageCache implements Serializable, Cache<String, Drawable> {
 
     /** image获取成功的message what **/
     private static final int                   IMAGE_LOADED_WHAT = 1;
+    /** 线程池 **/
+    private transient ExecutorService          threadPool        = Executors.newCachedThreadPool();
 
     /** 图片缓存 **/
     private AutoGetDataCache<String, Drawable> imageCache;
@@ -178,8 +182,10 @@ public class ImageCache implements Serializable, Cache<String, Drawable> {
             return false;
         }
 
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
+        synchronized (this) {
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
+            }
         }
         final Handler handler = new Handler() {
 
@@ -193,7 +199,7 @@ public class ImageCache implements Serializable, Cache<String, Drawable> {
         };
 
         // 获取图片并发送图片获取成功的message what
-        new Thread("ImageCache load drawable whose imageUrl is " + imageUrl) {
+        threadPool.execute(new Runnable() {
 
             @Override
             public void run() {
@@ -201,7 +207,7 @@ public class ImageCache implements Serializable, Cache<String, Drawable> {
                 Drawable drawable = (object == null ? null : object.getData());
                 handler.sendMessage(handler.obtainMessage(IMAGE_LOADED_WHAT, drawable));
             }
-        }.start();
+        });
         return imageCache.containsKey(imageUrl);
     }
 
@@ -414,7 +420,7 @@ public class ImageCache implements Serializable, Cache<String, Drawable> {
      * 
      * @author Trinea 2012-7-10 下午06:32:33
      */
-    public class RemoveTypeNull<T> implements CacheFullRemoveType<T> {
+    class RemoveTypeNull<T> implements CacheFullRemoveType<T> {
 
         private static final long serialVersionUID = 1L;
 

@@ -1,14 +1,14 @@
 10
 
 dir
-17
+18
 https://trinea-android-common.googlecode.com/svn/trunk
 https://trinea-android-common.googlecode.com/svn
 
 
 
-2012-07-16T03:21:28.389981Z
-17
+2012-07-16T03:28:06.997023Z
+18
 trinea1989@gmail.com
 
 
@@ -130,7 +130,7 @@ trinea1989@gmail.com
 
 AndroidManifest.xml
 file
-18
+
 
 
 
@@ -170,7 +170,7 @@ dir
 
 .gitattributes
 file
-18
+
 
 
 
