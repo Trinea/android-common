@@ -4,6 +4,7 @@
 target/*
 .svn
 gen
+bin/*
 
 *.pydevproject
 .project
