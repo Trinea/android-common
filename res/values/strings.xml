@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AndroidCommon</string>
-    <string name="drop_down_to_refresh_list_pull_tips">Drop Down to refresh...</string>
-    <string name="drop_down_to_refresh_list_release_tips">Release to refresh...</string>
-    <string name="drop_down_to_refresh_list_refreshing_tips">Loading...</string>
-    <string name="drop_down_to_refresh_list_refresh_view_tips">Click to refresh...</string>
+    
+    <string name="drop_down_list_header_default_text">Click to refresh&#8230;</string>
+    <string name="drop_down_list_header_pull_text">Drop Down to refresh&#8230;</string>
+    <string name="drop_down_list_header_release_text">Release to refresh&#8230;</string>
+    <string name="drop_down_list_header_loading_text">Loading&#8230;</string>
+    <string name="drop_down_list_footer_default_text">More</string>
+    <string name="drop_down_list_footer_loading_text">Loading&#8230;</string>
+    <string name="drop_down_list_footer_no_more_text">No More</string>
+    
+    <string name="image_content">Image</string>
 </resources>

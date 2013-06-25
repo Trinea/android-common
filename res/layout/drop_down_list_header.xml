@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:paddingBottom="@dimen/drop_down_list_header_padding_bottom"
+    android:paddingTop="@dimen/drop_down_list_header_padding_top" >
+
+    <ProgressBar
+        android:id="@+id/drop_down_list_header_progress_bar"
+        style="@style/drop_down_list_header_progress_bar_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/drop_down_list_header_default_text_layout"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/drop_down_list_header_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/drop_down_list_header_default_text_layout"
+        android:contentDescription="@string/image_content"
+        android:src="@drawable/drop_down_list_arrow"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/drop_down_list_header_default_text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/drop_down_list_header_default_text"
+            style="@style/drop_down_list_header_font_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/drop_down_list_header_second_text"
+            style="@style/drop_down_list_header_second_font_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/drop_down_list_header_default_text"
+            android:gravity="center"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</RelativeLayout>

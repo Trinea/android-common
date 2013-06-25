@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">AndroidCommon</string>
-    <string name="drop_down_to_refresh_list_pull_tips">Drop Down to refresh...</string>
-    <string name="drop_down_to_refresh_list_release_tips">Release to refresh...</string>
-    <string name="drop_down_to_refresh_list_refreshing_tips">Loading...</string>
-    <string name="drop_down_to_refresh_list_refresh_view_tips">Click to refresh...</string>
-</resources>
