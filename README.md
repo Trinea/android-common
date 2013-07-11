@@ -1,6 +1,6 @@
-个人博客  [http://www.trinea.cn/ http://www.trinea.cn/]
+个人博客  [http://www.trinea.cn/](http://www.trinea.cn/)
 =============
-本工程为总结的一些android公共库，包含公共的View、缓存以及一些工具类，具体使用可见[http://trinea.iteye.com/blog/1564055 总结的一些android公共库]。Demo地址见[https://code.google.com/p/trinea-android-demo/ AndroidDemo]
+本工程为总结的一些android公共库，包含公共的View、缓存以及一些工具类，具体使用可见[http://trinea.iteye.com/blog/1564055](总结的一些android公共库)。Demo地址见[https://code.google.com/p/trinea-android-demo/](AndroidDemo)
 主要包括
 一. 公用的view
 -------------
