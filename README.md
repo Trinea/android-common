@@ -4,13 +4,13 @@
 主要包括
 一. 公用的view
 -------------
-###1. 下拉刷新及滚动到底部加载更多的Listview([https://code.google.com/p/trinea-android-common/source/browse/trunk/src/cn/trinea/android/common/view/DropDownListView.java](DropDownListView)
+###1. 下拉刷新及滚动到底部加载更多的Listview[https://code.google.com/p/trinea-android-common/source/browse/trunk/src/cn/trinea/android/common/view/DropDownListView.java](DropDownListView)
 使用: [http://www.trinea.cn/android/滚动到底部加载更多及下拉刷新listview的使用](滚动到底部加载更多及下拉刷新listview的使用), 实现原理: [http://trinea.iteye.com/blog/1562281](http://trinea.iteye.com/blog/1562281)
 
-###2. 滑动一页(一个Item)的Gallery([https://code.google.com/p/trinea-android-common/source/browse/trunk/src/cn/trinea/android/common/view/SlideOnePageGallery.java](SlideOnePageGallery)
+###2. 滑动一页(一个Item)的Gallery[https://code.google.com/p/trinea-android-common/source/browse/trunk/src/cn/trinea/android/common/view/SlideOnePageGallery.java](SlideOnePageGallery)
 使用及实现原理: [http://www.trinea.cn/android/gallery%E6%BB%91%E5%8A%A8%E4%B8%80%E9%A1%B5%E4%B8%80%E4%B8%AAitem%E6%95%88%E6%9E%9C/](Gallery滑动一页(一个Item)效果)
 
-###3. 滑动到底部或顶部响应的ScrollView([https://code.google.com/p/trinea-android-common/source/browse/trunk/src/cn/trinea/android/common/view/BorderScrollView.java](BorderScrollView)
+###3. 滑动到底部或顶部响应的ScrollView[https://code.google.com/p/trinea-android-common/source/browse/trunk/src/cn/trinea/android/common/view/BorderScrollView.java](BorderScrollView)
 使用: [http://www.trinea.cn/android/%E6%BB%9A%E5%8A%A8%E5%88%B0%E5%BA%95%E9%83%A8%E6%88%96%E9%A1%B6%E9%83%A8%E5%93%8D%E5%BA%94%E7%9A%84scrollview%E4%BD%BF%E7%94%A8/](滚动到底部或顶部响应的ScrollView使用), 实现原理: [http://www.trinea.cn/android/%E6%BB%91%E5%8A%A8%E5%88%B0%E5%BA%95%E9%83%A8%E6%88%96%E9%A1%B6%E9%83%A8%E5%93%8D%E5%BA%94%E7%9A%84scrollview/](滑动到底部或顶部响应的ScrollView实现)
 
 二. 缓存类
