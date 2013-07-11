@@ -30,6 +30,6 @@
 功能扩展：[Android下载管理DownloadManager功能扩展和bug修改](http://www.trinea.cn/android/android%E4%B8%8B%E8%BD%BD%E7%AE%A1%E7%90%86downloadmanager%E5%8A%9F%E8%83%BD%E5%A2%9E%E5%BC%BA%E5%92%8Cbug%E4%BF%AE%E6%94%B9/)
 #####2. Android APK root权限静默安装
 使用示例：[Android APK root权限静默安装](http://www.trinea.cn/android/android%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E4%B9%8Bapk-root%E6%9D%83%E9%99%90%E9%9D%99%E9%BB%98%E5%AE%89%E8%A3%85/)
-#####4. Android root权限
-#####5. 图片工具类
+#####3. Android root权限
+#####4. 图片工具类
 (1)Drawable、Bitmap、byte数组相互转换; (2)根据url获得InputStream、Drawable、Bitmap
