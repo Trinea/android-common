@@ -1,5 +1,6 @@
-###![Trinea](http://www.trinea.cn/favicon.ico)个人博客  [http://www.trinea.cn/](http://www.trinea.cn/)
-总结的一些android公共库，包含*缓存*(图片缓存、预取缓存)、**公共View**(下拉及底部加载更多ListView、底部加载更多ScrollView、滑动一页Gallery)、及**工具类**(下载管理、静默安装、shell工具类等等)。  
+![Trinea](http://www.trinea.cn/favicon.ico)个人博客  [http://www.trinea.cn/](http://www.trinea.cn/)
+-------------
+总结的一些android公共库，包含<strong>缓存</strong>(图片缓存、预取缓存)、<strong>公共View</strong>(下拉及底部加载更多ListView、底部加载更多ScrollView、滑动一页Gallery)、及<strong>工具类</strong>(下载管理、静默安装、shell工具类等等)。  
 具体使用可见[总结的一些android公共库](http://trinea.iteye.com/blog/1564055)。Demo APK地址见[TrineaAndroidDemo](https://code.google.com/p/trinea-android-demo/)，主要包括：
 ####一. 缓存类
 主要特性：(1).使用简单 (2). 轻松获取及预取取新图片(3).可选择多种缓存算法(FIFO、LIFO、LRU、MRU、LFU、MFU等13种)或自定义缓存算法 (4).省流量性能佳(有且仅有一个线程获取图片) (5).支持不同类型网络处理(6).可根据系统配置初始化缓存(7).扩展性强 (8).支持队列(9). 缓存可序列化到本地缓存 可从文件中恢复(10)包含map的大多数接口。
