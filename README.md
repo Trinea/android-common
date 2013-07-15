@@ -7,12 +7,12 @@
 #####1. 图片内存缓存
 使用见：[图片内存缓存的使用](http://www.trinea.cn/?p=704)  
 适用：应用中获取图片较多且图片不大的应用，如新浪微博、twitter、微信头像、美丽说、蘑菇街、花瓣、淘宝等等。。效果如如下：  
-(http://img.hb.aicdn.com/5f6ef0ecc5a20ff7a5dd8a94684af7b0f7580d8524b6f-yOCNXi_fw580)
+![ImageCahe](http://img.hb.aicdn.com/5f6ef0ecc5a20ff7a5dd8a94684af7b0f7580d8524b6f-yOCNXi_fw580)
 
 #####2. 图片SD卡缓存
 使用见：[图片SD卡缓存的使用](http://www.trinea.cn/?p=757)  
 适用：应用中获取图片较多且图片较大的情况，在微博、花瓣、美丽说、path这类应用中可以起到很好的效果。效果如如下：  
-(http://img.hb.aicdn.com/37f1265d1c2132277694a39d6036d462f848b3625e51-8YB0M2_fw580)
+![ImageSDCardCache](http://img.hb.aicdn.com/37f1265d1c2132277694a39d6036d462f848b3625e51-8YB0M2_fw580)
 
 ####二. 公用的view
 #####1. 下拉刷新及滚动到底部加载更多的Listview
