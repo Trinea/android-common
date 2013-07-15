@@ -1,4 +1,4 @@
-![Trinea](http://www.trinea.cn/favicon.ico)个人博客  [http://www.trinea.cn/](http://www.trinea.cn/)
+![Trinea](http://img.hb.aicdn.com/651ca2996898c9298248b25c1a8b4d464d4cc25f123e-hjMrz5_fw580)个人博客  [http://www.trinea.cn/](http://www.trinea.cn/)
 -------------
 总结的一些android公共库，包含<strong>缓存</strong>(图片缓存、预取缓存)、<strong>公共View</strong>(下拉及底部加载更多ListView、底部加载更多ScrollView、滑动一页Gallery)、及<strong>工具类</strong>(下载管理、静默安装、shell工具类等等)。  
 具体使用可见[总结的一些android公共库](http://trinea.iteye.com/blog/1564055)。Demo APK地址见[TrineaAndroidDemo](https://code.google.com/p/trinea-android-demo/)，主要包括：
