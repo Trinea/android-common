@@ -244,12 +244,12 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     }
 
     /**
-     * set http read image time out, if less than 0, not set. default is not set
+     * set http read image time out, if less than 0, not set. default is not set, in mills
      * 
-     * @param httpReadTimeOut
+     * @param readTimeOutMillis
      */
-    public void setHttpReadTimeOut(int httpReadTimeOut) {
-        this.httpReadTimeOut = httpReadTimeOut;
+    public void setHttpReadTimeOut(int readTimeOutMillis) {
+        this.httpReadTimeOut = readTimeOutMillis;
     }
 
     /**

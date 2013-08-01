@@ -111,6 +111,9 @@ public class DropDownListView extends ListView implements OnScrollListener {
     /** y of point which user touch down **/
     private float              actionDownPointY;
 
+    /** whether is on bottom loading **/
+    private boolean            isOnBottomLoading        = false;
+
     public DropDownListView(Context context){
         super(context);
         init(context);
@@ -521,7 +524,8 @@ public class DropDownListView extends ListView implements OnScrollListener {
      * on bottom loading, you can call it by manual, but you should manual call onBottomComplete at the same time.
      */
     public void onBottom() {
-        if (isOnBottomStyle) {
+        if (isOnBottomStyle && !isOnBottomLoading) {
+            isOnBottomLoading = true;
             onBottomBegin();
             footerButton.performClick();
         }
@@ -541,6 +545,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
             } else {
                 footerButton.setText(footerDefaultText);
             }
+            isOnBottomLoading = false;
         }
     }
 
@@ -888,8 +893,8 @@ public class DropDownListView extends ListView implements OnScrollListener {
      */
     private void getAttrs(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.drop_down_list_attr);
-        isDropDownStyle = ta.getBoolean(R.styleable.drop_down_list_attr_isDropDownStyle, true);
-        isOnBottomStyle = ta.getBoolean(R.styleable.drop_down_list_attr_isOnBottomStyle, true);
+        isDropDownStyle = ta.getBoolean(R.styleable.drop_down_list_attr_isDropDownStyle, false);
+        isOnBottomStyle = ta.getBoolean(R.styleable.drop_down_list_attr_isOnBottomStyle, false);
         isAutoLoadOnBottom = ta.getBoolean(R.styleable.drop_down_list_attr_isAutoLoadOnBottom, false);
         ta.recycle();
     }

@@ -110,18 +110,18 @@ public class ImageUtils {
      * get input stream from network by imageurl, you need to close inputStream yourself
      * 
      * @param imageUrl
-     * @param readTimeOut read time out, if less than 0, not set
+     * @param readTimeOutMillis read time out, if less than 0, not set, in mills
      * @return
      * @throws MalformedURLException
      * @throws IOException
      */
-    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOut) {
+    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis) {
         InputStream stream = null;
         try {
             URL url = new URL(imageUrl);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            if (readTimeOut > 0) {
-                con.setReadTimeout(readTimeOut);
+            if (readTimeOutMillis > 0) {
+                con.setReadTimeout(readTimeOutMillis);
             }
             stream = con.getInputStream();
         } catch (MalformedURLException e) {
@@ -138,11 +138,11 @@ public class ImageUtils {
      * get drawable by imageUrl
      * 
      * @param imageUrl
-     * @param readTimeOut read time out, if less than 0, not set
+     * @param readTimeOutMillis read time out, if less than 0, not set, in mills
      * @return
      */
-    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOut) {
-        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOut);
+    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis) {
+        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis);
         Drawable d = Drawable.createFromStream(stream, "src");
         closeInputStream(stream);
         return d;
