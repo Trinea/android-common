@@ -16,6 +16,12 @@
 ![ImageSDCardCache](http://farm3.staticflickr.com/2834/9314949798_ea69bdb5e8_o.jpg)
   
 
+#####3. 预取数据缓存
+使用见：[预取数据缓存](http://www.trinea.cn/android/preloaddatacache%e6%94%af%e6%8c%81%e9%a2%84%e5%8f%96%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bc%93%e5%ad%98%ef%bc%8c%e4%bd%bf%e7%94%a8%e7%ae%80%e5%8d%95%ef%bc%8c%e6%94%af%e6%8c%81%e5%a4%9a%e7%a7%8d%e7%bc%93/)  
+缓存类关系图如下：其中HttpCache为后续计划的http缓存 
+![ImageSDCardCache](http://farm4.staticflickr.com/3818/9318670513_1576253fd5_o.jpg)  
+  
+
 ####二. 公用的view
 #####1. 下拉刷新及滚动到底部加载更多的Listview
 使用: [下拉刷新及滚动到底部加载更多listview的使用](http://www.trinea.cn/android/滚动到底部加载更多及下拉刷新listview的使用)  
@@ -45,6 +51,7 @@
 使用示例：[Android APK root权限静默安装](http://www.trinea.cn/android/android%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E4%B9%8Bapk-root%E6%9D%83%E9%99%90%E9%9D%99%E9%BB%98%E5%AE%89%E8%A3%85/)
   
 #####3. Android root权限
+直接调用[ShellUtils.execCommand](https://github.com/Trinea/AndroidCommon/blob/master/src/cn/trinea/android/common/util/ShellUtils.java#LC43)方法
   
 #####4. 图片工具类
 (1)Drawable、Bitmap、byte数组相互转换; (2)根据url获得InputStream、Drawable、Bitmap
