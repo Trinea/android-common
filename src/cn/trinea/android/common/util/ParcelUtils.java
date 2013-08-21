@@ -41,7 +41,6 @@ public class ParcelUtils {
      * @return
      */
     public static Map<String, String> readHashMapStringAndString(Parcel in) {
-
         if (in == null) {
             return null;
         }
@@ -67,7 +66,6 @@ public class ParcelUtils {
      * @param flags
      */
     public static void writeHashMapStringAndString(Map<String, String> map, Parcel out, int flags) {
-
         if (map != null) {
             out.writeInt(map.size());
             for (Entry<String, String> entry : map.entrySet()) {
@@ -89,7 +87,6 @@ public class ParcelUtils {
      */
     @SuppressWarnings("unchecked")
     public static <V extends Parcelable> Map<String, V> readHashMapStringKey(Parcel in, ClassLoader loader) {
-
         if (in == null) {
             return null;
         }
@@ -115,7 +112,6 @@ public class ParcelUtils {
      * @param flags
      */
     public static <V extends Parcelable> void writeHashMapStringKey(Map<String, V> map, Parcel out, int flags) {
-
         if (map != null) {
             out.writeInt(map.size());
 
@@ -138,7 +134,6 @@ public class ParcelUtils {
      */
     @SuppressWarnings("unchecked")
     public static <K extends Parcelable, V extends Parcelable> Map<K, V> readHashMap(Parcel in, ClassLoader loader) {
-
         if (in == null) {
             return null;
         }
@@ -163,7 +158,6 @@ public class ParcelUtils {
      * @param flags
      */
     public static <K extends Parcelable, V extends Parcelable> void writeHashMap(Map<K, V> map, Parcel out, int flags) {
-
         if (map != null) {
             out.writeInt(map.size());
 

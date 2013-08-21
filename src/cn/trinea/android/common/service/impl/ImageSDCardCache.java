@@ -376,38 +376,38 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                 case IMAGE_LOADED_WHAT:
                 case IMAGE_RELOADED_WHAT:
                     MessageObject object = (MessageObject)message.obj;
-                    if (object != null) {
-                        String imageUrl = object.imageUrl;
-                        String imagePath = object.imagePath;
+                    if (object == null) {
+                        break;
+                    }
 
-                        if (onImageSDCallbackListener != null) {
-                            if (isOpenWaitingQueue) {
-                                synchronized (viewSetMap) {
-                                    HashSet<View> viewSet = viewSetMap.get(imageUrl);
-                                    if (viewSet != null) {
-                                        for (View view : viewSet) {
-                                            if (view != null) {
-                                                onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view,
-                                                                                        false);
-                                            }
+                    String imageUrl = object.imageUrl;
+                    String imagePath = object.imagePath;
+                    if (onImageSDCallbackListener != null) {
+                        if (isOpenWaitingQueue) {
+                            synchronized (viewSetMap) {
+                                HashSet<View> viewSet = viewSetMap.get(imageUrl);
+                                if (viewSet != null) {
+                                    for (View view : viewSet) {
+                                        if (view != null) {
+                                            onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view, false);
                                         }
                                     }
                                 }
-                            } else {
-                                View view = viewMap.get(imageUrl);
-                                if (view != null) {
-                                    onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view, false);
-                                }
-                            }
-                        }
-
-                        if (isOpenWaitingQueue) {
-                            synchronized (viewSetMap) {
-                                viewSetMap.remove(imageUrl);
                             }
                         } else {
-                            viewMap.remove(imageUrl);
+                            View view = viewMap.get(imageUrl);
+                            if (view != null) {
+                                onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view, false);
+                            }
                         }
+                    }
+
+                    if (isOpenWaitingQueue) {
+                        synchronized (viewSetMap) {
+                            viewSetMap.remove(imageUrl);
+                        }
+                    } else {
+                        viewMap.remove(imageUrl);
                     }
                     break;
             }

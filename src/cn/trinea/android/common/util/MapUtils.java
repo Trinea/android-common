@@ -168,7 +168,6 @@ public class MapUtils {
                 return entry.getKey();
             }
         }
-
         return null;
     }
 
@@ -208,19 +207,21 @@ public class MapUtils {
         }
         Map<String, String> keyAndValueMap = new HashMap<String, String>();
         String[] keyAndValueArray = source.split(keyAndValuePairSeparator);
-        if (keyAndValueArray != null) {
-            int seperator;
-            for (String valueEntity : keyAndValueArray) {
-                if (!StringUtils.isEmpty(valueEntity)) {
-                    seperator = valueEntity.indexOf(keyAndValueSeparator);
-                    if (seperator != -1) {
-                        if (ignoreSpace) {
-                            MapUtils.putMapNotEmptyKey(keyAndValueMap, valueEntity.substring(0, seperator).trim(),
-                                                       valueEntity.substring(seperator + 1).trim());
-                        } else {
-                            MapUtils.putMapNotEmptyKey(keyAndValueMap, valueEntity.substring(0, seperator),
-                                                       valueEntity.substring(seperator + 1));
-                        }
+        if (keyAndValueArray == null) {
+            return null;
+        }
+
+        int seperator;
+        for (String valueEntity : keyAndValueArray) {
+            if (!StringUtils.isEmpty(valueEntity)) {
+                seperator = valueEntity.indexOf(keyAndValueSeparator);
+                if (seperator != -1) {
+                    if (ignoreSpace) {
+                        MapUtils.putMapNotEmptyKey(keyAndValueMap, valueEntity.substring(0, seperator).trim(),
+                                                   valueEntity.substring(seperator + 1).trim());
+                    } else {
+                        MapUtils.putMapNotEmptyKey(keyAndValueMap, valueEntity.substring(0, seperator),
+                                                   valueEntity.substring(seperator + 1));
                     }
                 }
             }

@@ -44,14 +44,10 @@ public class PackageUtils {
      * @return
      */
     public static final int install(Context context, String filePath) {
-        if (!PackageUtils.isSystemApplication(context)) {
-            boolean isRoot = ShellUtils.checkRootPermission();
-            if (!isRoot) {
-                return installNormal(context, filePath) ? INSTALL_SUCCEEDED : INSTALL_FAILED_INVALID_URI;
-            }
+        if (PackageUtils.isSystemApplication(context) || ShellUtils.checkRootPermission()) {
+            return installSilent(context, filePath);
         }
-
-        return installSilent(context, filePath);
+        return installNormal(context, filePath) ? INSTALL_SUCCEEDED : INSTALL_FAILED_INVALID_URI;
     }
 
     /**
@@ -64,20 +60,21 @@ public class PackageUtils {
     public static boolean installNormal(Context context, String filePath) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         File file = new File(filePath);
-        if (file != null && file.length() > 0 && file.exists() && file.isFile()) {
-            i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
-            return true;
+        if (file == null || !file.exists() || !file.isFile() || file.length() <= 0) {
+            return false;
         }
-        return false;
+
+        i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+        return true;
     }
 
     /**
      * install package silent by root
      * <ul>
      * <strong>Attentions：</strong>
-     * <li>Don't call this on the ui thread, it costs some times.</li>
+     * <li>Don't call this on the ui thread, it may costs some times.</li>
      * <li>You should add <strong>android.permission.INSTALL_PACKAGES</strong> in manifest, so no need to request root
      * permission, if you are system app.</li>
      * </ul>
@@ -85,7 +82,7 @@ public class PackageUtils {
      * @param context file path of package
      * @param filePath file path of package
      * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success, other means failed. details see
-     * {@link PackageUtils#INSTALL_FAILED_*}. same to {@link PackageManager#INSTALL_*}
+     * {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
      */
     public static int installSilent(Context context, String filePath) {
         if (filePath == null || filePath.length() == 0) {
@@ -98,10 +95,11 @@ public class PackageUtils {
         }
 
         /**
-         * if context is system app, don,t need root permission, but should add <uses-permission
+         * if context is system app, don't need root permission, but should add <uses-permission
          * android:name="android.permission.INSTALL_PACKAGES" /> in mainfest
          **/
-        StringBuilder command = new StringBuilder().append("pm install -r ").append(filePath.replace(" ", "\\ "));
+        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install -r ")
+                                                   .append(filePath.replace(" ", "\\ "));
         CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
         if (commandResult.successMsg != null
             && (commandResult.successMsg.contains("Success") || commandResult.successMsg.contains("success"))) {
@@ -110,78 +108,113 @@ public class PackageUtils {
 
         Log.e(TAG, new StringBuilder().append("successMsg:").append(commandResult.successMsg).append(", ErrorMsg:")
                                       .append(commandResult.errorMsg).toString());
-        if (commandResult.errorMsg != null) {
-            if (commandResult.errorMsg.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
-                return INSTALL_FAILED_ALREADY_EXISTS;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_APK")) {
-                return INSTALL_FAILED_INVALID_APK;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_URI")) {
-                return INSTALL_FAILED_INVALID_URI;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_INSUFFICIENT_STORAGE")) {
-                return INSTALL_FAILED_INSUFFICIENT_STORAGE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_DUPLICATE_PACKAGE")) {
-                return INSTALL_FAILED_DUPLICATE_PACKAGE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_NO_SHARED_USER")) {
-                return INSTALL_FAILED_NO_SHARED_USER;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) {
-                return INSTALL_FAILED_UPDATE_INCOMPATIBLE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_SHARED_USER_INCOMPATIBLE")) {
-                return INSTALL_FAILED_SHARED_USER_INCOMPATIBLE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_MISSING_SHARED_LIBRARY")) {
-                return INSTALL_FAILED_MISSING_SHARED_LIBRARY;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_REPLACE_COULDNT_DELETE")) {
-                return INSTALL_FAILED_REPLACE_COULDNT_DELETE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_DEXOPT")) {
-                return INSTALL_FAILED_DEXOPT;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_OLDER_SDK")) {
-                return INSTALL_FAILED_OLDER_SDK;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_CONFLICTING_PROVIDER")) {
-                return INSTALL_FAILED_CONFLICTING_PROVIDER;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_NEWER_SDK")) {
-                return INSTALL_FAILED_NEWER_SDK;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_TEST_ONLY")) {
-                return INSTALL_FAILED_TEST_ONLY;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_CPU_ABI_INCOMPATIBLE")) {
-                return INSTALL_FAILED_CPU_ABI_INCOMPATIBLE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_MISSING_FEATURE")) {
-                return INSTALL_FAILED_MISSING_FEATURE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_CONTAINER_ERROR")) {
-                return INSTALL_FAILED_CONTAINER_ERROR;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_INSTALL_LOCATION")) {
-                return INSTALL_FAILED_INVALID_INSTALL_LOCATION;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_MEDIA_UNAVAILABLE")) {
-                return INSTALL_FAILED_MEDIA_UNAVAILABLE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_VERIFICATION_TIMEOUT")) {
-                return INSTALL_FAILED_VERIFICATION_TIMEOUT;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_VERIFICATION_FAILURE")) {
-                return INSTALL_FAILED_VERIFICATION_FAILURE;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_PACKAGE_CHANGED")) {
-                return INSTALL_FAILED_PACKAGE_CHANGED;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_UID_CHANGED")) {
-                return INSTALL_FAILED_UID_CHANGED;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_NOT_APK")) {
-                return INSTALL_PARSE_FAILED_NOT_APK;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_BAD_MANIFEST")) {
-                return INSTALL_PARSE_FAILED_BAD_MANIFEST;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION")) {
-                return INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")) {
-                return INSTALL_PARSE_FAILED_NO_CERTIFICATES;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES")) {
-                return INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING")) {
-                return INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME")) {
-                return INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID")) {
-                return INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_MANIFEST_MALFORMED")) {
-                return INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
-            } else if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_MANIFEST_EMPTY")) {
-                return INSTALL_PARSE_FAILED_MANIFEST_EMPTY;
-            } else if (commandResult.errorMsg.contains("INSTALL_FAILED_INTERNAL_ERROR")) {
-                return INSTALL_FAILED_INTERNAL_ERROR;
-            }
+        if (commandResult.errorMsg == null) {
+            return INSTALL_FAILED_OTHER;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
+            return INSTALL_FAILED_ALREADY_EXISTS;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_APK")) {
+            return INSTALL_FAILED_INVALID_APK;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_URI")) {
+            return INSTALL_FAILED_INVALID_URI;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_INSUFFICIENT_STORAGE")) {
+            return INSTALL_FAILED_INSUFFICIENT_STORAGE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_DUPLICATE_PACKAGE")) {
+            return INSTALL_FAILED_DUPLICATE_PACKAGE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_NO_SHARED_USER")) {
+            return INSTALL_FAILED_NO_SHARED_USER;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) {
+            return INSTALL_FAILED_UPDATE_INCOMPATIBLE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_SHARED_USER_INCOMPATIBLE")) {
+            return INSTALL_FAILED_SHARED_USER_INCOMPATIBLE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_MISSING_SHARED_LIBRARY")) {
+            return INSTALL_FAILED_MISSING_SHARED_LIBRARY;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_REPLACE_COULDNT_DELETE")) {
+            return INSTALL_FAILED_REPLACE_COULDNT_DELETE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_DEXOPT")) {
+            return INSTALL_FAILED_DEXOPT;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_OLDER_SDK")) {
+            return INSTALL_FAILED_OLDER_SDK;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_CONFLICTING_PROVIDER")) {
+            return INSTALL_FAILED_CONFLICTING_PROVIDER;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_NEWER_SDK")) {
+            return INSTALL_FAILED_NEWER_SDK;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_TEST_ONLY")) {
+            return INSTALL_FAILED_TEST_ONLY;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_CPU_ABI_INCOMPATIBLE")) {
+            return INSTALL_FAILED_CPU_ABI_INCOMPATIBLE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_MISSING_FEATURE")) {
+            return INSTALL_FAILED_MISSING_FEATURE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_CONTAINER_ERROR")) {
+            return INSTALL_FAILED_CONTAINER_ERROR;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_INSTALL_LOCATION")) {
+            return INSTALL_FAILED_INVALID_INSTALL_LOCATION;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_MEDIA_UNAVAILABLE")) {
+            return INSTALL_FAILED_MEDIA_UNAVAILABLE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_VERIFICATION_TIMEOUT")) {
+            return INSTALL_FAILED_VERIFICATION_TIMEOUT;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_VERIFICATION_FAILURE")) {
+            return INSTALL_FAILED_VERIFICATION_FAILURE;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_PACKAGE_CHANGED")) {
+            return INSTALL_FAILED_PACKAGE_CHANGED;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_UID_CHANGED")) {
+            return INSTALL_FAILED_UID_CHANGED;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_NOT_APK")) {
+            return INSTALL_PARSE_FAILED_NOT_APK;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_BAD_MANIFEST")) {
+            return INSTALL_PARSE_FAILED_BAD_MANIFEST;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION")) {
+            return INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")) {
+            return INSTALL_PARSE_FAILED_NO_CERTIFICATES;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES")) {
+            return INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING")) {
+            return INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME")) {
+            return INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID")) {
+            return INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_MANIFEST_MALFORMED")) {
+            return INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_MANIFEST_EMPTY")) {
+            return INSTALL_PARSE_FAILED_MANIFEST_EMPTY;
+        }
+        if (commandResult.errorMsg.contains("INSTALL_FAILED_INTERNAL_ERROR")) {
+            return INSTALL_FAILED_INTERNAL_ERROR;
         }
         return INSTALL_FAILED_OTHER;
     }

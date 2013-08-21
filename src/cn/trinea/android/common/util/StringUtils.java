@@ -173,6 +173,7 @@ public class StringUtils {
         if (isEmpty(href)) {
             return "";
         }
+
         String hrefReg = ".*<[\\s]*a[\\s]*.*>(.+?)<[\\s]*/a[\\s]*>.*";
         Pattern hrefPattern = Pattern.compile(hrefReg, Pattern.CASE_INSENSITIVE);
         Matcher hrefMatcher = hrefPattern.matcher(href);
@@ -200,12 +201,8 @@ public class StringUtils {
      * @return
      */
     public static String htmlEscapeCharsToString(String source) {
-        if (StringUtils.isEmpty(source)) {
-            return source;
-        } else {
-            return source.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&")
-                         .replaceAll("&quot;", "\"");
-        }
+        return StringUtils.isEmpty(source) ? source : source.replaceAll("&lt;", "<").replaceAll("&gt;", ">")
+                                                            .replaceAll("&amp;", "&").replaceAll("&quot;", "\"");
     }
 
     /**

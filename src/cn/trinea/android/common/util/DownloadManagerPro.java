@@ -116,16 +116,18 @@ public class DownloadManagerPro {
      */
     public int pauseDownload(long... ids) {
         initPauseMethod();
-        if (pauseDownload != null) {
-            try {
-                return ((Integer)pauseDownload.invoke(downloadManager, ids)).intValue();
-            } catch (Exception e) {
-                /**
-                 * accept all exception, include ClassNotFoundException, NoSuchMethodException,
-                 * InvocationTargetException, NullPointException
-                 */
-                e.printStackTrace();
-            }
+        if (pauseDownload == null) {
+            return -1;
+        }
+
+        try {
+            return ((Integer)pauseDownload.invoke(downloadManager, ids)).intValue();
+        } catch (Exception e) {
+            /**
+             * accept all exception, include ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+             * NullPointException
+             */
+            e.printStackTrace();
         }
         return -1;
     }
@@ -138,16 +140,18 @@ public class DownloadManagerPro {
      */
     public int resumeDownload(long... ids) {
         initResumeMethod();
-        if (resumeDownload != null) {
-            try {
-                return ((Integer)resumeDownload.invoke(downloadManager, ids)).intValue();
-            } catch (Exception e) {
-                /**
-                 * accept all exception, include ClassNotFoundException, NoSuchMethodException,
-                 * InvocationTargetException, NullPointException
-                 */
-                e.printStackTrace();
-            }
+        if (resumeDownload == null) {
+            return -1;
+        }
+
+        try {
+            return ((Integer)resumeDownload.invoke(downloadManager, ids)).intValue();
+        } catch (Exception e) {
+            /**
+             * accept all exception, include ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+             * NullPointException
+             */
+            e.printStackTrace();
         }
         return -1;
     }
@@ -164,26 +168,30 @@ public class DownloadManagerPro {
     }
 
     private static void initPauseMethod() {
-        if (!isInitPauseDownload) {
-            isInitPauseDownload = true;
-            try {
-                pauseDownload = DownloadManager.class.getMethod(METHOD_NAME_PAUSE_DOWNLOAD, long[].class);
-            } catch (Exception e) {
-                // accept all exception
-                e.printStackTrace();
-            }
+        if (isInitPauseDownload) {
+            return;
+        }
+
+        isInitPauseDownload = true;
+        try {
+            pauseDownload = DownloadManager.class.getMethod(METHOD_NAME_PAUSE_DOWNLOAD, long[].class);
+        } catch (Exception e) {
+            // accept all exception
+            e.printStackTrace();
         }
     }
 
     private static void initResumeMethod() {
-        if (!isInitResumeDownload) {
-            isInitResumeDownload = true;
-            try {
-                resumeDownload = DownloadManager.class.getMethod(METHOD_NAME_RESUME_DOWNLOAD, long[].class);
-            } catch (Exception e) {
-                // accept all exception
-                e.printStackTrace();
-            }
+        if (isInitResumeDownload) {
+            return;
+        }
+
+        isInitResumeDownload = true;
+        try {
+            resumeDownload = DownloadManager.class.getMethod(METHOD_NAME_RESUME_DOWNLOAD, long[].class);
+        } catch (Exception e) {
+            // accept all exception
+            e.printStackTrace();
         }
     }
 

@@ -28,7 +28,7 @@ import cn.trinea.android.common.R;
  * <li>define isDropDownStyle="true" at layout xml or call {@link #setDropDownStyle(boolean)} to enable drop down style
  * before</li>
  * <li>{@link #setOnDropDownListener(OnDropDownListener)} set listener which will be excuted when drop down, but you
- * should call {@link #onDropDownComplete()} manual at the end of listener to reinstate status.</li>\
+ * should call {@link #onDropDownComplete()} manual at the end of listener to reinstate status.</li>
  * <li>{@link #setHeaderDefaultText(String)}, {@link #setHeaderLoadingText(String)}, {@link #setHeaderPullText(String)},
  * {@link #setHeaderReleaseText(String)}, {@link #setHeaderSecondText(CharSequence)} to set text</li>
  * </ul>
@@ -331,45 +331,46 @@ public class DropDownListView extends ListView implements OnScrollListener {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (isDropDownStyle) {
-            hasReachedTop = false;
+        if (!isDropDownStyle) {
+            return super.onTouchEvent(event);
+        }
 
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    actionDownPointY = event.getY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    adjustHeaderPadding(event);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (!isVerticalScrollBarEnabled()) {
-                        setVerticalScrollBarEnabled(true);
+        hasReachedTop = false;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                actionDownPointY = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                adjustHeaderPadding(event);
+                break;
+            case MotionEvent.ACTION_UP:
+                if (!isVerticalScrollBarEnabled()) {
+                    setVerticalScrollBarEnabled(true);
+                }
+                /**
+                 * set status when finger leave screen if first item visible and header status is not
+                 * HEADER_STATUS_LOADING
+                 * <ul>
+                 * <li>if current header status is HEADER_STATUS_RELEASE_TO_LOAD, call onDropDown.</li>
+                 * <li>if current header status is HEADER_STATUS_DROP_DOWN_TO_LOAD, then set header status to
+                 * HEADER_STATUS_CLICK_TO_LOAD and hide header layout.</li>
+                 * </ul>
+                 */
+                if (getFirstVisiblePosition() == 0 && currentHeaderStatus != HEADER_STATUS_LOADING) {
+                    switch (currentHeaderStatus) {
+                        case HEADER_STATUS_RELEASE_TO_LOAD:
+                            onDropDown();
+                            break;
+                        case HEADER_STATUS_DROP_DOWN_TO_LOAD:
+                            setHeaderStatusClickToLoad();
+                            setSecondPositionVisible();
+                            break;
+                        case HEADER_STATUS_CLICK_TO_LOAD:
+                        default:
+                            break;
                     }
-                    /**
-                     * set status when finger leave screen if first item visible and header status is not
-                     * HEADER_STATUS_LOADING
-                     * <ul>
-                     * <li>if current header status is HEADER_STATUS_RELEASE_TO_LOAD, call onDropDown.</li>
-                     * <li>if current header status is HEADER_STATUS_DROP_DOWN_TO_LOAD, then set header status to
-                     * HEADER_STATUS_CLICK_TO_LOAD and hide header layout.</li>
-                     * </ul>
-                     */
-                    if (getFirstVisiblePosition() == 0 && currentHeaderStatus != HEADER_STATUS_LOADING) {
-                        switch (currentHeaderStatus) {
-                            case HEADER_STATUS_RELEASE_TO_LOAD:
-                                onDropDown();
-                                break;
-                            case HEADER_STATUS_DROP_DOWN_TO_LOAD:
-                                setHeaderStatusClickToLoad();
-                                setSecondPositionVisible();
-                                break;
-                            case HEADER_STATUS_CLICK_TO_LOAD:
-                            default:
-                                break;
-                        }
-                    }
-                    break;
-            }
+                }
+                break;
         }
         return super.onTouchEvent(event);
     }

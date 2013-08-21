@@ -309,38 +309,38 @@ public class ImageCache extends PreloadDataCache<String, Drawable> {
             switch (message.what) {
                 case IMAGE_LOADED_WHAT:
                     MessageObject object = (MessageObject)message.obj;
-                    if (object != null) {
-                        String imageUrl = object.imageUrl;
-                        Drawable drawable = object.drawable;
+                    if (object == null) {
+                        break;
+                    }
 
-                        if (onImageCallbackListener != null) {
-                            if (isOpenWaitingQueue) {
-                                synchronized (viewSetMap) {
-                                    HashSet<View> viewSet = viewSetMap.get(imageUrl);
-                                    if (viewSet != null) {
-                                        for (View view : viewSet) {
-                                            if (view != null) {
-                                                onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
-                                            }
+                    String imageUrl = object.imageUrl;
+                    Drawable drawable = object.drawable;
+                    if (onImageCallbackListener != null) {
+                        if (isOpenWaitingQueue) {
+                            synchronized (viewSetMap) {
+                                HashSet<View> viewSet = viewSetMap.get(imageUrl);
+                                if (viewSet != null) {
+                                    for (View view : viewSet) {
+                                        if (view != null) {
+                                            onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
                                         }
                                     }
                                 }
-                            } else {
-                                View view = viewMap.get(imageUrl);
-                                if (view != null) {
-                                    onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
-                                }
-                            }
-                        }
-
-                        if (isOpenWaitingQueue) {
-                            synchronized (viewSetMap) {
-                                viewSetMap.remove(imageUrl);
                             }
                         } else {
-                            viewMap.remove(imageUrl);
+                            View view = viewMap.get(imageUrl);
+                            if (view != null) {
+                                onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
+                            }
                         }
+                    }
 
+                    if (isOpenWaitingQueue) {
+                        synchronized (viewSetMap) {
+                            viewSetMap.remove(imageUrl);
+                        }
+                    } else {
+                        viewMap.remove(imageUrl);
                     }
                     break;
             }

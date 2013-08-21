@@ -197,12 +197,14 @@ public class ImageUtils {
      * @param s
      */
     private static void closeInputStream(InputStream s) {
-        if (s != null) {
-            try {
-                s.close();
-            } catch (IOException e) {
-                throw new RuntimeException("IOException occurred. ", e);
-            }
+        if (s == null) {
+            return;
+        }
+
+        try {
+            s.close();
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
         }
     }
 }

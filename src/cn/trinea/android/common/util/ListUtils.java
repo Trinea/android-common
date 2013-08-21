@@ -48,20 +48,20 @@ public class ListUtils {
     public static <V> boolean isEquals(ArrayList<V> actual, ArrayList<V> expected) {
         if (actual == null) {
             return expected == null;
-        } else if (expected == null) {
+        }
+        if (expected == null) {
             return false;
-        } else {
-            if (actual.size() != expected.size()) {
+        }
+        if (actual.size() != expected.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < actual.size(); i++) {
+            if (!ObjectUtils.isEquals(actual.get(i), expected.get(i))) {
                 return false;
             }
-
-            for (int i = 0; i < actual.size(); i++) {
-                if (!ObjectUtils.isEquals(actual.get(i), expected.get(i))) {
-                    return false;
-                }
-            }
-            return true;
         }
+        return true;
     }
 
     /**
@@ -129,7 +129,6 @@ public class ListUtils {
                 joinStr.append(separator);
             }
         }
-
         return joinStr.toString();
     }
 
@@ -159,11 +158,11 @@ public class ListUtils {
         }
 
         int sourceCount = sourceList.size();
-        for (V entry : entryList)
+        for (V entry : entryList) {
             if (!sourceList.contains(entry)) {
                 sourceList.add(entry);
             }
-
+        }
         return sourceList.size() - sourceCount;
     }
 
@@ -181,7 +180,7 @@ public class ListUtils {
 
         int sourceCount = sourceList.size();
         int sourceListSize = sourceList.size();
-        for (int i = 0; i < sourceListSize; i++)
+        for (int i = 0; i < sourceListSize; i++) {
             for (int j = (i + 1); j < sourceListSize; j++) {
                 if (sourceList.get(i).equals(sourceList.get(j))) {
                     sourceList.remove(j);
@@ -189,7 +188,7 @@ public class ListUtils {
                     j--;
                 }
             }
-
+        }
         return sourceCount - sourceList.size();
     }
 

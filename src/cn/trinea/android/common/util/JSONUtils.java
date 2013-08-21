@@ -535,7 +535,8 @@ public class JSONUtils {
 
         if (jsonData == null) {
             return null;
-        } else if (jsonData.length() == 0) {
+        }
+        if (jsonData.length() == 0) {
             return new HashMap<String, String>();
         }
 

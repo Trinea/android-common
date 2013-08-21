@@ -50,32 +50,33 @@ public class FileUtils {
     public static StringBuilder readFile(String filePath) {
         File file = new File(filePath);
         StringBuilder fileContent = new StringBuilder("");
-        if (file != null && file.isFile()) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(file));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    if (!fileContent.toString().equals("")) {
-                        fileContent.append("\r\n");
-                    }
-                    fileContent.append(line);
+        if (file == null || !file.isFile()) {
+            return null;
+        }
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                if (!fileContent.toString().equals("")) {
+                    fileContent.append("\r\n");
                 }
-                reader.close();
-                return fileContent;
-            } catch (IOException e) {
-                throw new RuntimeException("IOException occurred. ", e);
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException("IOException occurred. ", e);
-                    }
+                fileContent.append(line);
+            }
+            reader.close();
+            return fileContent;
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("IOException occurred. ", e);
                 }
             }
         }
-        return null;
     }
 
     /**
@@ -152,29 +153,30 @@ public class FileUtils {
     public static List<String> readFileToList(String filePath) {
         File file = new File(filePath);
         List<String> fileContent = new ArrayList<String>();
-        if (file != null && file.isFile()) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(file));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    fileContent.add(line);
-                }
-                reader.close();
-                return fileContent;
-            } catch (IOException e) {
-                throw new RuntimeException("IOException occurred. ", e);
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException("IOException occurred. ", e);
-                    }
+        if (file == null || !file.isFile()) {
+            return null;
+        }
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                fileContent.add(line);
+            }
+            reader.close();
+            return fileContent;
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("IOException occurred. ", e);
                 }
             }
         }
-        return null;
     }
 
     /**
@@ -208,14 +210,11 @@ public class FileUtils {
         int filePosi = filePath.lastIndexOf(File.separator);
         if (filePosi == -1) {
             return (extenPosi == -1 ? filePath : filePath.substring(0, extenPosi));
-        } else {
-            if (extenPosi == -1) {
-                return filePath.substring(filePosi + 1);
-            } else {
-                return (filePosi < extenPosi ? filePath.substring(filePosi + 1, extenPosi)
-                    : filePath.substring(filePosi + 1));
-            }
         }
+        if (extenPosi == -1) {
+            return filePath.substring(filePosi + 1);
+        }
+        return (filePosi < extenPosi ? filePath.substring(filePosi + 1, extenPosi) : filePath.substring(filePosi + 1));
     }
 
     /**
@@ -245,10 +244,7 @@ public class FileUtils {
         }
 
         int filePosi = filePath.lastIndexOf(File.separator);
-        if (filePosi == -1) {
-            return filePath;
-        }
-        return filePath.substring(filePosi + 1);
+        return (filePosi == -1) ? filePath : filePath.substring(filePosi + 1);
     }
 
     /**
@@ -280,10 +276,7 @@ public class FileUtils {
         }
 
         int filePosi = filePath.lastIndexOf(File.separator);
-        if (filePosi == -1) {
-            return "";
-        }
-        return filePath.substring(0, filePosi);
+        return (filePosi == -1) ? "" : filePath.substring(0, filePosi);
     }
 
     /**
@@ -317,12 +310,8 @@ public class FileUtils {
         int filePosi = filePath.lastIndexOf(File.separator);
         if (extenPosi == -1) {
             return "";
-        } else {
-            if (filePosi >= extenPosi) {
-                return "";
-            }
-            return filePath.substring(extenPosi + 1);
         }
+        return (filePosi >= extenPosi) ? "" : filePath.substring(extenPosi + 1);
     }
 
     /**
@@ -410,22 +399,23 @@ public class FileUtils {
         }
 
         File file = new File(path);
-        if (file.exists()) {
-            if (file.isFile()) {
-                return file.delete();
-            } else if (file.isDirectory()) {
-                for (File f : file.listFiles()) {
-                    if (f.isFile()) {
-                        f.delete();
-                    } else if (f.isDirectory()) {
-                        deleteFile(f.getAbsolutePath());
-                    }
-                }
-                return file.delete();
-            }
+        if (!file.exists()) {
+            return true;
+        }
+        if (file.isFile()) {
+            return file.delete();
+        }
+        if (!file.isDirectory()) {
             return false;
         }
-        return true;
+        for (File f : file.listFiles()) {
+            if (f.isFile()) {
+                f.delete();
+            } else if (f.isDirectory()) {
+                deleteFile(f.getAbsolutePath());
+            }
+        }
+        return file.delete();
     }
 
     /**
@@ -442,6 +432,7 @@ public class FileUtils {
         if (StringUtils.isBlank(path)) {
             return -1;
         }
+
         File file = new File(path);
         return (file.exists() && file.isFile() ? file.length() : -1);
     }

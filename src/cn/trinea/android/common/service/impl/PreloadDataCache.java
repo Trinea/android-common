@@ -75,7 +75,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
     private ExecutorService                 threadPool;
 
     private Context                         context;
-    private static ConnectivityManager      connectivityManager;
+    private transient ConnectivityManager   connectivityManager;
 
     /** default count for preload forward **/
     public static final int                 DEFAULT_FORWARD_CACHE_NUMBER  = 3;

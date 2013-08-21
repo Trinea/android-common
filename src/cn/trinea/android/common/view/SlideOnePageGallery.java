@@ -31,7 +31,6 @@ public class SlideOnePageGallery extends Gallery {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
         int kEvent;
         if (isScrollingLeft(e1, e2)) {
             // Check if scrolling left
