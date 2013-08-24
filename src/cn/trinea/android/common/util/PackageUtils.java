@@ -20,6 +20,12 @@ import cn.trinea.android.common.util.ShellUtils.CommandResult;
  * <li>{@link PackageUtils#install(Context, String)}</li>
  * </ul>
  * <ul>
+ * <strong>Uninstall package</strong>
+ * <li>{@link PackageUtils#uninstallNormal(Context, String)}</li>
+ * <li>{@link PackageUtils#uninstallSilent(Context, String)}</li>
+ * <li>{@link PackageUtils#uninstall(Context, String)}</li>
+ * </ul>
+ * <ul>
  * <strong>Is system application</strong>
  * <li>{@link PackageUtils#isSystemApplication(Context)}</li>
  * <li>{@link PackageUtils#isSystemApplication(Context, String)}</li>
@@ -79,7 +85,7 @@ public class PackageUtils {
      * permission, if you are system app.</li>
      * </ul>
      * 
-     * @param context file path of package
+     * @param context
      * @param filePath file path of package
      * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success, other means failed. details see
      * {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
@@ -106,8 +112,9 @@ public class PackageUtils {
             return INSTALL_SUCCEEDED;
         }
 
-        Log.e(TAG, new StringBuilder().append("successMsg:").append(commandResult.successMsg).append(", ErrorMsg:")
-                                      .append(commandResult.errorMsg).toString());
+        Log.e(TAG,
+              new StringBuilder().append("installSilent successMsg:").append(commandResult.successMsg)
+                                 .append(", ErrorMsg:").append(commandResult.errorMsg).toString());
         if (commandResult.errorMsg == null) {
             return INSTALL_FAILED_OTHER;
         }
@@ -217,6 +224,103 @@ public class PackageUtils {
             return INSTALL_FAILED_INTERNAL_ERROR;
         }
         return INSTALL_FAILED_OTHER;
+    }
+
+    /**
+     * uninstall according conditions
+     * <ul>
+     * <li>if system application or rooted, see {@link #uninstallSilent(Context, String)}</li>
+     * <li>else see {@link #uninstallNormal(Context, String)}</li>
+     * </ul>
+     * 
+     * @param context
+     * @param packageName package name of app
+     * @return whether package name is empty
+     * @return
+     */
+    public static final int uninstall(Context context, String packageName) {
+        if (PackageUtils.isSystemApplication(context) || ShellUtils.checkRootPermission()) {
+            return uninstallSilent(context, packageName);
+        }
+        return uninstallNormal(context, packageName) ? DELETE_SUCCEEDED : DELETE_FAILED_INVALID_PACKAGE;
+    }
+
+    /**
+     * uninstall package normal by system intent
+     * 
+     * @param context
+     * @param packageName package name of app
+     * @return whether package name is empty
+     */
+    public static boolean uninstallNormal(Context context, String packageName) {
+        if (packageName == null || packageName.length() == 0) {
+            return false;
+        }
+
+        Intent i = new Intent(Intent.ACTION_DELETE, Uri.parse(new StringBuilder(32).append("package:")
+                                                                                   .append(packageName).toString()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+        return true;
+    }
+
+    /**
+     * uninstall package and clear data of app silent by root
+     * 
+     * @param context
+     * @param packageName package name of app
+     * @return
+     * @see {@link #uninstallSilent(Context, String, boolean)}
+     */
+    public static int uninstallSilent(Context context, String packageName) {
+        return uninstallSilent(context, packageName, true);
+    }
+
+    /**
+     * uninstall package silent by root
+     * <ul>
+     * <strong>Attentions：</strong>
+     * <li>Don't call this on the ui thread, it may costs some times.</li>
+     * <li>You should add <strong>android.permission.DELETE_PACKAGES</strong> in manifest, so no need to request root
+     * permission, if you are system app.</li>
+     * </ul>
+     * 
+     * @param context file path of package
+     * @param packageName package name of app
+     * @param isKeepData whether keep the data and cache directories around after package removal
+     * @return <ul>
+     * <li>{@link #DELETE_SUCCEEDED} means uninstall success</li>
+     * <li>{@link #DELETE_FAILED_INTERNAL_ERROR} means internal error</li>
+     * <li>{@link #DELETE_FAILED_INVALID_PACKAGE} means package name error</li>
+     * <li>{@link #DELETE_FAILED_PERMISSION_DENIED} means permission denied</li>
+     */
+    public static int uninstallSilent(Context context, String packageName, boolean isKeepData) {
+        if (packageName == null || packageName.length() == 0) {
+            return DELETE_FAILED_INVALID_PACKAGE;
+        }
+
+        /**
+         * if context is system app, don't need root permission, but should add <uses-permission
+         * android:name="android.permission.DELETE_PACKAGES" /> in mainfest
+         **/
+        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm uninstall")
+                                                   .append(isKeepData ? " -k " : " ")
+                                                   .append(packageName.replace(" ", "\\ "));
+        CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
+        if (commandResult.successMsg != null
+            && (commandResult.successMsg.contains("Success") || commandResult.successMsg.contains("success"))) {
+            return DELETE_SUCCEEDED;
+        }
+        Log.e(TAG,
+              new StringBuilder().append("uninstallSilent successMsg:").append(commandResult.successMsg)
+                                 .append(", ErrorMsg:").append(commandResult.errorMsg).toString());
+        if (commandResult.errorMsg == null) {
+            return DELETE_FAILED_INTERNAL_ERROR;
+        }
+        if (commandResult.errorMsg.contains("Permission denied")) {
+            return DELETE_FAILED_PERMISSION_DENIED;
+        }
+        return DELETE_FAILED_INTERNAL_ERROR;
     }
 
     /**
@@ -499,4 +603,34 @@ public class PackageUtils {
      * other reason
      */
     public static final int INSTALL_FAILED_OTHER                           = -1000000;
+
+    /**
+     * Uninstall return code<br/>
+     * uninstall success.
+     */
+    public static final int DELETE_SUCCEEDED                               = 1;
+
+    /**
+     * Uninstall return code<br/>
+     * uninstall fail if the system failed to delete the package for an unspecified reason.
+     */
+    public static final int DELETE_FAILED_INTERNAL_ERROR                   = -1;
+
+    /**
+     * Uninstall return code<br/>
+     * uninstall fail if the system failed to delete the package because it is the active DevicePolicy manager.
+     */
+    public static final int DELETE_FAILED_DEVICE_POLICY_MANAGER            = -2;
+
+    /**
+     * Uninstall return code<br/>
+     * uninstall fail if pcakge name is invalid
+     */
+    public static final int DELETE_FAILED_INVALID_PACKAGE                  = -3;
+
+    /**
+     * Uninstall return code<br/>
+     * uninstall fail if permission denied
+     */
+    public static final int DELETE_FAILED_PERMISSION_DENIED                = -4;
 }
