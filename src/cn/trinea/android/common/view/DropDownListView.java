@@ -591,6 +591,24 @@ public class DropDownListView extends ListView implements OnScrollListener {
     }
 
     /**
+     * get header layout view
+     * 
+     * @return
+     */
+    public RelativeLayout getHeaderLayout() {
+        return headerLayout;
+    }
+
+    /**
+     * get footer layout view
+     * 
+     * @return
+     */
+    public RelativeLayout getFooterLayout() {
+        return footerLayout;
+    }
+
+    /**
      * get rate about drop down distance and header padding top when drop down
      * 
      * @return headerPaddingTopRate
