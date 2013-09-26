@@ -3,7 +3,7 @@ package cn.trinea.android.common.util;
 /**
  * Object Utils
  * 
- * @author Trinea 2011-10-24
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-10-24
  */
 public class ObjectUtils {
 

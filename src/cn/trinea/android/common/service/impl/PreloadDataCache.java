@@ -48,7 +48,7 @@ import cn.trinea.android.common.util.SystemUtils;
  * <li>{@link #loadCache(String)} restore cache from file</li>
  * </ul>
  * 
- * @author Trinea 2012-3-4
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-3-4
  */
 public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
 
@@ -102,7 +102,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * {@link #preloadDataForward(Object, List, int)}, preload backward by
      * {@link #preloadDataBackward(Object, List, int)}
      * @return element if this cache contains the specified key, else get data realtime and wait for it
-     * @see {@link #get(Object)}
+     * @see PreloadDataCache#get(Object)
      */
     public CacheObject<V> get(K key, List<K> keyList) {
         if (key == null) {
@@ -176,7 +176,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * {@link #preloadDataForward(Object, List, int)}, preload backward by
      * {@link #preloadDataBackward(Object, List, int)}
      * @return element if this cache contains the specified key, null otherwise.
-     * @see {@link #getFromCache(Object)}
+     * @see #getFromCache(Object)
      */
     CacheObject<V> getFromCache(K key, List<K> keyList) {
         if (key == null) {
@@ -508,7 +508,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
     /**
      * get data interface, implements this to get data
      * 
-     * @author Trinea 2012-3-4
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-3-4
      */
     public interface OnGetDataListener<K, V> extends Serializable {
 
@@ -524,7 +524,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
     /**
      * the thread to get data
      * 
-     * @author Trinea 2012-3-4
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-3-4
      */
     private class GetDataThread implements Runnable {
 

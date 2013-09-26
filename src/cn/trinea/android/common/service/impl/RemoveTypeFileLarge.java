@@ -12,7 +12,7 @@ import cn.trinea.android.common.util.FileUtils;
  * <li>if file is equal to each other and used count is equal, remove the one which is first in</li>
  * </ul>
  * 
- * @author Trinea 2011-12-26
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-26
  */
 public class RemoveTypeFileLarge implements CacheFullRemoveType<String> {
 

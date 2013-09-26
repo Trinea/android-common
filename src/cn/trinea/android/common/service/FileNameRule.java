@@ -7,7 +7,7 @@ import cn.trinea.android.common.service.impl.ImageSDCardCache;
 /**
  * File name rule, used when saving images in {@link ImageSDCardCache}
  * 
- * @author Trinea 2012-7-6
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-7-6
  */
 public interface FileNameRule extends Serializable {
 

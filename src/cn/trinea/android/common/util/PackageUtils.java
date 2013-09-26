@@ -32,7 +32,7 @@ import cn.trinea.android.common.util.ShellUtils.CommandResult;
  * <li>{@link PackageUtils#isSystemApplication(PackageManager, String)}</li>
  * </ul>
  * 
- * @author Trinea 2013-5-15
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-15
  */
 public class PackageUtils {
 
@@ -79,7 +79,7 @@ public class PackageUtils {
     /**
      * install package silent by root
      * <ul>
-     * <strong>Attentions：</strong>
+     * <strong>Attentions:</strong>
      * <li>Don't call this on the ui thread, it may costs some times.</li>
      * <li>You should add <strong>android.permission.INSTALL_PACKAGES</strong> in manifest, so no need to request root
      * permission, if you are system app.</li>
@@ -270,7 +270,7 @@ public class PackageUtils {
      * @param context
      * @param packageName package name of app
      * @return
-     * @see {@link #uninstallSilent(Context, String, boolean)}
+     * @see #uninstallSilent(Context, String, boolean)
      */
     public static int uninstallSilent(Context context, String packageName) {
         return uninstallSilent(context, packageName, true);
@@ -279,7 +279,7 @@ public class PackageUtils {
     /**
      * uninstall package silent by root
      * <ul>
-     * <strong>Attentions：</strong>
+     * <strong>Attentions:</strong>
      * <li>Don't call this on the ui thread, it may costs some times.</li>
      * <li>You should add <strong>android.permission.DELETE_PACKAGES</strong> in manifest, so no need to request root
      * permission, if you are system app.</li>

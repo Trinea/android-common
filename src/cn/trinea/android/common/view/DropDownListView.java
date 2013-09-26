@@ -50,7 +50,7 @@ import cn.trinea.android.common.R;
  * principle see <a href="http://trinea.iteye.com/blog/1562281">http://trinea.iteye.com/blog/1562281</a>
  * </ul>
  * 
- * @author Trinea 2012-5-20
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-20
  */
 public class DropDownListView extends ListView implements OnScrollListener {
 
@@ -553,7 +553,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
     /**
      * OnDropDownListener, called when header released
      * 
-     * @author Trinea 2012-5-31
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-31
      */
     public interface OnDropDownListener {
 

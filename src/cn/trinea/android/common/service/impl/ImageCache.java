@@ -49,7 +49,7 @@ import cn.trinea.android.common.util.SystemUtils;
  * <li>{@link #ImageCache(int, int)}</li>
  * </ul>
  * 
- * @author Trinea 2012-4-5
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
  */
 public class ImageCache extends PreloadDataCache<String, Drawable> {
 
@@ -267,7 +267,7 @@ public class ImageCache extends PreloadDataCache<String, Drawable> {
     /**
      * callback interface after image get success
      * 
-     * @author Trinea 2012-4-5
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
      */
     public interface OnImageCallbackListener extends Serializable {
 
@@ -301,7 +301,7 @@ public class ImageCache extends PreloadDataCache<String, Drawable> {
     /**
      * My handler
      * 
-     * @author Trinea 2012-11-20
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-11-20
      */
     private class MyHandler extends Handler {
 
@@ -350,7 +350,7 @@ public class ImageCache extends PreloadDataCache<String, Drawable> {
     /**
      * message object
      * 
-     * @author Trinea 2013-1-14
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-1-14
      */
     private class MessageObject {
 

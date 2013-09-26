@@ -31,7 +31,7 @@ import android.net.Uri;
  * <li>{@link RequestPro#setNotiExtras(String)} set noti extras</li>
  * </ul>
  * 
- * @author Trinea 2013-5-4
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-4
  */
 public class DownloadManagerPro {
 

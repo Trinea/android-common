@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 /**
  * Serialize Utils
  * 
- * @author Trinea 2012-5-14
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-14
  */
 public class SerializeUtils {
 

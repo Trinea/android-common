@@ -9,7 +9,7 @@ import android.widget.Gallery;
 /**
  * SlideOnePageGallery, only slide one page every slide
  * 
- * @author Trinea 2013-3-22
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-3-22
  */
 public class SlideOnePageGallery extends Gallery {
 

@@ -7,7 +7,7 @@ import cn.trinea.android.common.service.CacheFullRemoveType;
  * Remove type when cache is full.<br/>
  * when cache is full, compare priority of object in cache, if priority is lower remove it first.<br/>
  * 
- * @author Trinea 2011-12-26
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-26
  */
 public class RemoveTypePriorityLow<T> implements CacheFullRemoveType<T> {
 

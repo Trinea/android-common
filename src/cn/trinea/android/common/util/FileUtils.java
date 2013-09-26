@@ -34,7 +34,7 @@ import java.util.List;
  * <li>{@link #makeDirs(String)}</li>
  * </ul>
  * 
- * @author Trinea 2012-5-12
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-12
  */
 public class FileUtils {
 
@@ -319,7 +319,7 @@ public class FileUtils {
      * to create this directory. <br/>
      * <br/>
      * <ul>
-     * <strong>Attentions：</strong>
+     * <strong>Attentions:</strong>
      * <li>makeDirs("C:\\Users\\Trinea") can only create users folder</li>
      * <li>makeFolder("C:\\Users\\Trinea\\") can create Trinea folder</li>
      * </ul>
@@ -346,7 +346,7 @@ public class FileUtils {
     /**
      * @param filePath
      * @return
-     * @see {@link #makeDirs(String)}
+     * @see #makeDirs(String)
      */
     public static boolean makeFolders(String filePath) {
         return makeDirs(filePath);

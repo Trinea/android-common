@@ -26,7 +26,7 @@ import android.content.SharedPreferences;
  * <li>get boolean {@link #getBoolean(Context, String)}, {@link #getBoolean(Context, String, boolean)}</li>
  * </ul>
  * 
- * @author Trinea 2013-3-6
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-3-6
  */
 public class PreferencesUtils {
 
@@ -54,7 +54,7 @@ public class PreferencesUtils {
      * @param key The name of the preference to retrieve
      * @return The preference value if it exists, or null. Throws ClassCastException if there is a preference with this
      * name that is not a string
-     * @see {@link #getString(Context, String, String)}
+     * @see #getString(Context, String, String)
      */
     public static String getString(Context context, String key) {
         return getString(context, key, null);
@@ -96,7 +96,7 @@ public class PreferencesUtils {
      * @param key The name of the preference to retrieve
      * @return The preference value if it exists, or -1. Throws ClassCastException if there is a preference with this
      * name that is not a int
-     * @see {@link #getInt(Context, String, int)}
+     * @see #getInt(Context, String, int)
      */
     public static int getInt(Context context, String key) {
         return getInt(context, key, -1);
@@ -138,7 +138,7 @@ public class PreferencesUtils {
      * @param key The name of the preference to retrieve
      * @return The preference value if it exists, or -1. Throws ClassCastException if there is a preference with this
      * name that is not a long
-     * @see {@link #getLong(Context, String, long)}
+     * @see #getLong(Context, String, long)
      */
     public static long getLong(Context context, String key) {
         return getLong(context, key, -1);
@@ -180,7 +180,7 @@ public class PreferencesUtils {
      * @param key The name of the preference to retrieve
      * @return The preference value if it exists, or -1. Throws ClassCastException if there is a preference with this
      * name that is not a float
-     * @see {@link #getFloat(Context, String, float)}
+     * @see #getFloat(Context, String, float)
      */
     public static float getFloat(Context context, String key) {
         return getFloat(context, key, -1);
@@ -222,7 +222,7 @@ public class PreferencesUtils {
      * @param key The name of the preference to retrieve
      * @return The preference value if it exists, or false. Throws ClassCastException if there is a preference with this
      * name that is not a boolean
-     * @see {@link #getBoolean(Context, String, boolean)}
+     * @see #getBoolean(Context, String, boolean)
      */
     public static boolean getBoolean(Context context, String key) {
         return getBoolean(context, key, false);

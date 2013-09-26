@@ -51,7 +51,7 @@ public class BorderScrollView extends ScrollView {
     /**
      * OnBorderListener, Called when scroll to top or bottom
      * 
-     * @author Trinea 2013-5-22
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-22
      */
     public static interface OnBorderListener {
 

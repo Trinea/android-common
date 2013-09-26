@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Random Utils
  * 
- * @author Trinea 2012-5-12
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-12
  */
 public class RandomUtils {
 
@@ -20,7 +20,7 @@ public class RandomUtils {
      * 
      * @param length
      * @return
-     * @see {@link RandomUtils#getRandom(String source, int length)}
+     * @see RandomUtils#getRandom(String source, int length)
      */
     public static String getRandomNumbersAndLetters(int length) {
         return getRandom(NUMBERS_AND_LETTERS, length);
@@ -31,7 +31,7 @@ public class RandomUtils {
      * 
      * @param length
      * @return
-     * @see {@link RandomUtils#getRandom(String source, int length)}
+     * @see RandomUtils#getRandom(String source, int length)
      */
     public static String getRandomNumbers(int length) {
         return getRandom(NUMBERS, length);
@@ -42,7 +42,7 @@ public class RandomUtils {
      * 
      * @param length
      * @return
-     * @see {@link RandomUtils#getRandom(String source, int length)}
+     * @see RandomUtils#getRandom(String source, int length)
      */
     public static String getRandomLetters(int length) {
         return getRandom(LETTERS, length);
@@ -53,7 +53,7 @@ public class RandomUtils {
      * 
      * @param length
      * @return
-     * @see {@link RandomUtils#getRandom(String source, int length)}
+     * @see RandomUtils#getRandom(String source, int length)
      */
     public static String getRandomCapitalLetters(int length) {
         return getRandom(CAPITAL_LETTERS, length);
@@ -64,7 +64,7 @@ public class RandomUtils {
      * 
      * @param length
      * @return
-     * @see {@link RandomUtils#getRandom(String source, int length)}
+     * @see RandomUtils#getRandom(String source, int length)
      */
     public static String getRandomLowerCaseLetters(int length) {
         return getRandom(LOWER_CASE_LETTERS, length);

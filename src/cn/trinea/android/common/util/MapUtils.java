@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 /**
  * Map Utils
  * 
- * @author Trinea 2011-7-22
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-7-22
  */
 public class MapUtils {
 
@@ -145,7 +145,7 @@ public class MapUtils {
     /**
      * get key by value, match the first entry front to back
      * <ul>
-     * <strong>Attentions：</strong>
+     * <strong>Attentions:</strong>
      * <li>for HashMap, the order of entry not same to put order, so you may need to use TreeMap</li>
      * </ul>
      * 

@@ -8,7 +8,7 @@ import cn.trinea.android.common.util.ObjectUtils;
  * Remove type when cache is full.<br/>
  * when cache is full, compare data of object in cache, if data is smaller remove it first.<br/>
  * 
- * @author Trinea 2011-12-26
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-26
  */
 public class RemoveTypeDataSmall<T> implements CacheFullRemoveType<T> {
 

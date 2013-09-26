@@ -7,7 +7,7 @@ import cn.trinea.android.common.util.ObjectUtils;
 /**
  * Object in cache
  * 
- * @author Trinea 2011-12-23
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-23
  */
 public class CacheObject<V> implements Serializable, Comparable<CacheObject<V>> {
 
@@ -92,7 +92,7 @@ public class CacheObject<V> implements Serializable, Comparable<CacheObject<V>> 
     /**
      * Set used(got) count
      * 
-     * @return
+     * @param usedCount
      */
     public void setUsedCount(long usedCount) {
         this.usedCount = usedCount;

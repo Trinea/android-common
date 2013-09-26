@@ -11,7 +11,7 @@ import org.json.JSONObject;
 /**
  * Json Utils
  * 
- * @author Trinea 2012-5-12
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-12
  */
 public class JSONUtils {
 
@@ -72,7 +72,7 @@ public class JSONUtils {
      * @param key
      * @param defaultValue
      * @return
-     * @see {@link JSONUtils#getLong(JSONObject, String, Long)}
+     * @see JSONUtils#getLong(JSONObject, String, Long)
      */
     public static long getLong(JSONObject jsonObject, String key, long defaultValue) {
         return getLong(jsonObject, key, (Long)defaultValue);
@@ -83,7 +83,7 @@ public class JSONUtils {
      * @param key
      * @param defaultValue
      * @return
-     * @see {@link JSONUtils#getLong(String, String, Long)}
+     * @see JSONUtils#getLong(String, String, Long)
      */
     public static long getLong(String jsonData, String key, long defaultValue) {
         return getLong(jsonData, key, (Long)defaultValue);
@@ -146,7 +146,7 @@ public class JSONUtils {
      * @param key
      * @param defaultValue
      * @return
-     * @see {@link JSONUtils#getInt(JSONObject, String, Integer)}
+     * @see JSONUtils#getInt(JSONObject, String, Integer)
      */
     public static int getInt(JSONObject jsonObject, String key, int defaultValue) {
         return getInt(jsonObject, key, (Integer)defaultValue);
@@ -157,7 +157,7 @@ public class JSONUtils {
      * @param key
      * @param defaultValue
      * @return
-     * @see {@link JSONUtils#getInt(String, String, Integer)}
+     * @see JSONUtils#getInt(String, String, Integer)
      */
     public static int getInt(String jsonData, String key, int defaultValue) {
         return getInt(jsonData, key, (Integer)defaultValue);
@@ -220,7 +220,7 @@ public class JSONUtils {
      * @param key
      * @param defaultValue
      * @return
-     * @see {@link JSONUtils#getDouble(JSONObject, String, Double)}
+     * @see JSONUtils#getDouble(JSONObject, String, Double)
      */
     public static double getDouble(JSONObject jsonObject, String key, double defaultValue) {
         return getDouble(jsonObject, key, (Double)defaultValue);
@@ -231,7 +231,7 @@ public class JSONUtils {
      * @param key
      * @param defaultValue
      * @return
-     * @see {@link JSONUtils#getDouble(String, String, Double)}
+     * @see JSONUtils#getDouble(String, String, Double)
      */
     public static double getDouble(String jsonData, String key, double defaultValue) {
         return getDouble(jsonData, key, (Double)defaultValue);

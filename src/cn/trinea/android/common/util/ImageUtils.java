@@ -36,7 +36,7 @@ import android.graphics.drawable.Drawable;
  * <li>{@link #scaleImage(Bitmap, float, float)}</li>
  * </ul>
  * 
- * @author Trinea 2012-6-27
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-6-27
  */
 public class ImageUtils {
 

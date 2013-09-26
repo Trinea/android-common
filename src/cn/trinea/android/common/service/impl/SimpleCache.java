@@ -47,7 +47,7 @@ import cn.trinea.android.common.util.SerializeUtils;
  * <strong>Other interfaces same to {@link Map} </strong>
  * </ul>
  * 
- * @author Trinea 2011-12-23
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-23
  */
 public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
 
@@ -200,7 +200,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * @param key key
      * @param value data of {@link CacheObject}
      * @return return null if cache is full and cannot remove one, else return the value be putted
-     * @see {@link #put(Object, CacheObject)}
+     * @see SimpleCache#put(Object, CacheObject)
      */
     @Override
     public CacheObject<V> put(K key, V value) {
@@ -264,7 +264,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * 
      * @param key
      * @return
-     * @see {@link #isExpired(CacheObject)}
+     * @see SimpleCache#isExpired(CacheObject)
      */
     protected boolean isExpired(K key) {
         return validTime == -1 ? false : isExpired(cache.get(key));

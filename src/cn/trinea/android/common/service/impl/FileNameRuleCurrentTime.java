@@ -13,7 +13,7 @@ import cn.trinea.android.common.util.StringUtils;
  * <li>use file suffix in url as target file suffix</li>
  * </ul>
  * 
- * @author Trinea 2012-7-6
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-7-6
  */
 public class FileNameRuleCurrentTime implements FileNameRule {
 
@@ -22,8 +22,7 @@ public class FileNameRuleCurrentTime implements FileNameRule {
     private TimeRule          timeRule;
 
     /**
-     * @param timeRule, see {@link TimeRule}
-     * @return
+     * @param timeRule see {@link TimeRule}
      */
     public FileNameRuleCurrentTime(TimeRule timeRule){
         super();
@@ -96,7 +95,7 @@ public class FileNameRuleCurrentTime implements FileNameRule {
      * <li>{@link #TO_SECONDS} current time in seconds, E.g., at 2012-7-6 14:37:58.365 PM result is 1341556678</li>
      * </ul>
      * 
-     * @author Trinea 2012-7-6
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-7-6
      */
     public enum TimeRule {
         YEAR, DAY_OF_MONTH, MILLISECOND, HOUR_OF_DAY_TO_MILLIS, HOUR_OF_DAY_TO_SECONDS, HOUR_OF_DAY_TO_MINUTES,

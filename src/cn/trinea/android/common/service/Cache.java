@@ -9,7 +9,7 @@ import cn.trinea.android.common.entity.CacheObject;
 /**
  * Cache interface
  * 
- * @author Trinea 2011-12-23
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-23
  */
 public interface Cache<K, V> {
 

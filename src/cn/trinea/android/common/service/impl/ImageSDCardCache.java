@@ -58,7 +58,7 @@ import cn.trinea.android.common.util.SystemUtils;
  * <li>{@link #ImageSDCardCache(int, int)}</li>
  * </ul>
  * 
- * @author Trinea 2012-4-5
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
  */
 public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
@@ -333,7 +333,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * callback interface after image get success
      * 
-     * @author Trinea 2012-4-5
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
      */
     public interface OnImageSDCallbackListener extends Serializable {
 
@@ -367,7 +367,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * My handler
      * 
-     * @author Trinea 2012-11-20
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-11-20
      */
     private class MyHandler extends Handler {
 
@@ -417,7 +417,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * message object
      * 
-     * @author Trinea 2013-1-14
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-1-14
      */
     private class MessageObject {
 

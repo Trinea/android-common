@@ -9,7 +9,7 @@ import cn.trinea.android.common.entity.CacheObject;
  * when cache is full, compare object is cache with this class, delete the smallest one.<br/>
  * you can implements this interface.
  * 
- * @author Trinea 2011-12-26
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-12-26
  */
 public interface CacheFullRemoveType<V> extends Serializable {
 

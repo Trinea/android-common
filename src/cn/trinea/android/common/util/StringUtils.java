@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * String Utils
  * 
- * @author Trinea 2011-7-22
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2011-7-22
  */
 public class StringUtils {
 

@@ -11,7 +11,7 @@ import cn.trinea.android.common.util.StringUtils;
  * <li>use file suffix in url as target file suffix</li>
  * </ul>
  * 
- * @author Trinea 2012-11-21
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-11-21
  */
 public class FileNameRuleImageUrl implements FileNameRule {
 
