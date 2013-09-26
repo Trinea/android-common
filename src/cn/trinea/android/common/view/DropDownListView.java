@@ -86,7 +86,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
     /** rate about drop down distance and header padding top when drop down **/
     private float              headerPaddingTopRate     = 1.5f;
     /** min distance which header can release to loading **/
-    private int                headerReleaseMinDistance = 30;
+    private int                headerReleaseMinDistance = 50;
 
     /** whether bottom listener has more **/
     private boolean            hasMore                  = true;
@@ -384,8 +384,9 @@ public class DropDownListView extends ListView implements OnScrollListener {
                  * and header status is not HEADER_STATUS_LOADING
                  * <ul>
                  * if header layout is visiable,
-                 * <li>if height of header is higher than a fixed value, then set header status to RELEASE_TO_REFRESH.</li>
-                 * <li>else set header status to DROP_DOWN_TO_REFRESH.</li>
+                 * <li>if height of header is higher than a fixed value, then set header status to
+                 * HEADER_STATUS_RELEASE_TO_LOAD.</li>
+                 * <li>else set header status to HEADER_STATUS_DROP_DOWN_TO_LOAD.</li>
                  * </ul>
                  * <ul>
                  * if header layout is not visiable,
@@ -394,8 +395,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
                  */
                 if (firstVisibleItem == 0) {
                     headerImage.setVisibility(View.VISIBLE);
-                    if (headerLayout.getBottom() >= headerOriginalHeight + headerReleaseMinDistance
-                        || headerLayout.getTop() >= 0) {
+                    if (headerLayout.getBottom() >= headerOriginalHeight + headerReleaseMinDistance) {
                         setHeaderStatusReleaseToLoad();
                     } else if (headerLayout.getBottom() < headerOriginalHeight + headerReleaseMinDistance) {
                         setHeaderStatusDropDownToLoad();
@@ -865,8 +865,12 @@ public class DropDownListView extends ListView implements OnScrollListener {
     private void adjustHeaderPadding(MotionEvent ev) {
         // adjust header padding according to motion event history
         int pointerCount = ev.getHistorySize();
+        if (isVerticalFadingEdgeEnabled()) {
+            setVerticalScrollBarEnabled(false);
+        }
         for (int i = 0; i < pointerCount; i++) {
-            if (currentHeaderStatus == HEADER_STATUS_RELEASE_TO_LOAD) {
+            if (currentHeaderStatus == HEADER_STATUS_DROP_DOWN_TO_LOAD
+                || currentHeaderStatus == HEADER_STATUS_RELEASE_TO_LOAD) {
                 headerLayout.setPadding(headerLayout.getPaddingLeft(),
                                         (int)(((ev.getHistoricalY(i) - actionDownPointY) - headerOriginalHeight) / headerPaddingTopRate),
                                         headerLayout.getPaddingRight(), headerLayout.getPaddingBottom());
