@@ -54,9 +54,9 @@ import cn.trinea.android.common.R;
  */
 public class DropDownListView extends ListView implements OnScrollListener {
 
-    private boolean            isDropDownStyle          = true;
-    private boolean            isOnBottomStyle          = true;
-    private boolean            isAutoLoadOnBottom       = false;
+    private boolean            isDropDownStyle         = true;
+    private boolean            isOnBottomStyle         = true;
+    private boolean            isAutoLoadOnBottom      = false;
 
     private String             headerDefaultText;
     private String             headerPullText;
@@ -84,20 +84,20 @@ public class DropDownListView extends ListView implements OnScrollListener {
     private OnScrollListener   onScrollListener;
 
     /** rate about drop down distance and header padding top when drop down **/
-    private float              headerPaddingTopRate     = 1.5f;
+    private float              headerPaddingTopRate    = 1.5f;
     /** min distance which header can release to loading **/
-    private int                headerReleaseMinDistance = 50;
+    private int                headerReleaseMinDistance;
 
     /** whether bottom listener has more **/
-    private boolean            hasMore                  = true;
+    private boolean            hasMore                 = true;
     /** whether show footer loading progress bar when loading **/
-    private boolean            isShowFooterProgressBar  = true;
+    private boolean            isShowFooterProgressBar = true;
 
     private int                currentScrollState;
     private int                currentHeaderStatus;
 
     /** whether reached top, when has reached top, don't show header layout **/
-    private boolean            hasReachedTop            = false;
+    private boolean            hasReachedTop           = false;
 
     /** image flip animation **/
     private RotateAnimation    flipAnimation;
@@ -112,7 +112,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
     private float              actionDownPointY;
 
     /** whether is on bottom loading **/
-    private boolean            isOnBottomLoading        = false;
+    private boolean            isOnBottomLoading       = false;
 
     public DropDownListView(Context context){
         super(context);
@@ -156,6 +156,8 @@ public class DropDownListView extends ListView implements OnScrollListener {
             return;
         }
 
+        headerReleaseMinDistance = context.getResources()
+                                          .getDimensionPixelSize(R.dimen.drop_down_list_header_release_min_distance);
         flipAnimation = new RotateAnimation(0, 180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                                             RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         flipAnimation.setInterpolator(new LinearInterpolator());
@@ -395,9 +397,10 @@ public class DropDownListView extends ListView implements OnScrollListener {
                  */
                 if (firstVisibleItem == 0) {
                     headerImage.setVisibility(View.VISIBLE);
-                    if (headerLayout.getBottom() >= headerOriginalHeight + headerReleaseMinDistance) {
+                    int pointBottom = headerOriginalHeight + headerReleaseMinDistance;
+                    if (headerLayout.getBottom() >= pointBottom) {
                         setHeaderStatusReleaseToLoad();
-                    } else if (headerLayout.getBottom() < headerOriginalHeight + headerReleaseMinDistance) {
+                    } else if (headerLayout.getBottom() < pointBottom) {
                         setHeaderStatusDropDownToLoad();
                     }
                 } else {
