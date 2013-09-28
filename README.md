@@ -1,6 +1,6 @@
 ![Trinea](http://farm8.staticflickr.com/7426/9456847893_053161c7a4_o.png)Android公共库
 -------------
-<strong>个人博客[www.trinea.cn]<strong>：(http://www.trinea.cn/) 关注于[Android](http://www.trinea.cn/category/android/)、[Java](http://www.trinea.cn/category/java/)、[性能优化](http://www.trinea.cn/category/perf/)、[开源代码](http://www.trinea.cn/category/open-code/)
+####个人博客[www.trinea.cn](http://www.trinea.cn/) ：关注于[Android](http://www.trinea.cn/category/android/)、[Java](http://www.trinea.cn/category/java/)、[性能优化](http://www.trinea.cn/category/perf/)、[开源代码](http://www.trinea.cn/category/open-code/)
 **主要包括**：<strong>缓存</strong>(图片缓存、预取缓存)、<strong>公共View</strong>(下拉及底部加载更多ListView、底部加载更多ScrollView、滑动一页Gallery)、及<strong>工具类</strong>(下载管理、静默安装、shell工具类等等)，    
 **示例APK**：[TrineaAndroidDemo.apk](https://github.com/Trinea/TrineaDownload/blob/master/TrineaAndroidDemo.apk?raw=true).  
 ####一. 缓存类
