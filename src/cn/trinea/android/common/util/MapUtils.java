@@ -1,6 +1,7 @@
 package cn.trinea.android.common.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -256,5 +257,30 @@ public class MapUtils {
     public static Map<String, String> parseKeyAndValueToMap(String source) {
         return parseKeyAndValueToMap(source, DEFAULT_KEY_AND_VALUE_SEPARATOR, DEFAULT_KEY_AND_VALUE_PAIR_SEPARATOR,
                                      true);
+    }
+
+    /**
+     * join map
+     * 
+     * @param map
+     * @return
+     */
+    public static String toJson(Map<String, String> map) {
+        if (map == null || map.size() == 0) {
+            return null;
+        }
+
+        StringBuilder paras = new StringBuilder();
+        paras.append("{");
+        Iterator<Map.Entry<String, String>> ite = map.entrySet().iterator();
+        while (ite.hasNext()) {
+            Map.Entry<String, String> entry = (Map.Entry<String, String>)ite.next();
+            paras.append("\"").append(entry.getKey()).append("\":").append(entry.getValue());
+            if (ite.hasNext()) {
+                paras.append(",");
+            }
+        }
+        paras.append("}");
+        return paras.toString();
     }
 }
