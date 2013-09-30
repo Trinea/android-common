@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.trinea.android.common"
     android:versionCode="23"
-    android:versionName="3.7.3" >
+    android:versionName="3.7.4" >
 
     <uses-sdk android:minSdkVersion="9" />
 

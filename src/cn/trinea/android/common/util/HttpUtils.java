@@ -13,12 +13,37 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+
 import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
 
 /**
  * HttpUtils
+ * <ul>
+ * <strong>Http get</strong>
+ * <li>{@link #httpGet(HttpRequest)}</li>
+ * <li>{@link #httpGet(String)}</li>
+ * <li>{@link #httpGetString(String)}</li>
+ * </ul>
+ * <ul>
+ * <strong>Http post</strong>
+ * <li>{@link #httpPost(HttpRequest)}</li>
+ * <li>{@link #httpPost(String)}</li>
+ * <li>{@link #httpPostString(String)}</li>
+ * <li>{@link #httpPostString(String, Map)}</li>
+ * </ul>
+ * <ul>
+ * <strong>Http params</strong>
+ * <li>{@link #getUrlWithParas(String, Map)}</li>
+ * <li>{@link #getUrlWithValueEncodeParas(String, Map)}</li>
+ * <li>{@link #joinParas(Map)}</li>
+ * <li>{@link #joinParasWithEncodedValue(Map)}</li>
+ * <li>{@link #appendParaToUrl(String, String, String)}</li>
+ * <li>{@link #parseGmtTime(String)}</li>
+ * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-12
  */
@@ -311,7 +336,7 @@ public class HttpUtils {
      * @param paraValue
      * @return
      */
-    public static String appednParaToUrl(String url, String paraKey, String paraValue) {
+    public static String appendParaToUrl(String url, String paraKey, String paraValue) {
         if (StringUtils.isEmpty(url)) {
             return url;
         }
@@ -323,6 +348,24 @@ public class HttpUtils {
             sb.append(PARAMETERS_SEPARATOR);
         }
         return sb.append(paraKey).append(EQUAL_SIGN).append(paraValue).toString();
+    }
+
+    private static final SimpleDateFormat GMT_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z",
+                                                                            Locale.ENGLISH);
+
+    /**
+     * parse gmt time to long
+     * 
+     * @param gmtTime likes Thu, 11 Apr 2013 10:20:30 GMT
+     * @return -1 represents exception
+     */
+    public static long parseGmtTime(String gmtTime) {
+        try {
+            return GMT_FORMAT.parse(gmtTime).getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     /**
@@ -365,23 +408,5 @@ public class HttpUtils {
         }
         response.setResponseHeader(HttpConstants.EXPIRES, urlConnection.getHeaderField("Expires"));
         response.setResponseHeader(HttpConstants.CACHE_CONTROL, urlConnection.getHeaderField("Cache-Control"));
-    }
-
-    private static final SimpleDateFormat GMT_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z",
-                                                                            Locale.ENGLISH);
-
-    /**
-     * parse gmt time to long
-     * 
-     * @param gmtTime likes Thu, 11 Apr 2013 10:20:30 GMT
-     * @return -1 represents exception
-     */
-    public static long parseGmtTime(String gmtTime) {
-        try {
-            return GMT_FORMAT.parse(gmtTime).getTime();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
     }
 }
