@@ -357,7 +357,7 @@ public class HttpUtils {
      * parse gmt time to long
      * 
      * @param gmtTime likes Thu, 11 Apr 2013 10:20:30 GMT
-     * @return -1 represents exception
+     * @return -1 represents exception otherwise time in  milliseconds
      */
     public static long parseGmtTime(String gmtTime) {
         try {
