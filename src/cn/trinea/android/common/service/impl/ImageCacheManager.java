@@ -26,8 +26,8 @@ import android.widget.ImageView;
  * 
  *         图片缓存管理，有两级缓存，第一级为
  *         本地图片文件与内存的缓存，第二层结合ImageSDCardCacheManager，为网络与本地文件之间的缓存。
- *         使用方法：导入这个类，或者直接作为内部类，获取图片的时候跟使用ImageCache一样，例如： ImageCacheManager
- *         imgCacheManager = new ImageCacheManager(context);
+ *         使用方法：导入这个类，或者直接作为内部类，获取图片的时候跟使用ImageCache一样，例如： 
+ *         ImageCacheManager imgCacheManager = new ImageCacheManager(context);
  * 
  *         参数的设置与原来的ImageCache和ImageSDCardCache一致(可以删除代码中的一些默认的设置) ImageCache
  *         IMAGE_CACHE = imgCacheManager。getImgCache();
