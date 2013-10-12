@@ -45,7 +45,7 @@ import android.widget.ImageView;
  *               ImageView imageView = (ImageView)view;
  *               imageView.setImageDrawable(imageDrawable); 
  *               if (!isInCache) {
- *                 imageView.startAnimation(getInAlphaAnimation(2000)); 
+ *                 imageView.startAnimation(imgCacheManager.getInAlphaAnimation(2000)); 
  *               } 
  *             }
  *            } 
