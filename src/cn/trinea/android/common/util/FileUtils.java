@@ -2,12 +2,13 @@ package cn.trinea.android.common.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,11 @@ public class FileUtils {
      * read file
      * 
      * @param filePath
+     * @param charsetName The name of a supported {@link java.nio.charset.Charset </code>charset<code>}
      * @return if file not exist, return null, else return content of file
      * @throws IOException if an error occurs while operator BufferedReader
      */
-    public static StringBuilder readFile(String filePath) {
+    public static StringBuilder readFile(String filePath, String charsetName) {
         File file = new File(filePath);
         StringBuilder fileContent = new StringBuilder("");
         if (file == null || !file.isFile()) {
@@ -56,7 +58,8 @@ public class FileUtils {
 
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file));
+            InputStreamReader is = new InputStreamReader(new FileInputStream(file), charsetName);
+            reader = new BufferedReader(is);
             String line = null;
             while ((line = reader.readLine()) != null) {
                 if (!fileContent.toString().equals("")) {
@@ -147,10 +150,11 @@ public class FileUtils {
      * read file to string list, a element of list is a line
      * 
      * @param filePath
+     * @param charsetName The name of a supported {@link java.nio.charset.Charset </code>charset<code>}
      * @return if file not exist, return null, else return content of file
      * @throws IOException if an error occurs while operator BufferedReader
      */
-    public static List<String> readFileToList(String filePath) {
+    public static List<String> readFileToList(String filePath, String charsetName) {
         File file = new File(filePath);
         List<String> fileContent = new ArrayList<String>();
         if (file == null || !file.isFile()) {
@@ -159,7 +163,8 @@ public class FileUtils {
 
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file));
+            InputStreamReader is = new InputStreamReader(new FileInputStream(file), charsetName);
+            reader = new BufferedReader(is);
             String line = null;
             while ((line = reader.readLine()) != null) {
                 fileContent.add(line);
