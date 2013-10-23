@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-
 import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
@@ -357,7 +354,7 @@ public class HttpUtils {
      * parse gmt time to long
      * 
      * @param gmtTime likes Thu, 11 Apr 2013 10:20:30 GMT
-     * @return -1 represents exception otherwise time in  milliseconds
+     * @return -1 represents exception otherwise time in milliseconds
      */
     public static long parseGmtTime(String gmtTime) {
         try {

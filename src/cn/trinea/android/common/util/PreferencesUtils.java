@@ -30,7 +30,7 @@ import android.content.SharedPreferences;
  */
 public class PreferencesUtils {
 
-    public static final String PREFERENCE_NAME = "TrineaAndroidCommon";
+    public static String PREFERENCE_NAME = "TrineaAndroidCommon";
 
     /**
      * put string preferences

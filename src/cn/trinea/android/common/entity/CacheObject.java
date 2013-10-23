@@ -194,6 +194,7 @@ public class CacheObject<V> implements Serializable, Comparable<CacheObject<V>> 
      * if data, enterTime, priority, isExpired, isForever all equals
      */
     @SuppressWarnings("unchecked")
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -202,5 +203,10 @@ public class CacheObject<V> implements Serializable, Comparable<CacheObject<V>> 
         CacheObject<V> obj = (CacheObject<V>)(o);
         return (ObjectUtils.isEquals(this.data, obj.data) && this.enterTime == obj.enterTime
                 && this.priority == obj.priority && this.isExpired == obj.isExpired && this.isForever == obj.isForever);
+    }
+
+    @Override
+    public int hashCode() {
+        return data == null ? 0 : data.hashCode();
     }
 }

@@ -59,11 +59,13 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
     /** count for preload backward, default is {@link #DEFAULT_BACKWARD_CACHE_NUMBER} **/
     private int                             backwardCacheNumber           = DEFAULT_BACKWARD_CACHE_NUMBER;
 
+    /** whether to check the network at first when get data **/
+    private boolean                         isCheckNetwork                = true;
     /** allowed network type, default to all network types allowed **/
     private int                             allowedNetworkTypes           = ~0;
 
     /** get data listener **/
-    private OnGetDataListener<K, V>         onGetDataListener;
+    protected OnGetDataListener<K, V>       onGetDataListener;
 
     /**
      * restore threads those getting data, to avoid multi threads get the data for same key so that to save network
@@ -282,7 +284,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * @return
      */
     private synchronized GetDataThread gettingData(K key) {
-        if (containsKey(key) || !checkIsNetworkTypeAllowed()) {
+        if (containsKey(key) || (isCheckNetwork && !checkIsNetworkTypeAllowed())) {
             return null;
         }
 
@@ -424,6 +426,24 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      */
     public void setAllowedNetworkTypes(int allowedNetworkTypes) {
         this.allowedNetworkTypes = allowedNetworkTypes;
+    }
+
+    /**
+     * get whether to check the network at first when get data, used when {@link #checkIsNetworkTypeAllowed()}
+     * 
+     * @return
+     */
+    public boolean isCheckNetwork() {
+        return isCheckNetwork;
+    }
+
+    /**
+     * set whether to check the network at first when get data, used when {@link #checkIsNetworkTypeAllowed()}
+     * 
+     * @param isCheckNetwork
+     */
+    public void setCheckNetwork(boolean isCheckNetwork) {
+        this.isCheckNetwork = isCheckNetwork;
     }
 
     public Context getContext() {
