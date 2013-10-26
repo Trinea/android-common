@@ -30,6 +30,8 @@ import cn.trinea.android.common.util.ImageUtils;
  * <li>{@link ImageMemoryCache#get(String, List, View)} get image asynchronous and preload other images asynchronous
  * according to urlList</li>
  * <li>{@link ImageMemoryCache#get(String, View)} get image asynchronous</li>
+ * <li>{@link #initData(Context, String)} or {@link #loadDataFromDb(Context, String)} to init data when app start,
+ * {@link #saveDataToDb(Context, String)} to save data when app exit</li>
  * <li>{@link #setHttpReadTimeOut(int)} set http read image time out, if less than 0, not set. default is not set</li>
  * <li>{@link PreloadDataCache#setContext(Context)} and {@link #setAllowedNetworkTypes(int)} restrict the types of
  * networks over which this data can get.</li>
@@ -40,7 +42,6 @@ import cn.trinea.android.common.util.ImageUtils;
  * <li>{@link SimpleCache#setCacheFullRemoveType(CacheFullRemoveType)} set remove type when primary cache is full</li>
  * <li>{@link #setCacheFullRemoveTypeOfSecondaryCache(CacheFullRemoveType)} set remove type when secondary cache is full
  * </li>
- * <li>other see {@link PreloadDataCache} and {@link SimpleCache}</li>
  * </ul>
  * <ul>
  * <strong>Constructor</strong>

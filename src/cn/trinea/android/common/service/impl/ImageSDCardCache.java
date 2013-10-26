@@ -42,6 +42,8 @@ import cn.trinea.android.common.util.SystemUtils;
  * <li>{@link #get(String, List, View)} get image asynchronous and preload other images asynchronous according to
  * urlList</li>
  * <li>{@link #get(String, View)} get image asynchronous</li>
+ * <li>{@link #initData(Context, String)} or {@link #loadDataFromDb(Context, String)} to init data when app start,
+ * {@link #saveDataToDb(Context, String)} to save data when app exit</li>
  * <li>{@link #setFileNameRule(FileNameRule)} set file name rule which be used when saving images, default is
  * {@link FileNameRuleImageUrl}</li>
  * <li>{@link #setCacheFolder(String)} set cache folder path which be used when saving images, default is
