@@ -1,430 +1,378 @@
 package cn.trinea.android.common.service.impl;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.io.File;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
+import android.os.Environment;
 import android.view.View;
 import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
+import cn.trinea.android.common.service.FileNameRule;
+import cn.trinea.android.common.service.impl.ImageMemoryCache.OnImageCallbackListener;
+import cn.trinea.android.common.util.FileUtils;
 import cn.trinea.android.common.util.ImageUtils;
-import cn.trinea.android.common.util.SizeUtils;
-import cn.trinea.android.common.util.StringUtils;
-import cn.trinea.android.common.util.SystemUtils;
 
 /**
- * <strong>Image Memory Cache</strong><br/>
+ * <strong>Image Cache</strong><br/>
  * <br/>
- * It applies to images those uesd frequently, like users avatar of twitter or sina weibo. Cache of big image you can
- * consider of {@link ImageSDCardCache}.<br/>
+ * It's a cache with primary cache and secondary cache. It's a combination of {@link ImageMemoryCache} and
+ * {@link ImageSDCardCache}. It applies to apps those used much images, like sina weibo, twitter, taobao, huaban, weixin
+ * and so on.<br/>
  * <ul>
  * <strong>Setting and Usage</strong>
- * <li>Use one of constructors below to init cache</li>
- * <li>{@link #setOnImageCallbackListener(OnImageCallbackListener)} set callback interface after image get success</li>
- * <li>{@link #get(String, List, View)} get image asynchronous and preload other images asynchronous according to
- * urlList</li>
- * <li>{@link #get(String, View)} get image asynchronous</li>
+ * <li>Use one of constructors in sections II to init cache</li>
+ * <li>{@link ImageMemoryCache#setOnImageCallbackListener(OnImageCallbackListener)} set callback interface after image
+ * get success</li>
+ * <li>{@link ImageMemoryCache#get(String, List, View)} get image asynchronous and preload other images asynchronous
+ * according to urlList</li>
+ * <li>{@link ImageMemoryCache#get(String, View)} get image asynchronous</li>
  * <li>{@link #setHttpReadTimeOut(int)} set http read image time out, if less than 0, not set. default is not set</li>
- * <li>{@link #setOpenWaitingQueue(boolean)} set whether open waiting queue, default is true. If true, save all view
- * waiting for image loaded, else only save the newest one</li>
+ * <li>{@link PreloadDataCache#setContext(Context)} and {@link #setAllowedNetworkTypes(int)} restrict the types of
+ * networks over which this data can get.</li>
+ * <li>{@link ImageMemoryCache#setOpenWaitingQueue(boolean)} set whether open waiting queue, default is true. If true,
+ * save all view waiting for image loaded, else only save the newest one</li>
  * <li>{@link PreloadDataCache#setOnGetDataListener(OnGetDataListener)} set how to get image, this cache will get image
  * and preload images by it</li>
- * <li>{@link SimpleCache#setCacheFullRemoveType(CacheFullRemoveType)} set remove type when cache is full</li>
+ * <li>{@link SimpleCache#setCacheFullRemoveType(CacheFullRemoveType)} set remove type when primary cache is full</li>
+ * <li>{@link #setCacheFullRemoveTypeOfSecondaryCache(CacheFullRemoveType)} set remove type when secondary cache is full
+ * </li>
  * <li>other see {@link PreloadDataCache} and {@link SimpleCache}</li>
  * </ul>
  * <ul>
  * <strong>Constructor</strong>
  * <li>{@link #ImageCache()}</li>
- * <li>{@link #ImageCache(int)}</li>
  * <li>{@link #ImageCache(int, int)}</li>
+ * <li>{@link #ImageCache(int, int, int, int)}</li>
  * </ul>
  * 
- * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
+ * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-10-18
  */
-public class ImageCache extends PreloadDataCache<String, Drawable> {
+public class ImageCache extends ImageMemoryCache {
 
-    private static final long                    serialVersionUID   = 1L;
+    private static final long  serialVersionUID     = 1L;
+    private ImageSDCardCache   secondaryCache;
 
-    private static final String                  TAG                = "ImageCache";
-
-    /** callback interface after image get success **/
-    private OnImageCallbackListener              onImageCallbackListener;
-    /** http read image time out, if less than 0, not set. default is not set **/
-    private int                                  httpReadTimeOut    = -1;
-    /**
-     * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
-     * newest one
-     **/
-    private boolean                              isOpenWaitingQueue = true;
-
-    /** recommend default max cache size according to dalvik max memory **/
-    public static final int                      DEFAULT_MAX_SIZE   = getDefaultMaxSize();
-    /** image got success message what **/
-    private static final int                     IMAGE_LOADED_WHAT  = 1;
-
-    /** thread pool whose wait for data got, attention, not the get data thread pool **/
-    private transient ExecutorService            threadPool         = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
-    /**
-     * key is image url, value is the newest view which waiting for image loaded, used when {@link #isOpenWaitingQueue}
-     * is false
-     **/
-    private transient Map<String, View>          viewMap;
-    /**
-     * key is image url, value is view set those waiting for image loaded, used when {@link #isOpenWaitingQueue} is true
-     **/
-    private transient Map<String, HashSet<View>> viewSetMap;
-
-    private transient Handler                    handler;
+    /** cache folder path which be used when saving images **/
+    public static final String DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath()
+                                                      + File.separator + "Trinea" + File.separator + "AndroidCommon"
+                                                      + File.separator + "ImageCache";
 
     /**
-     * get image asynchronous. when get image success, it will pass to
-     * {@link OnImageCallbackListener#onImageLoaded(String, Drawable, View, boolean)}
+     * <ul>
+     * <li>max size of primary cache is {@link ImageMemoryCache#DEFAULT_MAX_SIZE}, max size of secondary cache is
+     * {@link ImageSDCardCache#DEFAULT_MAX_SIZE}</li>
+     * <li>thread pool size of primary cache and secondary cache both are
+     * {@link PreloadDataCache#DEFAULT_THREAD_POOL_SIZE}</li>
+     * </ul>
      * 
-     * @param imageUrl
-     * @param view
-     * @return whether image already in cache or not
+     * @see {@link #ImageCache(int, int, int, int)}
      */
-    public boolean get(String imageUrl, View view) {
-        return get(imageUrl, null, view);
+    public ImageCache(){
+        this(ImageMemoryCache.DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE,
+             ImageSDCardCache.DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
     /**
-     * get image asynchronous and preload other images asynchronous according to urlList
+     * <ul>
+     * <li>max size of secondary cache is {@link ImageSDCardCache#DEFAULT_MAX_SIZE}</li>
+     * <li>thread pool size of primary cache and secondary cache both are
+     * {@link PreloadDataCache#DEFAULT_THREAD_POOL_SIZE}</li>
+     * </ul>
      * 
-     * @param imageUrl
-     * @param urlList url list, if is null, not preload, else preload forward by
-     * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
-     * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
-     * @param view
-     * @return whether image already in cache or not
+     * @param primaryCacheMaxSize
+     * @param secondaryCacheMaxSize
+     * @see {@link #ImageCache(int, int, int, int)}
      */
-    public boolean get(final String imageUrl, final List<String> urlList, final View view) {
-        if (StringUtils.isEmpty(imageUrl)) {
-            return false;
-        }
+    public ImageCache(int primaryCacheMaxSize){
+        this(primaryCacheMaxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE, ImageSDCardCache.DEFAULT_MAX_SIZE,
+             PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
+    }
 
-        /**
-         * if already in cache, call onImageSDCallbackListener, else new thread to wait for it
-         */
-        CacheObject<Drawable> object = getFromCache(imageUrl, urlList);
-        if (object != null) {
-            Drawable drawable = object.getData();
-            if (drawable != null) {
-                if (onImageCallbackListener != null) {
-                    onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, true);
+    /**
+     * thread pool size of primary cache and secondary cache both are {@link PreloadDataCache#DEFAULT_THREAD_POOL_SIZE}
+     * 
+     * @param primaryCacheMaxSize
+     * @param secondaryCacheMaxSize
+     * @see {@link #ImageCache(int, int, int, int)}
+     */
+    public ImageCache(int primaryCacheMaxSize, int secondaryCacheMaxSize){
+        this(primaryCacheMaxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE, secondaryCacheMaxSize,
+             PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
+    }
+
+    /**
+     * <ul>
+     * <li>Callback interface after image get success is null, can set by
+     * {@link PreloadDataCache#setOnImageCallbackListener(OnImageCallbackListener)}</li>
+     * <li>Get data listener of primary cache is {@link #getOnGetImageListenerOfPrimaryCache()}, you can set by
+     * {@link #setOnGetImageListenerOfPrimaryCache(OnGetDataListener)}, but not recommended, you may destory secondary
+     * cache.</li>
+     * <li>Get data listener of secondary cache is {@link #getOnGetImageListenerOfSecondaryCache()}, you can set by
+     * {@link #setOnGetImageListenerOfSecondaryCache(OnGetDataListener)}.</li>
+     * <li>Elements of the cache will not invalid</li>
+     * <li>Remove type of primary cache is {@link RemoveTypeUsedCountSmall} when cache is full</li>
+     * </ul>
+     * 
+     * @param primaryCacheMaxSize maximum size of the primary cache
+     * @param primaryCacheThreadPoolSize getting data thread pool size of the primary cache
+     * @param secondaryCacheMaxSize maximum size of the secondary cache
+     * @param secondaryCacheThreadPoolSize getting data thread pool size of the secondary cache
+     */
+    public ImageCache(int primaryCacheMaxSize, int primaryCacheThreadPoolSize, int secondaryCacheMaxSize,
+                      int secondaryCacheThreadPoolSize){
+        super(primaryCacheMaxSize, primaryCacheThreadPoolSize);
+
+        setOnGetDataListener(new OnGetDataListener<String, Drawable>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public CacheObject<Drawable> onGetData(String key) {
+                CacheObject<String> object = secondaryCache.get(key);
+                String imagePath = (object == null ? null : object.getData());
+                if (FileUtils.isFileExist(imagePath)) {
+                    Drawable d = ImageUtils.bitmapToDrawable(BitmapFactory.decodeFile(imagePath));
+                    return (d == null ? null : new CacheObject<Drawable>(d));
+                } else {
+                    secondaryCache.remove(key);
                 }
-                return true;
-            } else {
-                remove(imageUrl);
+                return null;
             }
-        }
+        });
+        super.setCheckNetwork(false);
+        setCacheFullRemoveType(new RemoveTypeUsedCountSmall<Drawable>());
 
-        if (isOpenWaitingQueue) {
-            synchronized (viewSetMap) {
-                HashSet<View> viewSet = viewSetMap.get(imageUrl);
-                if (viewSet == null) {
-                    viewSet = new HashSet<View>();
-                    viewSetMap.put(imageUrl, viewSet);
-                }
-                viewSet.add(view);
-            }
-        } else {
-            viewMap.put(imageUrl, view);
-        }
-
-        if (isExistGettingDataThread(imageUrl)) {
-            return false;
-        }
-
-        startGetImageThread(IMAGE_LOADED_WHAT, imageUrl, urlList);
-        return false;
+        secondaryCache = new ImageSDCardCache(secondaryCacheMaxSize, secondaryCacheThreadPoolSize);
+        secondaryCache.setCacheFolder(DEFAULT_CACHE_FOLDER);
+        secondaryCache.setFileNameRule(new FileNameRuleImageUrl().setFileExtension(""));
     }
 
     /**
-     * get callback interface after image get success
-     * 
-     * @return the onImageCallbackListener
-     */
-    public OnImageCallbackListener getOnImageCallbackListener() {
-        return onImageCallbackListener;
-    }
-
-    /**
-     * set callback interface after image get success
-     * 
-     * @param onImageCallbackListener
-     */
-    public void setOnImageCallbackListener(OnImageCallbackListener onImageCallbackListener) {
-        this.onImageCallbackListener = onImageCallbackListener;
-    }
-
-    /**
-     * get http read image time out, if less than 0, not set. default is not set
+     * get http read image time out of secondary cache, if less than 0, not set. default is not set
      * 
      * @return the httpReadTimeOut
      */
+    @Override
     public int getHttpReadTimeOut() {
-        return httpReadTimeOut;
+        return secondaryCache.getHttpReadTimeOut();
     }
 
     /**
-     * set http read image time out, if less than 0, not set. default is not set, in mills
+     * set http read image time out of secondary cache, if less than 0, not set. default is not set, in mills
      * 
      * @param readTimeOutMillis
      */
+    @Override
     public void setHttpReadTimeOut(int readTimeOutMillis) {
-        this.httpReadTimeOut = readTimeOutMillis;
+        secondaryCache.setHttpReadTimeOut(readTimeOutMillis);
     }
 
     /**
-     * get whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save
-     * the newest one
+     * clear both primary cache and secondary cache
+     */
+    @Override
+    public void clear() {
+        super.clear();
+        secondaryCache.clear();
+    }
+
+    @Override
+    public void setForwardCacheNumber(int forwardCacheNumber) {
+        super.setForwardCacheNumber(forwardCacheNumber);
+        secondaryCache.setForwardCacheNumber(forwardCacheNumber);
+    }
+
+    @Override
+    public void setBackwardCacheNumber(int backwardCacheNumber) {
+        super.setForwardCacheNumber(backwardCacheNumber);
+        secondaryCache.setForwardCacheNumber(backwardCacheNumber);
+    }
+
+    @Override
+    public int getAllowedNetworkTypes() {
+        return secondaryCache.getAllowedNetworkTypes();
+    }
+
+    @Override
+    public void setAllowedNetworkTypes(int allowedNetworkTypes) {
+        secondaryCache.setAllowedNetworkTypes(allowedNetworkTypes);
+    }
+
+    @Override
+    public boolean isCheckNetwork() {
+        return secondaryCache.isCheckNetwork();
+    }
+
+    @Override
+    public void setCheckNetwork(boolean isCheckNetwork) {
+        secondaryCache.setCheckNetwork(isCheckNetwork);
+    }
+
+    @Override
+    public boolean checkIsNetworkTypeAllowed() {
+        return secondaryCache.checkIsNetworkTypeAllowed();
+    }
+
+    @Override
+    public Context getContext() {
+        return secondaryCache.getContext();
+    }
+
+    @Override
+    public void setContext(Context context) {
+        secondaryCache.setContext(context);
+    }
+
+    /**
+     * get cache folder path which be used when saving images, default is {@link #DEFAULT_CACHE_FOLDER}
      * 
+     * @return the cacheFolder
+     * @see ImageSDCardCache#getCacheFolder()
+     */
+    public String getCacheFolder() {
+        return secondaryCache.getCacheFolder();
+    }
+
+    /**
+     * set cache folder path which be used when saving images, default is {@link #DEFAULT_CACHE_FOLDER}
+     * 
+     * @param cacheFolder
+     * @see ImageSDCardCache#setCacheFolder(String)
+     */
+    public void setCacheFolder(String cacheFolder) {
+        secondaryCache.setCacheFolder(cacheFolder);
+    }
+
+    /**
+     * get file name rule which be used when saving images, default is {@link FileNameRuleImageUrl}
+     * 
+     * @return the fileNameRule
+     * @see ImageSDCardCache#getFileNameRule()
+     */
+    public FileNameRule getFileNameRule() {
+        return secondaryCache.getFileNameRule();
+    }
+
+    /**
+     * set file name rule which be used when saving images, default is {@link FileNameRuleImageUrl}
+     * 
+     * @param fileNameRule
+     * @see ImageSDCardCache#setFileNameRule(FileNameRule)
+     */
+    public void setFileNameRule(FileNameRule fileNameRule) {
+        secondaryCache.setFileNameRule(fileNameRule);
+    }
+
+    /**
+     * load all data in db whose tag is same to tag to this cache. just put, do not affect the original data
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>If tag is null or empty, throws exception</li>
+     * </ul>
+     * 
+     * @param context
+     * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
+     * empty
      * @return
+     * @see ImageSDCardCache#loadDataFromDb(Context, ImageSDCardCache, String)
      */
-    public boolean isOpenWaitingQueue() {
-        return isOpenWaitingQueue;
+    public boolean loadDataFromDb(Context context, String tag) {
+        return ImageSDCardCache.loadDataFromDb(context, secondaryCache, tag);
     }
 
     /**
-     * set whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save
-     * the newest one
-     * 
-     * @param isOpenWaitingQueue
-     */
-    public void setOpenWaitingQueue(boolean isOpenWaitingQueue) {
-        this.isOpenWaitingQueue = isOpenWaitingQueue;
-    }
-
-    /**
+     * delete all rows in db whose tag is same to tag at first, and insert all data in this cache to db
      * <ul>
-     * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
-     * {@link #setOnImageCallbackListener(OnImageCallbackListener)}</li>
-     * <li>Maximum size of the cache is {@link #DEFAULT_MAX_SIZE}</li>
-     * <li>Elements of the cache will not invalid</li>
-     * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
+     * <strong>Attentions:</strong>
+     * <li>If tag is null or empty, throws exception</li>
+     * <li>Will delete all rows in db whose tag is same to tag at first</li>
      * </ul>
      * 
-     * @see PreloadDataCache#PreloadDataCache()
+     * @param context
+     * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
+     * empty
+     * @return
+     * @see ImageSDCardCache#saveDataToDb(Context, ImageSDCardCache, String)
      */
-    public ImageCache(){
-        this(DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
-    }
-
-    /**
-     * <ul>
-     * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
-     * {@link #setOnImageCallbackListener(OnImageCallbackListener)}</li>
-     * <li>Elements of the cache will not invalid</li>
-     * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
-     * </ul>
-     * 
-     * @param maxSize maximum size of the cache
-     * @see PreloadDataCache#PreloadDataCache(int)
-     */
-    public ImageCache(int maxSize){
-        this(maxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
-    }
-
-    /**
-     * <ul>
-     * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
-     * {@link #setOnImageCallbackListener(OnImageCallbackListener)}</li>
-     * <li>Elements of the cache will not invalid</li>
-     * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
-     * </ul>
-     * 
-     * @param maxSize maximum size of the cache
-     * @param threadPoolSize getting data thread pool size
-     * @see PreloadDataCache#PreloadDataCache(int, int)
-     */
-    public ImageCache(int maxSize, int threadPoolSize){
-        super(maxSize, threadPoolSize);
-
-        super.setOnGetDataListener(getDefaultOnGetImageListener());
-        super.setCacheFullRemoveType(new RemoveTypeUsedCountSmall<Drawable>());
-        this.viewMap = new ConcurrentHashMap<String, View>();
-        this.viewSetMap = new HashMap<String, HashSet<View>>();
-        this.handler = new MyHandler();
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
-        }
-    }
-
-    /**
-     * callback interface after image get success
-     * 
-     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
-     */
-    public interface OnImageCallbackListener extends Serializable {
-
-        /**
-         * callback function after image get success, run on ui thread
-         * 
-         * @param imageUrl imageUrl
-         * @param imageDrawable drawable
-         * @param view view need the image
-         * @param isInCache whether already in cache or got realtime
-         */
-        public void onImageLoaded(String imageUrl, Drawable imageDrawable, View view, boolean isInCache);
+    public boolean saveDataToDb(Context context, String tag) {
+        return ImageSDCardCache.saveDataToDb(context, secondaryCache, tag);
     }
 
     /**
      * @see ExecutorService#shutdown()
      */
+    @Override
     public void shutdown() {
-        threadPool.shutdown();
+        secondaryCache.shutdown();
         super.shutdown();
     }
 
     /**
      * @see ExecutorService#shutdownNow()
      */
+    @Override
     public List<Runnable> shutdownNow() {
-        threadPool.shutdownNow();
+        secondaryCache.shutdownNow();
         return super.shutdownNow();
     }
 
     /**
-     * My handler
+     * get get image listener of primary cache
      * 
-     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-11-20
+     * @return
+     * @see {@link PreloadDataCache#getOnGetDataListener()}
      */
-    private class MyHandler extends Handler {
-
-        public void handleMessage(Message message) {
-            switch (message.what) {
-                case IMAGE_LOADED_WHAT:
-                    MessageObject object = (MessageObject)message.obj;
-                    if (object == null) {
-                        break;
-                    }
-
-                    String imageUrl = object.imageUrl;
-                    Drawable drawable = object.drawable;
-                    if (onImageCallbackListener != null) {
-                        if (isOpenWaitingQueue) {
-                            synchronized (viewSetMap) {
-                                HashSet<View> viewSet = viewSetMap.get(imageUrl);
-                                if (viewSet != null) {
-                                    for (View view : viewSet) {
-                                        if (view != null) {
-                                            onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            View view = viewMap.get(imageUrl);
-                            if (view != null) {
-                                onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
-                            }
-                        }
-                    }
-
-                    if (isOpenWaitingQueue) {
-                        synchronized (viewSetMap) {
-                            viewSetMap.remove(imageUrl);
-                        }
-                    } else {
-                        viewMap.remove(imageUrl);
-                    }
-                    break;
-            }
-        }
-    };
-
-    /**
-     * message object
-     * 
-     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-1-14
-     */
-    private class MessageObject {
-
-        String   imageUrl;
-        Drawable drawable;
-
-        public MessageObject(String imageUrl, Drawable drawable){
-            this.imageUrl = imageUrl;
-            this.drawable = drawable;
-        }
+    public OnGetDataListener<String, Drawable> getOnGetImageListenerOfPrimaryCache() {
+        return getOnGetDataListener();
     }
 
     /**
-     * start thread to wait for image get
+     * set get data listener of primary cache, primary cache will get data and preload data by it
      * 
-     * @param messsageWhat
-     * @param imageUrl
-     * @param urlList url list, if is null, not preload, else preload forward by
-     * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
-     * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
+     * @param onGetImageListener
+     * @see {@link PreloadDataCache#setOnGetDataListener(OnGetDataListener)}
      */
-    private void startGetImageThread(final int messsageWhat, final String imageUrl, final List<String> urlList) {
-        // wait for image be got success and send message
-        threadPool.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                CacheObject<Drawable> object = get(imageUrl, urlList);
-                Drawable drawable = (object == null ? null : object.getData());
-                // if drawable is null, remove it
-                if (drawable == null) {
-                    remove(imageUrl);
-                } else {
-                    handler.sendMessage(handler.obtainMessage(IMAGE_LOADED_WHAT, new MessageObject(imageUrl, drawable)));
-                }
-            }
-        });
+    public void setOnGetImageListenerOfPrimaryCache(OnGetDataListener<String, Drawable> onGetImageListener) {
+        this.onGetDataListener = onGetImageListener;
     }
 
     /**
-     * default get image listener
+     * get get image listener of secondary cache
      * 
      * @return
      */
-    public OnGetDataListener<String, Drawable> getDefaultOnGetImageListener() {
-        return new OnGetDataListener<String, Drawable>() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public CacheObject<Drawable> onGetData(String key) {
-                Drawable d = null;
-                try {
-                    d = ImageUtils.getDrawableFromUrl(key, httpReadTimeOut);
-                } catch (Exception e) {
-                    Log.e(TAG, "get drawable exception, imageUrl is:" + key, e);
-                }
-                return (d == null ? null : new CacheObject<Drawable>(d));
-            }
-        };
+    public OnGetDataListener<String, String> getOnGetImageListenerOfSecondaryCache() {
+        return secondaryCache.getOnGetDataListener();
     }
 
     /**
-     * get recommend default max cache size according to dalvik max memory
+     * set get data listener of secondary cache, secondary cache will get data and preload data by it
+     * 
+     * @param onGetImageListener
+     */
+    public void setOnGetImageListenerOfSecondaryCache(OnGetDataListener<String, String> onGetImageListener) {
+        secondaryCache.setOnGetDataListener(onGetImageListener);
+    }
+
+    /**
+     * get remove type when secondary cache is full
      * 
      * @return
      */
-    static int getDefaultMaxSize() {
-        long maxMemory = Runtime.getRuntime().maxMemory();
-        if (maxMemory > SizeUtils.GB_2_BYTE) {
-            return 512;
-        }
+    public CacheFullRemoveType<String> getCacheFullRemoveTypeOfSecondaryCache() {
+        return secondaryCache.getCacheFullRemoveType();
+    }
 
-        int mb = (int)(maxMemory / SizeUtils.MB_2_BYTE);
-        return mb > 16 ? mb * 2 : 16;
+    /**
+     * set remove type when secondary cache is full
+     * 
+     * @param cacheFullRemoveType the cacheFullRemoveType to set
+     */
+    public void setCacheFullRemoveTypeOfSecondaryCache(CacheFullRemoveType<String> cacheFullRemoveType) {
+        secondaryCache.setCacheFullRemoveType(cacheFullRemoveType);
     }
 }

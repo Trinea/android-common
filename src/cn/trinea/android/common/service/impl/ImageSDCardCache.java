@@ -12,18 +12,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import cn.trinea.android.common.dao.impl.ImageSDCardCacheDaoImpl;
 import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.service.FileNameRule;
 import cn.trinea.android.common.util.FileUtils;
 import cn.trinea.android.common.util.ImageUtils;
 import cn.trinea.android.common.util.SizeUtils;
+import cn.trinea.android.common.util.SqliteUtils;
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.SystemUtils;
 
@@ -31,10 +34,10 @@ import cn.trinea.android.common.util.SystemUtils;
  * <strong>Image SDCard Cache</strong><br/>
  * <br/>
  * It applies to images those uesd frequently and their size is big that we cannot store too much in memory, like
- * pictures of twitter or sina weibo. Cache of small images you can consider of {@link ImageCache}.<br/>
+ * pictures of twitter or sina weibo. Cache of small images you can consider of {@link ImageMemoryCache}.<br/>
  * <ul>
  * <strong>Setting and Usage</strong>
- * <li>Use one of constructors below to init cache</li>
+ * <li>Use one of constructors in sections II to init cache</li>
  * <li>{@link #setOnImageSDCallbackListener(OnImageSDCallbackListener)} set callback interface after image get success</li>
  * <li>{@link #get(String, List, View)} get image asynchronous and preload other images asynchronous according to
  * urlList</li>
@@ -89,7 +92,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                                                         + "Trinea"
                                                                         + File.separator
                                                                         + "AndroidCommon"
-                                                                        + File.separator + "ImageCache";
+                                                                        + File.separator + "ImageSDCardCache";
 
     /** image got success message what **/
     private static final int                     IMAGE_LOADED_WHAT    = 1;
@@ -496,6 +499,92 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             }
         }
         super.clear();
+    }
+
+    /**
+     * load all data in db whose tag is same to tag to imageSDCardCache. just put, do not affect the original data
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>If tag is null or empty, throws exception</li>
+     * </ul>
+     * 
+     * @param context
+     * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
+     * empty
+     * @return
+     * @see #loadDataFromDb(Context, ImageSDCardCache, String)
+     */
+    public boolean loadDataFromDb(Context context, String tag) {
+        return ImageSDCardCache.loadDataFromDb(context, this, tag);
+    }
+
+    /**
+     * delete all rows in db whose tag is same to tag at first, and insert all data in imageSDCardCache to db
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>If tag is null or empty, throws exception</li>
+     * <li>Will delete all rows in db whose tag is same to tag at first</li>
+     * </ul>
+     * 
+     * @param context
+     * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
+     * empty
+     * @return
+     * @see #saveDataToDb(Context, ImageSDCardCache, String)
+     */
+    public boolean saveDataToDb(Context context, String tag) {
+        return ImageSDCardCache.saveDataToDb(context, this, tag);
+    }
+
+    /**
+     * load all data in db whose tag is same to tag to imageSDCardCache. just put, do not affect the original data
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>If imageSDCardCache is null, throws exception</li>
+     * <li>If tag is null or empty, throws exception</li>
+     * </ul>
+     * 
+     * @param context
+     * @param imageSDCardCache
+     * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
+     * empty
+     * @return
+     */
+    public static boolean loadDataFromDb(Context context, ImageSDCardCache imageSDCardCache, String tag) {
+        if (context == null || imageSDCardCache == null) {
+            throw new IllegalArgumentException("The context and cache both can not be null.");
+        }
+        if (StringUtils.isEmpty(tag)) {
+            throw new IllegalArgumentException("The tag can not be null or empty.");
+        }
+        return new ImageSDCardCacheDaoImpl(SqliteUtils.getInstance(context)).putIntoImageSDCardCache(imageSDCardCache,
+                                                                                                     tag);
+    }
+
+    /**
+     * delete all rows in db whose tag is same to tag at first, and insert all data in imageSDCardCache to db
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>If imageSDCardCache is null, throws exception</li>
+     * <li>If tag is null or empty, throws exception</li>
+     * <li>Will delete all rows in db whose tag is same to tag at first</li>
+     * </ul>
+     * 
+     * @param context
+     * @param imageSDCardCache
+     * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
+     * empty
+     * @return
+     */
+    public static boolean saveDataToDb(Context context, ImageSDCardCache imageSDCardCache, String tag) {
+        if (context == null || imageSDCardCache == null) {
+            throw new IllegalArgumentException("The context and cache both can not be null.");
+        }
+        if (StringUtils.isEmpty(tag)) {
+            throw new IllegalArgumentException("The tag can not be null or empty.");
+        }
+        return new ImageSDCardCacheDaoImpl(SqliteUtils.getInstance(context)).deleteAndInsertImageSDCardCache(imageSDCardCache,
+                                                                                                             tag);
     }
 
     /**
