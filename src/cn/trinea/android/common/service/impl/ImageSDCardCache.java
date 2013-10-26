@@ -502,10 +502,63 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     }
 
     /**
+     * delete unused file in {@link #getCacheFolder()}, you can use it after {@link #loadDataFromDb(Context, String)} at
+     * first time
+     */
+    public void deleteUnusedFiles() {
+        int size = getSize();
+        final HashSet<String> filePathSet = new HashSet<String>(size > 16 ? size : 16);
+        for (CacheObject<String> value : values()) {
+            if (value != null) {
+                filePathSet.add(value.getData());
+            }
+        }
+
+        threadPool.execute(new Runnable() {
+
+            @Override
+            public void run() {
+
+                try {
+                    File file = new File(getCacheFolder());
+                    if (file != null && file.exists() && file.isDirectory()) {
+                        for (File f : file.listFiles()) {
+                            if (f.isFile() && !filePathSet.contains(f.getPath())) {
+                                f.delete();
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "delete unused files fail.");
+                }
+            }
+        });
+    }
+
+    /**
+     * load all data from db and delete unused file in {@link #getCacheFolder()}
+     * <ul>
+     * <li>It's a combination of {@link #loadDataFromDb(Context, String)} and {@link #deleteUnusedFiles()}</li>
+     * <li>You should use {@link #saveDataToDb(Context, String)} to save data when app exit</li>
+     * </ul>
+     * 
+     * @param context
+     * @param tag
+     * @see #loadDataFromDb(Context, String)
+     * @see #deleteUnusedFiles()
+     */
+    public void initData(Context context, String tag) {
+        ImageSDCardCache.loadDataFromDb(context, this, tag);
+        deleteUnusedFiles();
+    }
+
+    /**
      * load all data in db whose tag is same to tag to imageSDCardCache. just put, do not affect the original data
      * <ul>
      * <strong>Attentions:</strong>
      * <li>If tag is null or empty, throws exception</li>
+     * <li>You should use {@link #saveDataToDb(Context, String)} to save data when app exit</li>
      * </ul>
      * 
      * @param context
@@ -524,6 +577,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * <strong>Attentions:</strong>
      * <li>If tag is null or empty, throws exception</li>
      * <li>Will delete all rows in db whose tag is same to tag at first</li>
+     * <li>You can use {@link #initData(Context, String)} or {@link #loadDataFromDb(Context, String)} to init data when
+     * app start</li>
      * </ul>
      * 
      * @param context
@@ -542,6 +597,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * <strong>Attentions:</strong>
      * <li>If imageSDCardCache is null, throws exception</li>
      * <li>If tag is null or empty, throws exception</li>
+     * <li>You should use {@link #saveDataToDb(Context, ImageSDCardCache, String)} to save data when app exit</li>
      * </ul>
      * 
      * @param context
@@ -568,6 +624,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * <li>If imageSDCardCache is null, throws exception</li>
      * <li>If tag is null or empty, throws exception</li>
      * <li>Will delete all rows in db whose tag is same to tag at first</li>
+     * <li>You can use {@link #initData(Context, String)} or {@link #loadDataFromDb(Context, ImageSDCardCache, String)}
+     * to init data when app start</li>
      * </ul>
      * 
      * @param context

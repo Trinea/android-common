@@ -268,10 +268,38 @@ public class ImageCache extends ImageMemoryCache {
     }
 
     /**
+     * load all data from db and delete unused file in {@link #getCacheFolder()}
+     * <ul>
+     * <li>It's a combination of {@link #loadDataFromDb(Context, String)} and {@link #deleteUnusedFiles()}</li>
+     * <li>You should use {@link #saveDataToDb(Context, String)} to save data when app exit</li>
+     * </ul>
+     * 
+     * @param context
+     * @param tag
+     * @see #loadDataFromDb(Context, String)
+     * @see #deleteUnusedFiles()
+     */
+    public void initData(Context context, String tag) {
+        loadDataFromDb(context, tag);
+        deleteUnusedFiles();
+    }
+
+    /**
+     * delete unused file in {@link #getCacheFolder()}, you can use it after {@link #loadDataFromDb(Context, String)} at
+     * first time
+     * 
+     * @see {@link ImageSDCardCache#deleteUnusedFiles()}
+     */
+    public void deleteUnusedFiles() {
+        secondaryCache.deleteUnusedFiles();
+    }
+
+    /**
      * load all data in db whose tag is same to tag to this cache. just put, do not affect the original data
      * <ul>
      * <strong>Attentions:</strong>
      * <li>If tag is null or empty, throws exception</li>
+     * <li>You should use {@link #saveDataToDb(Context, String)} to save data when app exit</li>
      * </ul>
      * 
      * @param context
@@ -290,6 +318,8 @@ public class ImageCache extends ImageMemoryCache {
      * <strong>Attentions:</strong>
      * <li>If tag is null or empty, throws exception</li>
      * <li>Will delete all rows in db whose tag is same to tag at first</li>
+     * <li>You can use {@link #initData(Context, String)} or {@link #loadDataFromDb(Context, String)} to init data when
+     * app start</li>
      * </ul>
      * 
      * @param context
