@@ -5,10 +5,10 @@
 **Api Guide**:[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_android_common/index.html)。  
 **个人博客**：[www.trinea.cn](http://www.trinea.cn/) 关注于[Android](http://www.trinea.cn/category/android/)、[Java](http://www.trinea.cn/category/java/)、[性能优化](http://www.trinea.cn/category/perf/)、[开源代码](http://www.trinea.cn/category/open-code/)。  
 ####一. 缓存类
-主要特性：(1).使用简单 (2). 轻松获取及预取取新图片(3).可选择多种缓存算法(FIFO、LIFO、LRU、MRU、LFU、MFU等13种)或自定义缓存算法 (4).省流量性能佳(有且仅有一个线程获取图片) (5).支持不同类型网络处理(6).可根据系统配置初始化缓存(7).扩展性强 (8).支持队列(9). 缓存可序列化到本地缓存 可从文件中恢复(10)包含map的大多数接口。
-#####1. 图片内存缓存
-使用见：[图片内存缓存的使用](http://www.trinea.cn/?p=704)  
-适用：应用中获取图片较多且图片不大的应用，如新浪微博、twitter、微信头像、美丽说、蘑菇街、花瓣、淘宝等等。。效果图如下：  
+主要特性：(1).使用简单 (2).轻松获取及预取取新图片 (3).包含二级缓存 (4).可选择多种缓存算法(FIFO、LIFO、LRU、MRU、LFU、MFU等13种)或自定义缓存算法 (5).可方便的保存及初始化恢复数据 (6).省流量性能佳(有且仅有一个线程获取图片) (7).支持不同类型网络处理(8).可根据系统配置初始化缓存 (9).扩展性强 (10).支持等待队列 (11)包含map的大多数接口。
+#####1. 图片缓存
+使用见：[图片缓存的使用](http://www.trinea.cn/?p=704)  
+适用：获取图片较多的应用，包含二级缓存，如新浪微博、twitter、微信头像、美丽说、蘑菇街、花瓣、淘宝等等。。效果图如下：  
 ![ImageCahe](http://farm4.staticflickr.com/3710/9312163125_81f1c1997b_o.jpg)
   
 
