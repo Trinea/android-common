@@ -46,6 +46,7 @@ import cn.trinea.android.common.util.ImageUtils;
  * <ul>
  * <strong>Constructor</strong>
  * <li>{@link #ImageCache()}</li>
+ * <li>{@link #ImageCache(int)}</li>
  * <li>{@link #ImageCache(int, int)}</li>
  * <li>{@link #ImageCache(int, int, int, int)}</li>
  * </ul>

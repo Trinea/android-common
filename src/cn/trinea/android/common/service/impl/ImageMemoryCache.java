@@ -47,9 +47,9 @@ import cn.trinea.android.common.util.SystemUtils;
  * </ul>
  * <ul>
  * <strong>Constructor</strong>
- * <li>{@link #ImageCache()}</li>
- * <li>{@link #ImageCache(int)}</li>
- * <li>{@link #ImageCache(int, int)}</li>
+ * <li>{@link #ImageMemoryCache()}</li>
+ * <li>{@link #ImageMemoryCache(int)}</li>
+ * <li>{@link #ImageMemoryCache(int, int)}</li>
  * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
