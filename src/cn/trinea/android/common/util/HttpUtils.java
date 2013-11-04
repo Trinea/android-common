@@ -125,6 +125,18 @@ public class HttpUtils {
     /**
      * http get
      * 
+     * @param request
+     * @return the content of the url, if null represents http error
+     * @see HttpUtils#httpGet(HttpRequest)
+     */
+    public static String httpGetString(HttpRequest request) {
+        HttpResponse response = httpGet(request);
+        return response == null ? null : response.getResponseBody();
+    }
+
+    /**
+     * http get
+     * 
      * @param httpUrl
      * @return the content of the url, if null represents http error
      * @see HttpUtils#httpGet(HttpRequest)
