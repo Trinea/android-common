@@ -6,6 +6,7 @@ import java.util.Map;
 import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.util.HttpUtils;
 import cn.trinea.android.common.util.StringUtils;
+import cn.trinea.android.common.util.TimeUtils;
 
 /**
  * <strong>HttpResponse</strong><br/>
@@ -38,6 +39,10 @@ public class HttpResponse {
     /** http response content **/
     private String              responseBody;
     private Map<String, Object> responseHeaders;
+    /** type to mark this response **/
+    private int                 type;
+    /** expired time in milliseconds **/
+    private long                expiredTime;
 
     /**
      * An <code>int</code> representing the three digit HTTP Status-Code.
@@ -108,6 +113,58 @@ public class HttpResponse {
 
     public void setResponseHeaders(Map<String, Object> responseHeaders) {
         this.responseHeaders = responseHeaders;
+    }
+
+    /**
+     * get type
+     * 
+     * @return the type
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * set type
+     * 
+     * @param type the type to set
+     */
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    /**
+     * set expired time in millis
+     * 
+     * @param expiredTime
+     */
+    public void setExpiredTime(long expiredTime) {
+        this.expiredTime = expiredTime;
+    }
+
+    /**
+     * get expired time in millis
+     * <ul>
+     * <li>if current time is bigger than expired time, it means this response is dirty</li>
+     * </ul>
+     * 
+     * @return <ul>
+     * <li>if max-age in cache-control is exists, return current time plus it</li>
+     * <li>else return expires</li>
+     * <li>if something error, return -1</li>
+     * </ul>
+     */
+    public long getExpiredTime() {
+        return expiredTime;
+    }
+
+    /**
+     * whether this response has expired
+     * 
+     * @return
+     */
+    public boolean isExpired() {
+        return TimeUtils.getCurrentTimeInLong() > expiredTime;
     }
 
     /**
