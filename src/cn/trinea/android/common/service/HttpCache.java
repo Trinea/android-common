@@ -7,6 +7,7 @@ import android.content.Context;
 import cn.trinea.android.common.dao.impl.HttpCacheDaoImpl;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
+import cn.trinea.android.common.service.impl.SimpleCache;
 import cn.trinea.android.common.util.HttpUtils;
 import cn.trinea.android.common.util.SqliteUtils;
 import cn.trinea.android.common.util.StringUtils;
@@ -16,7 +17,7 @@ import cn.trinea.android.common.util.StringUtils;
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-1
  */
-public class HttpCache {
+public class HttpCache extends SimpleCache<String, HttpResponse> {
 
     /** http memory cache **/
     private Map<String, HttpResponse> cache;
