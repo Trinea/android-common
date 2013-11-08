@@ -2,6 +2,7 @@
 -------------
 **主要包括**：<strong>缓存</strong>(图片缓存、预取缓存)、<strong>公共View</strong>(下拉及底部加载更多ListView、底部加载更多ScrollView、滑动一页Gallery)及<strong>Android常用工具类</strong>(网络、下载、shell、文件、Json、Collection等等)。    
 **示例APK**：[TrineaAndroidDemo.apk](https://github.com/Trinea/TrineaDownload/blob/master/TrineaAndroidDemo.apk?raw=true)，示例源码：[TrineaAndroidDemo](https://github.com/Trinea/AndroidDemo)。  
+**使用**:拉取代码导入IDE，右击你的工程->properties->Android，在library中选择TrineaAndroidCommon即可。  
 **Api Guide**:[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_android_common/index.html)。  
 **个人博客**：[www.trinea.cn](http://www.trinea.cn/) 关注于[Android](http://www.trinea.cn/category/android/)、[Java](http://www.trinea.cn/category/java/)、[性能优化](http://www.trinea.cn/category/perf/)、[开源代码](http://www.trinea.cn/category/open-code/)。  
 ####一. 缓存类
