@@ -356,7 +356,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * @see ExecutorService#shutdown()
      */
-    public void shutdown() {
+    protected void shutdown() {
         threadPool.shutdown();
         super.shutdown();
     }

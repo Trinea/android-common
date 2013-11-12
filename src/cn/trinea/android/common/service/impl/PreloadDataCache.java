@@ -514,7 +514,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
     /**
      * @see ExecutorService#shutdown()
      */
-    public void shutdown() {
+    protected void shutdown() {
         threadPool.shutdown();
     }
 

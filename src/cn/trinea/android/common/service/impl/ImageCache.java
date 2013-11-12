@@ -338,7 +338,7 @@ public class ImageCache extends ImageMemoryCache {
      * @see ExecutorService#shutdown()
      */
     @Override
-    public void shutdown() {
+    protected void shutdown() {
         secondaryCache.shutdown();
         super.shutdown();
     }

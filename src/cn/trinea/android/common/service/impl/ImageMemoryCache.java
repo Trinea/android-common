@@ -288,7 +288,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     /**
      * @see ExecutorService#shutdown()
      */
-    public void shutdown() {
+    protected void shutdown() {
         threadPool.shutdown();
         super.shutdown();
     }
