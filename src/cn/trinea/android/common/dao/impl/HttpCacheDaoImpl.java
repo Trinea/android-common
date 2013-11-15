@@ -31,7 +31,9 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
         if (contentValues == null) {
             return -1;
         }
-        return sqliteUtils.getWDb().replace(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null, contentValues);
+        synchronized (HttpCacheDaoImpl.class) {
+            return sqliteUtils.getWDb().replace(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null, contentValues);
+        }
     }
 
     @Override
@@ -43,21 +45,22 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
         StringBuilder appWhere = new StringBuilder();
         appWhere.append(DbConstants.HTTP_CACHE_TABLE_URL).append("=?");
         String[] appWhereArgs = { url };
-        Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null, appWhere.toString(),
-                                                   appWhereArgs, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
+        synchronized (HttpCacheDaoImpl.class) {
+            Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
+                                                       appWhere.toString(), appWhereArgs, null, null, null);
+            if (cursor == null) {
+                return null;
+            }
 
-        HttpResponse httpResponse = null;
-        if (cursor.moveToFirst()) {
-            httpResponse = cursorToHttpResponse(cursor, url);
+            HttpResponse httpResponse = null;
+            if (cursor.moveToFirst()) {
+                httpResponse = cursorToHttpResponse(cursor, url);
+            }
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+            return httpResponse;
         }
-        if (!cursor.isClosed()) {
-            cursor.close();
-        }
-
-        return httpResponse;
     }
 
     @Override
@@ -65,31 +68,34 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
         StringBuilder whereClause = new StringBuilder();
         whereClause.append(DbConstants.HTTP_CACHE_TABLE_TYPE).append("=?");
         String[] whereClauseArgs = { Integer.toString(type) };
-        Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
-                                                   whereClause.toString(), whereClauseArgs, null, null, null);
 
-        if (cursor == null) {
-            return null;
-        }
+        synchronized (HttpCacheDaoImpl.class) {
+            Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
+                                                       whereClause.toString(), whereClauseArgs, null, null, null);
 
-        Map<String, HttpResponse> httpResponseMap = new HashMap<String, HttpResponse>();
-        if (cursor.getCount() > 0) {
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                String url = cursor.getString(DbConstants.HTTP_CACHE_TABLE_URL_INDEX);
-                if (StringUtils.isEmpty(url)) {
-                    continue;
-                }
+            if (cursor == null) {
+                return null;
+            }
 
-                HttpResponse httpResponse = cursorToHttpResponse(cursor, url);
-                if (httpResponse != null) {
-                    httpResponseMap.put(url, httpResponse);
+            Map<String, HttpResponse> httpResponseMap = new HashMap<String, HttpResponse>();
+            if (cursor.getCount() > 0) {
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    String url = cursor.getString(DbConstants.HTTP_CACHE_TABLE_URL_INDEX);
+                    if (StringUtils.isEmpty(url)) {
+                        continue;
+                    }
+
+                    HttpResponse httpResponse = cursorToHttpResponse(cursor, url);
+                    if (httpResponse != null) {
+                        httpResponseMap.put(url, httpResponse);
+                    }
                 }
             }
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+            return httpResponseMap;
         }
-        if (!cursor.isClosed()) {
-            cursor.close();
-        }
-        return httpResponseMap;
     }
 
     /**

@@ -2,8 +2,10 @@ package cn.trinea.android.common.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;
+import cn.trinea.android.common.dao.HttpCacheDao;
 import cn.trinea.android.common.dao.impl.HttpCacheDaoImpl;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
@@ -19,24 +21,38 @@ import cn.trinea.android.common.util.StringUtils;
  */
 public class HttpCache extends SimpleCache<String, HttpResponse> {
 
+    private Context                   context;
+
     /** http memory cache **/
     private Map<String, HttpResponse> cache;
+    /** dao to get data from http db cache **/
+    private HttpCacheDao              httpCacheDaoImpl;
 
-    public HttpCache(){
-        cache = new HashMap<String, HttpResponse>();
-    }
-
-    /**
-     * get httpResponse whose type is type into memory as primary cache to improve performanceo
-     * 
-     * @param context
-     * @param type
-     */
-    public void initData(Context context, int type) {
+    public HttpCache(Context context){
         if (context == null) {
             throw new IllegalArgumentException("The context can not be null.");
         }
-        this.cache = new HttpCacheDaoImpl(SqliteUtils.getInstance(context)).getHttpResponsesByType(type);
+        this.context = context;
+        cache = new ConcurrentHashMap<String, HttpResponse>();
+        httpCacheDaoImpl = new HttpCacheDaoImpl(SqliteUtils.getInstance(context));
+    }
+
+    /**
+     * @param context
+     * @param type get httpResponse whose type is type into memory as primary cache to improve performance
+     */
+    public HttpCache(Context context, int type){
+        this(context);
+        initData(type);
+    }
+
+    /**
+     * get httpResponse whose type is type into memory as primary cache to improve performance
+     * 
+     * @param type
+     */
+    private void initData(int type) {
+        this.cache = httpCacheDaoImpl.getHttpResponsesByType(type);
         if (cache == null) {
             cache = new HashMap<String, HttpResponse>();
         }
@@ -62,10 +78,23 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
         return cacheResponse == null ? HttpUtils.httpGetString(httpUrl) : cacheResponse.getResponseBody();
     }
 
+    /**
+     * get from memory cache first, if not exist in memory cache, get from db
+     * 
+     * @param httpUrl
+     * @return <ul>
+     * <li>if neither exit in memory cache nor db, return null</li>
+     * <li>if is expired, return null, otherwise return cache response</li>
+     * </ul>
+     */
     private HttpResponse getFromCache(String httpUrl) {
+        if (StringUtils.isEmpty(httpUrl)) {
+            return null;
+        }
+
         HttpResponse cacheResponse = cache.get(httpUrl);
         if (cacheResponse == null) {
-            // get from db
+            cacheResponse = httpCacheDaoImpl.getHttpResponse(httpUrl);
         }
         return (cacheResponse == null || cacheResponse.isExpired()) ? null : cacheResponse;
     }
