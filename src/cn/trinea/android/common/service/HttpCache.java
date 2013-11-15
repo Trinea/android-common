@@ -30,6 +30,8 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
     /** dao to get data from http db cache **/
     private HttpCacheDao              httpCacheDaoImpl;
 
+    private int                       type = -1;
+
     public HttpCache(Context context){
         if (context == null) {
             throw new IllegalArgumentException("The context can not be null.");
@@ -45,6 +47,7 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
      */
     public HttpCache(Context context, int type){
         this(context);
+        this.type = type;
         initData(type);
     }
 
@@ -60,6 +63,18 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
         }
     }
 
+    /**
+     * http get
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>Don't call this on the ui thread, it may costs some times. Becaust if not in cache, it get from network
+     * synchronous.</li>
+     * <li>If you want get data asynchronous, use {@link HttpCache#httpGet(HttpRequest, HttpCacheListener)}</li>
+     * </ul>
+     * 
+     * @param httpRequest
+     * @return the response of the url, if null represents http error
+     */
     public HttpResponse httpGet(HttpRequest request) {
         String url;
         if (request == null || StringUtils.isEmpty(url = request.getUrl())) {
@@ -67,25 +82,86 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
         }
 
         HttpResponse cacheResponse = getFromCache(url);
-        return cacheResponse == null ? HttpUtils.httpGet(request) : cacheResponse;
+        return cacheResponse == null ? putIntoCache(HttpUtils.httpGet(url)) : cacheResponse;
     }
 
+    /**
+     * http get
+     * <ul>
+     * <li>It gets data from cache or network asynchronous.</li>
+     * <li>If you want get data synchronous, use {@link HttpCache#httpGet(HttpRequest)} or
+     * {@link HttpCache#httpGetString(HttpRequest)}</li>
+     * </ul>
+     * 
+     * @param httpUrl
+     * @param listener
+     */
     public void httpGet(String httpUrl, HttpCacheListener listener) {
         new HttpCacheStringAsyncTask(listener).execute(httpUrl);
     }
 
+    /**
+     * http get
+     * <ul>
+     * <li>It gets data from cache or network asynchronous.</li>
+     * <li>If you want get data synchronous, use {@link HttpCache#httpGet(HttpRequest)} or
+     * {@link HttpCache#httpGetString(HttpRequest)}</li>
+     * </ul>
+     * 
+     * @param request
+     * @param listener
+     */
     public void httpGet(HttpRequest request, HttpCacheListener listener) {
         new HttpCacheRequestAsyncTask(listener).execute(request);
     }
 
+    /**
+     * http get
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>Don't call this on the ui thread, it may costs some times. Becaust if not in cache, it get from network
+     * synchronous.</li>
+     * <li>If you want get data asynchronous, use {@link HttpCache#httpGet(HttpRequest, HttpCacheListener)}</li>
+     * </ul>
+     * 
+     * @param httpUrl
+     * @return the response of the url, if null represents http error
+     */
     public HttpResponse httpGet(String httpUrl) {
-        HttpResponse cacheResponse = getFromCache(httpUrl);
-        return cacheResponse == null ? HttpUtils.httpGet(httpUrl) : cacheResponse;
+        return httpGet(new HttpRequest(httpUrl));
     }
 
+    /**
+     * http get
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>Don't call this on the ui thread, it may costs some times. Becaust if not in cache, it get from network
+     * synchronous.</li>
+     * <li>If you want get data asynchronous, use {@link HttpCache#httpGet(String, HttpCacheListener)}</li>
+     * </ul>
+     * 
+     * @param httpUrl
+     * @return the response body of the url, if null represents http error
+     */
     public String httpGetString(String httpUrl) {
-        HttpResponse cacheResponse = getFromCache(httpUrl);
-        return cacheResponse == null ? HttpUtils.httpGetString(httpUrl) : cacheResponse.getResponseBody();
+        HttpResponse cacheResponse = httpGet(new HttpRequest(httpUrl));
+        return cacheResponse == null ? null : cacheResponse.getResponseBody();
+    }
+
+    /**
+     * http get
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>Don't call this on the ui thread, it may costs some times. Becaust if not in cache, it get from network
+     * synchronous.</li>
+     * <li>If you want get data asynchronous, use {@link HttpCache#httpGet(HttpRequest, HttpCacheListener)}</li>
+     * </ul>
+     * 
+     * @param httpRequest
+     * @return the response body of the url, if null represents http error
+     */
+    public HttpResponse httpGetString(HttpRequest httpRequest) {
+        return httpGet(httpRequest);
     }
 
     public abstract class HttpCacheListener {
@@ -96,6 +172,46 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
         protected void onPostExecute(HttpResponse httpResponse) {
         }
 
+    }
+
+    /**
+     * get type
+     * 
+     * @return the type
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * set type
+     * 
+     * @param type the type to set
+     */
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    /**
+     * put response into cache
+     * <ul>
+     * <li>put response to db, if {@link HttpResponse#getType()} == {@link HttpCache#getType()}, also put into memory
+     * cache</li>
+     * </ul>
+     * 
+     * @param httpResponse
+     * @return if insert into db error, return null, otherwise return HttpResponse
+     */
+    private HttpResponse putIntoCache(HttpResponse httpResponse) {
+        String url;
+        if (httpResponse == null || (url = httpResponse.getUrl()) == null) {
+            return null;
+        }
+
+        if (type != -1 && type == httpResponse.getType()) {
+            cache.put(url, httpResponse);
+        }
+        return (httpCacheDaoImpl.insertHttpResponse(httpResponse) == -1) ? null : httpResponse;
     }
 
     /**

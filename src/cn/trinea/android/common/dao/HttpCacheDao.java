@@ -15,7 +15,7 @@ public interface HttpCacheDao {
      * insert HttpResponse
      * 
      * @param httpResponse
-     * @return
+     * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
     public long insertHttpResponse(HttpResponse httpResponse);
 

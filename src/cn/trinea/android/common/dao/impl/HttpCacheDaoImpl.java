@@ -130,7 +130,7 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
      * @return
      */
     private static ContentValues httpResponseToCV(HttpResponse httpResponse) {
-        if (httpResponse == null) {
+        if (httpResponse == null || StringUtils.isEmpty(httpResponse.getUrl())) {
             return null;
         }
 
