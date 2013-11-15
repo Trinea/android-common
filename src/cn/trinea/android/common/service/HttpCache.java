@@ -10,18 +10,37 @@ import cn.trinea.android.common.dao.HttpCacheDao;
 import cn.trinea.android.common.dao.impl.HttpCacheDaoImpl;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
-import cn.trinea.android.common.service.impl.SimpleCache;
+import cn.trinea.android.common.service.impl.ImageCache;
 import cn.trinea.android.common.util.ArrayUtils;
 import cn.trinea.android.common.util.HttpUtils;
 import cn.trinea.android.common.util.SqliteUtils;
 import cn.trinea.android.common.util.StringUtils;
 
 /**
- * HttpCache
+ * <strong>Http Cache</strong><br/>
+ * <br/>
+ * It applies to get and cache api data from server, like json or xml and so on. It applies to apps like weixin, weibo,
+ * twitter, taobao and so on. If want to cache image, please use {@link ImageCache}<br/>
+ * <ul>
+ * <strong>Constructor</strong>
+ * <li>{@link #HttpCache(Context)} to init cache</li>
+ * </ul>
+ * <ul>
+ * <strong>Get data asynchronous</strong>
+ * <li>{@link #httpGet(HttpRequest, HttpCacheListener)}</li>
+ * <li>{@link #httpGet(String, HttpCacheListener)}</li>
+ * </ul>
+ * <ul>
+ * <strong>Get data synchronous</strong>
+ * <li>{@link #httpGet(HttpRequest)}</li>
+ * <li>{@link #httpGet(String)}</li>
+ * <li>{@link #httpGetString(HttpRequest)}</li>
+ * <li>{@link #httpGetString(String)}</li>
+ * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-1
  */
-public class HttpCache extends SimpleCache<String, HttpResponse> {
+public class HttpCache {
 
     private Context                   context;
 
@@ -29,7 +48,6 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
     private Map<String, HttpResponse> cache;
     /** dao to get data from http db cache **/
     private HttpCacheDao              httpCacheDaoImpl;
-
     private int                       type = -1;
 
     public HttpCache(Context context){
@@ -42,10 +60,12 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
     }
 
     /**
+     * waiting to be perfect^_^
+     * 
      * @param context
      * @param type get httpResponse whose type is type into memory as primary cache to improve performance
      */
-    public HttpCache(Context context, int type){
+    private HttpCache(Context context, int type){
         this(context);
         this.type = type;
         initData(type);
@@ -166,30 +186,30 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
 
     public abstract class HttpCacheListener {
 
+        /**
+         * Runs on the UI thread before httpGet.
+         */
         protected void onPreExecute() {
         }
 
-        protected void onPostExecute(HttpResponse httpResponse) {
+        /**
+         * Runs on the UI thread after httpGet. The httpResponse is returned by httpGet.
+         * 
+         * @param httpResponse get by the url
+         * @param isInCache the data responsed to the url whether is in cache
+         */
+        protected void onPostExecute(HttpResponse httpResponse, boolean isInCache) {
         }
 
     }
 
     /**
-     * get type
+     * get type, waiting to be perfect^_^
      * 
      * @return the type
      */
-    public int getType() {
+    private int getType() {
         return type;
-    }
-
-    /**
-     * set type
-     * 
-     * @param type the type to set
-     */
-    public void setType(int type) {
-        this.type = type;
     }
 
     /**
@@ -232,7 +252,7 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
         if (cacheResponse == null) {
             cacheResponse = httpCacheDaoImpl.getHttpResponse(httpUrl);
         }
-        return (cacheResponse == null || cacheResponse.isExpired()) ? null : cacheResponse;
+        return (cacheResponse == null || cacheResponse.isExpired()) ? null : cacheResponse.setInCache(true);
     }
 
     /**
@@ -263,7 +283,7 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
 
         protected void onPostExecute(HttpResponse httpResponse) {
             if (listener != null) {
-                listener.onPostExecute(httpResponse);
+                listener.onPostExecute(httpResponse, httpResponse == null ? false : httpResponse.isInCache());
             }
         }
     }
@@ -296,7 +316,7 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
 
         protected void onPostExecute(HttpResponse httpResponse) {
             if (listener != null) {
-                listener.onPostExecute(httpResponse);
+                listener.onPostExecute(httpResponse, httpResponse == null ? false : httpResponse.isInCache());
             }
         }
     }
