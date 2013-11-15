@@ -114,7 +114,8 @@ public class HttpCache {
      * </ul>
      * 
      * @param httpUrl
-     * @param listener
+     * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
+     * something
      */
     public void httpGet(String httpUrl, HttpCacheListener listener) {
         new HttpCacheStringAsyncTask(listener).execute(httpUrl);
@@ -129,7 +130,8 @@ public class HttpCache {
      * </ul>
      * 
      * @param request
-     * @param listener
+     * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
+     * something
      */
     public void httpGet(HttpRequest request, HttpCacheListener listener) {
         new HttpCacheRequestAsyncTask(listener).execute(request);
@@ -184,16 +186,27 @@ public class HttpCache {
         return httpGet(httpRequest);
     }
 
+    /**
+     * HttpCacheListener, can do something before or after HttpGet
+     * 
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
+     */
     public abstract class HttpCacheListener {
 
         /**
-         * Runs on the UI thread before httpGet.
+         * Runs on the UI thread before httpGet.<br/>
+         * <ul>
+         * <li>this can be null if you not want to do something</li>
+         * </ul>
          */
         protected void onPreExecute() {
         }
 
         /**
          * Runs on the UI thread after httpGet. The httpResponse is returned by httpGet.
+         * <ul>
+         * <li>this can be null if you not want to do something</li>
+         * </ul>
          * 
          * @param httpResponse get by the url
          * @param isInCache the data responsed to the url whether is in cache
@@ -258,7 +271,7 @@ public class HttpCache {
     /**
      * AsyncTask to get data by String url
      * 
-     * @author gxwu@lewatek.com 2013-11-15
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
      */
     private class HttpCacheStringAsyncTask extends AsyncTask<String, Void, HttpResponse> {
 
@@ -291,7 +304,7 @@ public class HttpCache {
     /**
      * AsyncTask to get data by HttpRequest
      * 
-     * @author gxwu@lewatek.com 2013-11-15
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
      */
     private class HttpCacheRequestAsyncTask extends AsyncTask<HttpRequest, Void, HttpResponse> {
 
