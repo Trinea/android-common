@@ -5,11 +5,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import cn.trinea.android.common.dao.HttpCacheDao;
 import cn.trinea.android.common.dao.impl.HttpCacheDaoImpl;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
 import cn.trinea.android.common.service.impl.SimpleCache;
+import cn.trinea.android.common.util.ArrayUtils;
 import cn.trinea.android.common.util.HttpUtils;
 import cn.trinea.android.common.util.SqliteUtils;
 import cn.trinea.android.common.util.StringUtils;
@@ -68,6 +70,14 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
         return cacheResponse == null ? HttpUtils.httpGet(request) : cacheResponse;
     }
 
+    public void httpGet(String httpUrl, HttpCacheListener listener) {
+        new HttpCacheStringAsyncTask(listener).execute(httpUrl);
+    }
+
+    public void httpGet(HttpRequest request, HttpCacheListener listener) {
+        new HttpCacheRequestAsyncTask(listener).execute(request);
+    }
+
     public HttpResponse httpGet(String httpUrl) {
         HttpResponse cacheResponse = getFromCache(httpUrl);
         return cacheResponse == null ? HttpUtils.httpGet(httpUrl) : cacheResponse;
@@ -76,6 +86,16 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
     public String httpGetString(String httpUrl) {
         HttpResponse cacheResponse = getFromCache(httpUrl);
         return cacheResponse == null ? HttpUtils.httpGetString(httpUrl) : cacheResponse.getResponseBody();
+    }
+
+    public abstract class HttpCacheListener {
+
+        protected void onPreExecute() {
+        }
+
+        protected void onPostExecute(HttpResponse httpResponse) {
+        }
+
     }
 
     /**
@@ -97,5 +117,71 @@ public class HttpCache extends SimpleCache<String, HttpResponse> {
             cacheResponse = httpCacheDaoImpl.getHttpResponse(httpUrl);
         }
         return (cacheResponse == null || cacheResponse.isExpired()) ? null : cacheResponse;
+    }
+
+    /**
+     * AsyncTask to get data by String url
+     * 
+     * @author gxwu@lewatek.com 2013-11-15
+     */
+    private class HttpCacheStringAsyncTask extends AsyncTask<String, Void, HttpResponse> {
+
+        private HttpCacheListener listener;
+
+        public HttpCacheStringAsyncTask(HttpCacheListener listener){
+            this.listener = listener;
+        }
+
+        protected HttpResponse doInBackground(String... url) {
+            if (ArrayUtils.isEmpty(url)) {
+                return null;
+            }
+            return httpGet(url[0]);
+        }
+
+        protected void onPreExecute() {
+            if (listener != null) {
+                listener.onPreExecute();
+            }
+        }
+
+        protected void onPostExecute(HttpResponse httpResponse) {
+            if (listener != null) {
+                listener.onPostExecute(httpResponse);
+            }
+        }
+    }
+
+    /**
+     * AsyncTask to get data by HttpRequest
+     * 
+     * @author gxwu@lewatek.com 2013-11-15
+     */
+    private class HttpCacheRequestAsyncTask extends AsyncTask<HttpRequest, Void, HttpResponse> {
+
+        private HttpCacheListener listener;
+
+        public HttpCacheRequestAsyncTask(HttpCacheListener listener){
+            this.listener = listener;
+        }
+
+        protected HttpResponse doInBackground(HttpRequest... httpRequest) {
+            if (ArrayUtils.isEmpty(httpRequest)) {
+                return null;
+            }
+            return httpGet(httpRequest[0]);
+        }
+
+        protected void onPreExecute() {
+            if (listener != null) {
+                listener.onPreExecute();
+            }
+        }
+
+        protected void onPostExecute(HttpResponse httpResponse) {
+            if (listener != null) {
+                listener.onPostExecute(httpResponse);
+            }
+        }
     }
 }
