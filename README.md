@@ -25,7 +25,7 @@
 ![ImageSDCardCache](http://farm4.staticflickr.com/3818/9318670513_1576253fd5_o.jpg)  
   
 ####4.  网络缓存  
-deving…  
+一期功能完成，帮助文档准备中^v^… 
 
 ####二. 公用的view
 #####1. 下拉刷新及滚动到底部加载更多的Listview
