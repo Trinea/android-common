@@ -34,4 +34,11 @@ public interface HttpCacheDao {
      * @return
      */
     public Map<String, HttpResponse> getHttpResponsesByType(int type);
+
+    /**
+     * delete all http response
+     * 
+     * @return
+     */
+    public int deleteAllHttpResponse();
 }

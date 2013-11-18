@@ -98,6 +98,11 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
         }
     }
 
+    @Override
+    public int deleteAllHttpResponse() {
+        return sqliteUtils.getWDb().delete(DbConstants.HTTP_CACHE_TABLE_TYPE, null, null);
+    }
+
     /**
      * convert cursor to HttpResponse
      * 

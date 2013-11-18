@@ -113,12 +113,12 @@ public class HttpCache {
      * {@link HttpCache#httpGetString(HttpRequest)}</li>
      * </ul>
      * 
-     * @param httpUrl
+     * @param url
      * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
      * something
      */
-    public void httpGet(String httpUrl, HttpCacheListener listener) {
-        new HttpCacheStringAsyncTask(listener).execute(httpUrl);
+    public void httpGet(String url, HttpCacheListener listener) {
+        new HttpCacheStringAsyncTask(listener).execute(url);
     }
 
     /**
@@ -146,11 +146,11 @@ public class HttpCache {
      * <li>If you want get data asynchronous, use {@link HttpCache#httpGet(HttpRequest, HttpCacheListener)}</li>
      * </ul>
      * 
-     * @param httpUrl
+     * @param url
      * @return the response of the url, if null represents http error
      */
-    public HttpResponse httpGet(String httpUrl) {
-        return httpGet(new HttpRequest(httpUrl));
+    public HttpResponse httpGet(String url) {
+        return httpGet(new HttpRequest(url));
     }
 
     /**
@@ -162,11 +162,11 @@ public class HttpCache {
      * <li>If you want get data asynchronous, use {@link HttpCache#httpGet(String, HttpCacheListener)}</li>
      * </ul>
      * 
-     * @param httpUrl
+     * @param url
      * @return the response body of the url, if null represents http error
      */
-    public String httpGetString(String httpUrl) {
-        HttpResponse cacheResponse = httpGet(new HttpRequest(httpUrl));
+    public String httpGetString(String url) {
+        HttpResponse cacheResponse = httpGet(new HttpRequest(url));
         return cacheResponse == null ? null : cacheResponse.getResponseBody();
     }
 
@@ -184,6 +184,24 @@ public class HttpCache {
      */
     public HttpResponse httpGetString(HttpRequest httpRequest) {
         return httpGet(httpRequest);
+    }
+
+    /**
+     * whether this cache contains the specified url.
+     * 
+     * @param url
+     * @return true if this cache contains the specified url and the element is valid, false otherwise.
+     */
+    public boolean containsKey(String url) {
+        return getFromCache(url) != null;
+    }
+
+    /**
+     * Removes all elements from this cache, leaving it empty.
+     */
+    public void clear() {
+        cache.clear();
+        httpCacheDaoImpl.deleteAllHttpResponse();
     }
 
     /**
@@ -250,20 +268,20 @@ public class HttpCache {
     /**
      * get from memory cache first, if not exist in memory cache, get from db
      * 
-     * @param httpUrl
+     * @param url
      * @return <ul>
      * <li>if neither exit in memory cache nor db, return null</li>
      * <li>if is expired, return null, otherwise return cache response</li>
      * </ul>
      */
-    private HttpResponse getFromCache(String httpUrl) {
-        if (StringUtils.isEmpty(httpUrl)) {
+    private HttpResponse getFromCache(String url) {
+        if (StringUtils.isEmpty(url)) {
             return null;
         }
 
-        HttpResponse cacheResponse = cache.get(httpUrl);
+        HttpResponse cacheResponse = cache.get(url);
         if (cacheResponse == null) {
-            cacheResponse = httpCacheDaoImpl.getHttpResponse(httpUrl);
+            cacheResponse = httpCacheDaoImpl.getHttpResponse(url);
         }
         return (cacheResponse == null || cacheResponse.isExpired()) ? null : cacheResponse.setInCache(true);
     }
