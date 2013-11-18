@@ -417,5 +417,6 @@ public class HttpUtils {
         }
         response.setResponseHeader(HttpConstants.EXPIRES, urlConnection.getHeaderField("Expires"));
         response.setResponseHeader(HttpConstants.CACHE_CONTROL, urlConnection.getHeaderField("Cache-Control"));
+        response.setExpiredTime(response.getExpiresInMillis());
     }
 }

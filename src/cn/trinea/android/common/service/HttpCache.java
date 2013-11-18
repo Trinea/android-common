@@ -209,7 +209,7 @@ public class HttpCache {
      * 
      * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
      */
-    public abstract class HttpCacheListener {
+    public static abstract class HttpCacheListener {
 
         /**
          * Runs on the UI thread before httpGet.<br/>
