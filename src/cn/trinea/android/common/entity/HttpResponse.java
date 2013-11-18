@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.trinea.android.common.constant.HttpConstants;
+import cn.trinea.android.common.service.HttpCache;
 import cn.trinea.android.common.util.HttpUtils;
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.TimeUtils;
@@ -43,6 +44,8 @@ public class HttpResponse {
     private int                 type;
     /** expired time in milliseconds **/
     private long                expiredTime;
+    /** this is a client mark, whether this response is in client cache **/
+    private boolean             isInCache;
 
     /**
      * An <code>int</code> representing the three digit HTTP Status-Code.
@@ -58,6 +61,8 @@ public class HttpResponse {
 
     public HttpResponse(String url){
         this.url = url;
+        type = 0;
+        isInCache = false;
         responseHeaders = new HashMap<String, Object>();
     }
 
@@ -117,6 +122,10 @@ public class HttpResponse {
 
     /**
      * get type
+     * <ul>
+     * <li>type to mark this response, default is 0</li>
+     * <li>it will be used in {@link HttpCache#HttpCache(android.content.Context, int)}</li>
+     * </ul>
      * 
      * @return the type
      */
@@ -126,10 +135,17 @@ public class HttpResponse {
 
     /**
      * set type
+     * <ul>
+     * <li>type to mark this response, default is 0, cannot be smaller than 0.</li>
+     * <li>it will be used in {@link HttpCache#HttpCache(android.content.Context, int)}</li>
+     * </ul>
      * 
      * @param type the type to set
      */
     public void setType(int type) {
+        if (type < 0) {
+            throw new IllegalArgumentException("The type of HttpResponse cannot be smaller than 0.");
+        }
         this.type = type;
     }
 
@@ -165,6 +181,26 @@ public class HttpResponse {
      */
     public boolean isExpired() {
         return TimeUtils.getCurrentTimeInLong() > expiredTime;
+    }
+
+    /**
+     * get isInCache, this is a client mark, whethero is in client cache
+     * 
+     * @return the isInCache
+     */
+    public boolean isInCache() {
+        return isInCache;
+    }
+
+    /**
+     * set isInCache, this is a client mark, whethero is in client cache
+     * 
+     * @param isInCache the isInCache to set
+     * @return
+     */
+    public HttpResponse setInCache(boolean isInCache) {
+        this.isInCache = isInCache;
+        return this;
     }
 
     /**

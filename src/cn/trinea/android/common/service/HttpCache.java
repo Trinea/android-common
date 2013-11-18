@@ -199,7 +199,7 @@ public class HttpCache {
          * <li>this can be null if you not want to do something</li>
          * </ul>
          */
-        protected void onPreExecute() {
+        protected void onPreGet() {
         }
 
         /**
@@ -211,7 +211,7 @@ public class HttpCache {
          * @param httpResponse get by the url
          * @param isInCache the data responsed to the url whether is in cache
          */
-        protected void onPostExecute(HttpResponse httpResponse, boolean isInCache) {
+        protected void onPostGet(HttpResponse httpResponse, boolean isInCache) {
         }
 
     }
@@ -290,13 +290,13 @@ public class HttpCache {
 
         protected void onPreExecute() {
             if (listener != null) {
-                listener.onPreExecute();
+                listener.onPreGet();
             }
         }
 
         protected void onPostExecute(HttpResponse httpResponse) {
             if (listener != null) {
-                listener.onPostExecute(httpResponse, httpResponse == null ? false : httpResponse.isInCache());
+                listener.onPostGet(httpResponse, httpResponse == null ? false : httpResponse.isInCache());
             }
         }
     }
@@ -323,13 +323,13 @@ public class HttpCache {
 
         protected void onPreExecute() {
             if (listener != null) {
-                listener.onPreExecute();
+                listener.onPreGet();
             }
         }
 
         protected void onPostExecute(HttpResponse httpResponse) {
             if (listener != null) {
-                listener.onPostExecute(httpResponse, httpResponse == null ? false : httpResponse.isInCache());
+                listener.onPostGet(httpResponse, httpResponse == null ? false : httpResponse.isInCache());
             }
         }
     }
