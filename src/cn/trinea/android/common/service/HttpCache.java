@@ -197,6 +197,16 @@ public class HttpCache {
     }
 
     /**
+     * whether the element of the specified url has invalided
+     * 
+     * @param url
+     * @return true if the element of the specified url has invalided, false otherwise.
+     */
+    protected boolean isExpired(String url) {
+        return getFromCache(url) == null;
+    }
+
+    /**
      * Removes all elements from this cache, leaving it empty.
      */
     public void clear() {

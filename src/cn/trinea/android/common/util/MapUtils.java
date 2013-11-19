@@ -26,7 +26,7 @@ public class MapUtils {
      * isEmpty({1, 2})    =   false;
      * </pre>
      * 
-     * @param str
+     * @param sourceMap
      * @return if map is null or its size is 0, return true, else return false.
      */
     public static <K, V> boolean isEmpty(Map<K, V> sourceMap) {
