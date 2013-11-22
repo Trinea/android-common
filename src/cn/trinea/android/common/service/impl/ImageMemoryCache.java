@@ -56,27 +56,29 @@ import cn.trinea.android.common.util.SystemUtils;
  */
 public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
-    private static final long                    serialVersionUID   = 1L;
+    private static final long                    serialVersionUID     = 1L;
 
-    private static final String                  TAG                = "ImageCache";
+    private static final String                  TAG                  = "ImageCache";
 
     /** callback interface after image get success **/
     private OnImageCallbackListener              onImageCallbackListener;
     /** http read image time out, if less than 0, not set. default is not set **/
-    private int                                  httpReadTimeOut    = -1;
+    private int                                  httpReadTimeOut      = -1;
     /**
      * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
      * newest one
      **/
-    private boolean                              isOpenWaitingQueue = true;
+    private boolean                              isOpenWaitingQueue   = true;
+    /** whether http connecion is keep alive **/
+    private boolean                              isConnecionKeepAlive = true;
 
     /** recommend default max cache size according to dalvik max memory **/
-    public static final int                      DEFAULT_MAX_SIZE   = getDefaultMaxSize();
+    public static final int                      DEFAULT_MAX_SIZE     = getDefaultMaxSize();
     /** image got success message what **/
-    private static final int                     IMAGE_LOADED_WHAT  = 1;
+    private static final int                     IMAGE_LOADED_WHAT    = 1;
 
     /** thread pool whose wait for data got, attention, not the get data thread pool **/
-    private transient ExecutorService            threadPool         = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
+    private transient ExecutorService            threadPool           = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
     /**
      * key is image url, value is the newest view which waiting for image loaded, used when {@link #isOpenWaitingQueue}
      * is false
@@ -207,6 +209,29 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
      */
     public void setOpenWaitingQueue(boolean isOpenWaitingQueue) {
         this.isOpenWaitingQueue = isOpenWaitingQueue;
+    }
+
+    /**
+     * get whether http connecion is keep alive
+     * 
+     * @return the isConnecionKeepAlive
+     */
+    public boolean isConnecionKeepAlive() {
+        return isConnecionKeepAlive;
+    }
+
+    /**
+     * set whether http connecion is keep alive
+     * <ul>
+     * <li>if image is from the same server, isConnecionKeepAlive is set to true recommended, and this is the default
+     * value</li>
+     * <li>else if image is from the different server, isConnecionKeepAlive is set to false recommended</li>
+     * </ul>
+     * 
+     * @param isConnecionKeepAlive the isConnecionKeepAlive to set
+     */
+    public void setConnecionKeepAlive(boolean isConnecionKeepAlive) {
+        this.isConnecionKeepAlive = isConnecionKeepAlive;
     }
 
     /**
@@ -407,7 +432,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             public CacheObject<Drawable> onGetData(String key) {
                 Drawable d = null;
                 try {
-                    d = ImageUtils.getDrawableFromUrl(key, httpReadTimeOut);
+                    d = ImageUtils.getDrawableFromUrl(key, httpReadTimeOut, isConnecionKeepAlive);
                 } catch (Exception e) {
                     Log.e(TAG, "get drawable exception, imageUrl is:" + key, e);
                 }

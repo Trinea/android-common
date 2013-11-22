@@ -84,6 +84,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * newest one
      **/
     private boolean                              isOpenWaitingQueue   = true;
+    /** whether http connecion is keep alive **/
+    private boolean                              isConnecionKeepAlive = true;
 
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE     = getDefaultMaxSize();
@@ -275,6 +277,29 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      */
     public void setOpenWaitingQueue(boolean isOpenWaitingQueue) {
         this.isOpenWaitingQueue = isOpenWaitingQueue;
+    }
+
+    /**
+     * get whether http connecion is keep alive
+     * 
+     * @return the isConnecionKeepAlive
+     */
+    public boolean isConnecionKeepAlive() {
+        return isConnecionKeepAlive;
+    }
+
+    /**
+     * set whether http connecion is keep alive
+     * <ul>
+     * <li>if image is from the same server, isConnecionKeepAlive is set to true recommended, and this is the default
+     * value</li>
+     * <li>else if image is from the different server, isConnecionKeepAlive is set to false recommended</li>
+     * </ul>
+     * 
+     * @param isConnecionKeepAlive the isConnecionKeepAlive to set
+     */
+    public void setConnecionKeepAlive(boolean isConnecionKeepAlive) {
+        this.isConnecionKeepAlive = isConnecionKeepAlive;
     }
 
     /**
@@ -678,7 +703,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
                 String savePath = null;
                 try {
-                    InputStream stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut);
+                    InputStream stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut, isConnecionKeepAlive);
                     if (stream != null) {
                         savePath = cacheFolder + File.separator + fileNameRule.getFileName(key);
                         try {

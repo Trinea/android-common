@@ -229,6 +229,16 @@ public class ImageCache extends ImageMemoryCache {
         secondaryCache.setContext(context);
     }
 
+    @Override
+    public boolean isConnecionKeepAlive() {
+        return secondaryCache.isConnecionKeepAlive();
+    }
+
+    @Override
+    public void setConnecionKeepAlive(boolean isConnecionKeepAlive) {
+        secondaryCache.setConnecionKeepAlive(isConnecionKeepAlive);
+    }
+
     /**
      * get cache folder path which be used when saving images, default is {@link #DEFAULT_CACHE_FOLDER}
      * 

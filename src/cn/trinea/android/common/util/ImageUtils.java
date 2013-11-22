@@ -107,19 +107,37 @@ public class ImageUtils {
     }
 
     /**
+     * get input stream from network by imageurl, and http conection is keep alive, you need to close inputStream
+     * yourself
+     * 
+     * @param imageUrl
+     * @param readTimeOutMillis
+     * @return
+     * @see ImageUtils#getInputStreamFromUrl(String, int, boolean)
+     */
+    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis) {
+        return getInputStreamFromUrl(imageUrl, readTimeOutMillis, true);
+    }
+
+    /**
      * get input stream from network by imageurl, you need to close inputStream yourself
      * 
      * @param imageUrl
      * @param readTimeOutMillis read time out, if less than 0, not set, in mills
+     * @param isConnecionKeepAlive whether connection keep alive
      * @return
      * @throws MalformedURLException
      * @throws IOException
      */
-    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis) {
+    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis, boolean isConnecionKeepAlive) {
         InputStream stream = null;
         try {
             URL url = new URL(imageUrl);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            // default is keep alive
+            if (!isConnecionKeepAlive) {
+                con.addRequestProperty("Connection", "false");
+            }
             if (readTimeOutMillis > 0) {
                 con.setReadTimeout(readTimeOutMillis);
             }
@@ -135,27 +153,53 @@ public class ImageUtils {
     }
 
     /**
+     * get drawable by imageUrl , and http conection is keep alive
+     * 
+     * @param imageUrl
+     * @param readTimeOutMillis
+     * @return
+     * @see ImageUtils#getDrawableFromUrl(String, int, boolean)
+     */
+    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis) {
+        return getDrawableFromUrl(imageUrl, readTimeOutMillis, true);
+    }
+
+    /**
      * get drawable by imageUrl
      * 
      * @param imageUrl
      * @param readTimeOutMillis read time out, if less than 0, not set, in mills
+     * @param isConnecionKeepAlive whether connection keep alive
      * @return
      */
-    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis) {
-        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis);
+    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis, boolean isConnecionKeepAlive) {
+        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis, isConnecionKeepAlive);
         Drawable d = Drawable.createFromStream(stream, "src");
         closeInputStream(stream);
         return d;
     }
 
     /**
+     * get Bitmap by imageUrl, and http conection is keep alive
+     * 
+     * @param imageUrl
+     * @param readTimeOut
+     * @return
+     * @see ImageUtils#getBitmapFromUrl(String, int, boolean)
+     */
+    public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut) {
+        return getBitmapFromUrl(imageUrl, readTimeOut, true);
+    }
+
+    /**
      * get Bitmap by imageUrl
      * 
      * @param imageUrl
+     * @param isConnecionKeepAlive whether connection keep alive
      * @return
      */
-    public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut) {
-        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOut);
+    public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut, boolean isConnecionKeepAlive) {
+        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOut, isConnecionKeepAlive);
         Bitmap b = BitmapFactory.decodeStream(stream);
         closeInputStream(stream);
         return b;
