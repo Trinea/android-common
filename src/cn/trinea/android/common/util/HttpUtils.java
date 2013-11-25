@@ -10,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.entity.HttpRequest;
@@ -388,15 +386,30 @@ public class HttpUtils {
             return;
         }
 
-        Set<Entry<String, String>> proSet = request.getRequestPropertys().entrySet();
-        for (Map.Entry<String, String> entry : proSet) {
-            urlConnection.setRequestProperty(entry.getKey(), entry.getValue());
-        }
+        setURLConnection(request.getRequestProperties(), urlConnection);
         if (request.getConnectTimeout() >= 0) {
             urlConnection.setConnectTimeout(request.getConnectTimeout());
         }
         if (request.getReadTimeout() >= 0) {
             urlConnection.setReadTimeout(request.getReadTimeout());
+        }
+    }
+
+    /**
+     * set HttpURLConnection property
+     * 
+     * @param requestProperties
+     * @param urlConnection
+     */
+    public static void setURLConnection(Map<String, String> requestProperties, HttpURLConnection urlConnection) {
+        if (MapUtils.isEmpty(requestProperties) || urlConnection == null) {
+            return;
+        }
+
+        for (Map.Entry<String, String> entry : requestProperties.entrySet()) {
+            if (!StringUtils.isEmpty(entry.getKey())) {
+                urlConnection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
         }
     }
 

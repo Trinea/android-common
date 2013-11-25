@@ -85,9 +85,9 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
      * newest one
      **/
-    private boolean                              isOpenWaitingQueue     = true;
-    /** whether http connecion is keep alive **/
-    private boolean                              isConnecionKeepAlive = true;
+    private boolean                              isOpenWaitingQueue   = true;
+    /** http request properties **/
+    private Map<String, String>                  requestProperties    = null;
 
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
@@ -286,26 +286,43 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     }
 
     /**
-     * get whether http connecion is keep alive
+     * set http request properties
+     * <ul>
+     * <li>If image is from the different server, setRequestProperty("Connection", "false") is recommended. If image is
+     * from the same server, true is recommended, and this is the default value</li>
+     * </ul>
      * 
-     * @return the isConnecionKeepAlive
+     * @param requestProperties
      */
-    public boolean isConnecionKeepAlive() {
-        return isConnecionKeepAlive;
+    public void setRequestProperties(Map<String, String> requestProperties) {
+        this.requestProperties = requestProperties;
     }
 
     /**
-     * set whether http connecion is keep alive
-     * <ul>
-     * <li>if image is from the same server, isConnecionKeepAlive is set to true recommended, and this is the default
-     * value</li>
-     * <li>else if image is from the different server, isConnecionKeepAlive is set to false recommended</li>
-     * </ul>
+     * get http request properties
      * 
-     * @param isConnecionKeepAlive the isConnecionKeepAlive to set
+     * @return
      */
-    public void setConnecionKeepAlive(boolean isConnecionKeepAlive) {
-        this.isConnecionKeepAlive = isConnecionKeepAlive;
+    public Map<String, String> getRequestProperties() {
+        return requestProperties;
+    }
+
+    /**
+     * Sets the value of the http request header field
+     * 
+     * @param field the request header field to be set
+     * @param newValue the new value of the specified property
+     * @see {@link #setRequestProperties(Map)}
+     */
+    public void setRequestProperty(String field, String newValue) {
+        if (StringUtils.isEmpty(field)) {
+            return;
+        }
+
+        if (requestProperties == null) {
+            requestProperties = new HashMap<String, String>();
+        }
+        requestProperties.put(field, newValue);
     }
 
     /**
@@ -751,7 +768,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
                 String savePath = null;
                 try {
-                    InputStream stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut, isConnecionKeepAlive);
+                    InputStream stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut, requestProperties);
                     if (stream != null) {
                         savePath = cacheFolder + File.separator + fileNameRule.getFileName(key);
                         try {

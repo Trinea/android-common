@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -107,8 +108,7 @@ public class ImageUtils {
     }
 
     /**
-     * get input stream from network by imageurl, and http conection is keep alive, you need to close inputStream
-     * yourself
+     * get input stream from network by imageurl, you need to close inputStream yourself
      * 
      * @param imageUrl
      * @param readTimeOutMillis
@@ -116,7 +116,7 @@ public class ImageUtils {
      * @see ImageUtils#getInputStreamFromUrl(String, int, boolean)
      */
     public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis) {
-        return getInputStreamFromUrl(imageUrl, readTimeOutMillis, true);
+        return getInputStreamFromUrl(imageUrl, readTimeOutMillis, null);
     }
 
     /**
@@ -124,20 +124,18 @@ public class ImageUtils {
      * 
      * @param imageUrl
      * @param readTimeOutMillis read time out, if less than 0, not set, in mills
-     * @param isConnecionKeepAlive whether connection keep alive
+     * @param requestProperties http request properties
      * @return
      * @throws MalformedURLException
      * @throws IOException
      */
-    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis, boolean isConnecionKeepAlive) {
+    public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis,
+                                                    Map<String, String> requestProperties) {
         InputStream stream = null;
         try {
             URL url = new URL(imageUrl);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            // default is keep alive
-            if (!isConnecionKeepAlive) {
-                con.addRequestProperty("Connection", "false");
-            }
+            HttpUtils.setURLConnection(requestProperties, con);
             if (readTimeOutMillis > 0) {
                 con.setReadTimeout(readTimeOutMillis);
             }
@@ -153,7 +151,7 @@ public class ImageUtils {
     }
 
     /**
-     * get drawable by imageUrl , and http conection is keep alive
+     * get drawable by imageUrl
      * 
      * @param imageUrl
      * @param readTimeOutMillis
@@ -161,7 +159,7 @@ public class ImageUtils {
      * @see ImageUtils#getDrawableFromUrl(String, int, boolean)
      */
     public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis) {
-        return getDrawableFromUrl(imageUrl, readTimeOutMillis, true);
+        return getDrawableFromUrl(imageUrl, readTimeOutMillis, null);
     }
 
     /**
@@ -169,18 +167,19 @@ public class ImageUtils {
      * 
      * @param imageUrl
      * @param readTimeOutMillis read time out, if less than 0, not set, in mills
-     * @param isConnecionKeepAlive whether connection keep alive
+     * @param requestProperties http request properties
      * @return
      */
-    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis, boolean isConnecionKeepAlive) {
-        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis, isConnecionKeepAlive);
+    public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis,
+                                              Map<String, String> requestProperties) {
+        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis, requestProperties);
         Drawable d = Drawable.createFromStream(stream, "src");
         closeInputStream(stream);
         return d;
     }
 
     /**
-     * get Bitmap by imageUrl, and http conection is keep alive
+     * get Bitmap by imageUrl
      * 
      * @param imageUrl
      * @param readTimeOut
@@ -188,18 +187,18 @@ public class ImageUtils {
      * @see ImageUtils#getBitmapFromUrl(String, int, boolean)
      */
     public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut) {
-        return getBitmapFromUrl(imageUrl, readTimeOut, true);
+        return getBitmapFromUrl(imageUrl, readTimeOut, null);
     }
 
     /**
      * get Bitmap by imageUrl
      * 
      * @param imageUrl
-     * @param isConnecionKeepAlive whether connection keep alive
+     * @param requestProperties http request properties
      * @return
      */
-    public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut, boolean isConnecionKeepAlive) {
-        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOut, isConnecionKeepAlive);
+    public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut, Map<String, String> requestProperties) {
+        InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOut, requestProperties);
         Bitmap b = BitmapFactory.decodeStream(stream);
         closeInputStream(stream);
         return b;

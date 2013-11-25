@@ -20,7 +20,7 @@ import cn.trinea.android.common.util.HttpUtils;
  * <li>{@link #setParasMap(Map)}</li>
  * <li>{@link #setUserAgent(String)}</li>
  * <li>{@link #setRequestProperty(String, String)}</li>
- * <li>{@link #setRequestPropertys(Map)}</li>
+ * <li>{@link #setRequestProperties(Map)}</li>
  * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-12
@@ -31,13 +31,13 @@ public class HttpRequest {
     private int                 connectTimeout;
     private int                 readTimeout;
     private Map<String, String> parasMap;
-    private Map<String, String> requestPropertys;
+    private Map<String, String> requestProperties;
 
     public HttpRequest(String url){
         this.url = url;
         this.connectTimeout = -1;
         this.readTimeout = -1;
-        requestPropertys = new HashMap<String, String>();
+        requestProperties = new HashMap<String, String>();
     }
 
     public HttpRequest(String url, Map<String, String> parasMap){
@@ -45,7 +45,7 @@ public class HttpRequest {
         this.parasMap = parasMap;
         this.connectTimeout = -1;
         this.readTimeout = -1;
-        requestPropertys = new HashMap<String, String>();
+        requestProperties = new HashMap<String, String>();
     }
 
     public String getUrl() {
@@ -121,7 +121,7 @@ public class HttpRequest {
      * @see URLConnection#setRequestProperty(String, String)
      */
     public void setRequestProperty(String field, String newValue) {
-        requestPropertys.put(field, newValue);
+        requestProperties.put(field, newValue);
     }
 
     /**
@@ -129,7 +129,7 @@ public class HttpRequest {
      * @see URLConnection#getRequestProperty(String)
      */
     public String getRequestProperty(String field) {
-        return requestPropertys.get(field);
+        return requestProperties.get(field);
     }
 
     /**
@@ -139,20 +139,20 @@ public class HttpRequest {
      * @see URLConnection#setRequestProperty(String, String)
      */
     public void setUserAgent(String value) {
-        requestPropertys.put("User-Agent", value);
+        requestProperties.put("User-Agent", value);
     }
 
     /**
      * @return
      */
-    public Map<String, String> getRequestPropertys() {
-        return requestPropertys;
+    public Map<String, String> getRequestProperties() {
+        return requestProperties;
     }
 
     /**
-     * @param requestPropertys
+     * @param requestProperties
      */
-    public void setRequestPropertys(Map<String, String> requestPropertys) {
-        this.requestPropertys = requestPropertys;
+    public void setRequestProperties(Map<String, String> requestProperties) {
+        this.requestProperties = requestProperties;
     }
 }

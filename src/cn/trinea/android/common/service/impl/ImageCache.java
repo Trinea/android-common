@@ -2,6 +2,7 @@ package cn.trinea.android.common.service.impl;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import android.content.Context;
@@ -228,14 +229,37 @@ public class ImageCache extends ImageMemoryCache {
         secondaryCache.setContext(context);
     }
 
-    @Override
-    public boolean isConnecionKeepAlive() {
-        return secondaryCache.isConnecionKeepAlive();
+    /**
+     * set http request properties
+     * <ul>
+     * <li>If image is from the different server, setRequestProperty("Connection", "false") is recommended. If image is
+     * from the same server, true is recommended, and this is the default value</li>
+     * </ul>
+     * 
+     * @param requestProperties
+     */
+    public void setRequestProperties(Map<String, String> requestProperties) {
+        secondaryCache.setRequestProperties(requestProperties);
     }
 
-    @Override
-    public void setConnecionKeepAlive(boolean isConnecionKeepAlive) {
-        secondaryCache.setConnecionKeepAlive(isConnecionKeepAlive);
+    /**
+     * get http request properties
+     * 
+     * @return
+     */
+    public Map<String, String> getRequestProperties() {
+        return secondaryCache.getRequestProperties();
+    }
+
+    /**
+     * Sets the value of the http request header field
+     * 
+     * @param field the request header field to be set
+     * @param newValue the new value of the specified property
+     * @see {@link #setRequestProperties(Map)}
+     */
+    public void setRequestProperty(String field, String newValue) {
+        secondaryCache.setRequestProperty(field, newValue);
     }
 
     /**
