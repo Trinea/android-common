@@ -12,7 +12,6 @@ import android.view.View;
 import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.service.FileNameRule;
-import cn.trinea.android.common.service.impl.ImageMemoryCache.OnImageCallbackListener;
 import cn.trinea.android.common.util.FileUtils;
 import cn.trinea.android.common.util.ImageUtils;
 

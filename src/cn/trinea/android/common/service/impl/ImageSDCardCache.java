@@ -3,7 +3,6 @@ package cn.trinea.android.common.service.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +19,10 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import cn.trinea.android.common.dao.impl.ImageSDCardCacheDaoImpl;
+import cn.trinea.android.common.entity.FailedException;
 import cn.trinea.android.common.entity.CacheObject;
+import cn.trinea.android.common.entity.FailedReason;
+import cn.trinea.android.common.entity.FailedReason.FailedType;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.service.FileNameRule;
 import cn.trinea.android.common.util.FileUtils;
@@ -38,7 +40,7 @@ import cn.trinea.android.common.util.SystemUtils;
  * <ul>
  * <strong>Setting and Usage</strong>
  * <li>Use one of constructors in sections II to init cache</li>
- * <li>{@link #setOnImageSDCallbackListener(OnImageSDCallbackListener)} set callback interface after image get success</li>
+ * <li>{@link #setOnImageSDCallbackListener(OnImageSDCallbackListener)} set callback interface when getting image</li>
  * <li>{@link #get(String, List, View)} get image asynchronous and preload other images asynchronous according to
  * urlList</li>
  * <li>{@link #get(String, View)} get image asynchronous</li>
@@ -67,44 +69,45 @@ import cn.trinea.android.common.util.SystemUtils;
  */
 public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
-    private static final long                    serialVersionUID     = 1L;
+    private static final long                    serialVersionUID       = 1L;
 
-    private static final String                  TAG                  = "ImageSDCardCache";
+    private static final String                  TAG                    = "ImageSDCardCache";
 
-    /** callback interface after image get success **/
+    /** callback interface when getting image **/
     private OnImageSDCallbackListener            onImageSDCallbackListener;
     /** cache folder path which be used when saving images, default is {@link #DEFAULT_CACHE_FOLDER} **/
-    private String                               cacheFolder          = DEFAULT_CACHE_FOLDER;
+    private String                               cacheFolder            = DEFAULT_CACHE_FOLDER;
     /** file name rule which be used when saving images, default is {@link FileNameRuleImageUrl} **/
-    private FileNameRule                         fileNameRule         = new FileNameRuleImageUrl();
+    private FileNameRule                         fileNameRule           = new FileNameRuleImageUrl();
     /** http read image time out, if less than 0, not set. default is not set **/
-    private int                                  httpReadTimeOut      = -1;
+    private int                                  httpReadTimeOut        = -1;
     /**
      * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
      * newest one
      **/
-    private boolean                              isOpenWaitingQueue   = true;
+    private boolean                              isOpenWaitingQueue     = true;
     /** whether http connecion is keep alive **/
     private boolean                              isConnecionKeepAlive = true;
 
     /** recommend default max cache size according to dalvik max memory **/
-    public static final int                      DEFAULT_MAX_SIZE     = getDefaultMaxSize();
+    public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
     /** cache folder path which be used when saving images **/
-    public static final String                   DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory()
-                                                                                   .getAbsolutePath()
-                                                                        + File.separator
-                                                                        + "Trinea"
-                                                                        + File.separator
-                                                                        + "AndroidCommon"
-                                                                        + File.separator + "ImageSDCardCache";
+    public static final String                   DEFAULT_CACHE_FOLDER   = Environment.getExternalStorageDirectory()
+                                                                                     .getAbsolutePath()
+                                                                          + File.separator
+                                                                          + "Trinea"
+                                                                          + File.separator
+                                                                          + "AndroidCommon"
+                                                                          + File.separator
+                                                                          + "ImageSDCardCache";
 
-    /** image got success message what **/
-    private static final int                     IMAGE_LOADED_WHAT    = 1;
-    /** image reloaded success message what **/
-    private static final int                     IMAGE_RELOADED_WHAT  = 2;
+    /** message what for get image successfully **/
+    private static final int                     WHAT_GET_IMAGE_SUCCESS = 1;
+    /** message what for get image failed **/
+    private static final int                     WHAT_GET_IMAGE_FAILED  = 2;
 
     /** thread pool whose wait for data got, attention, not the get data thread pool **/
-    private transient ExecutorService            threadPool           = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
+    private transient ExecutorService            threadPool             = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
     /**
      * key is image url, value is the newest view which waiting for image loaded, used when {@link #isOpenWaitingQueue}
      * is false
@@ -118,7 +121,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
     /**
      * get image asynchronous. when get image success, it will pass to
-     * {@link OnImageSDCallbackListener#onImageLoaded(String, String, View, boolean)}
+     * {@link OnImageSDCallbackListener#onGetSuccess(String, String, View, boolean)}
      * 
      * @param imageUrl
      * @param view
@@ -143,6 +146,9 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             return false;
         }
 
+        if (onImageSDCallbackListener != null) {
+            onImageSDCallbackListener.onPreGet(imageUrl, view);
+        }
         /**
          * if already in cache, call onImageSDCallbackListener, else new thread to wait for it
          */
@@ -151,7 +157,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             String imagePath = object.getData();
             if (!StringUtils.isEmpty(imagePath) && FileUtils.isFileExist(imagePath)) {
                 if (onImageSDCallbackListener != null) {
-                    onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view, true);
+                    onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, true);
                 }
                 return true;
             } else {
@@ -176,7 +182,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             return false;
         }
 
-        startGetImageThread(IMAGE_LOADED_WHAT, imageUrl, urlList);
+        startGetImageThread(imageUrl, urlList);
         return false;
     }
 
@@ -224,7 +230,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     }
 
     /**
-     * get callback interface after image get success
+     * get callback interface when getting image
      * 
      * @return the onImageSDCallbackListener
      */
@@ -233,7 +239,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     }
 
     /**
-     * set callback interface after image get success
+     * set callback interface when getting image
      * 
      * @param onImageSDCallbackListener the onImageSDCallbackListener to set
      */
@@ -305,7 +311,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * <ul>
      * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
+     * <li>callback interface when getting image is null, can set by
      * {@link #setOnImageSDCallbackListener(OnImageSDCallbackListener)}</li>
      * <li>Maximum size of the cache is {@link #DEFAULT_MAX_SIZE}</li>
      * <li>Elements of the cache will not invalid</li>
@@ -321,7 +327,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * <ul>
      * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
+     * <li>callback interface when getting image is null, can set by
      * {@link #setOnImageSDCallbackListener(OnImageSDCallbackListener)}</li>
      * <li>Elements of the cache will not invalid</li>
      * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
@@ -337,7 +343,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /**
      * <ul>
      * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
+     * <li>callback interface when getting image is null, can set by
      * {@link #setOnImageSDCallbackListener(OnImageSDCallbackListener)}</li>
      * <li>Elements of the cache will not invalid</li>
      * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
@@ -361,21 +367,39 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     }
 
     /**
-     * callback interface after image get success
+     * callback interface when getting image
      * 
      * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
      */
-    public interface OnImageSDCallbackListener extends Serializable {
+    public interface OnImageSDCallbackListener {
 
         /**
-         * callback function after image get success, run on ui thread
+         * callback function before get image, run on ui thread
+         * 
+         * @param imageUrl imageUrl
+         * @param view view need the image
+         */
+        public void onPreGet(String imageUrl, View view);
+
+        /**
+         * callback function after get image successfully, run on ui thread
          * 
          * @param imageUrl imageUrl
          * @param imagePath image path
          * @param view view need the image
          * @param isInCache whether already in cache or got realtime
          */
-        public void onImageLoaded(String imageUrl, String imagePath, View view, boolean isInCache);
+        public void onGetSuccess(String imageUrl, String imagePath, View view, boolean isInCache);
+
+        /**
+         * callback function after get image failed, run on ui thread
+         * 
+         * @param imageUrl imageUrl
+         * @param imagePath image path
+         * @param view view need the image
+         * @param failedReason failed reason for get image
+         */
+        public void onGetFailed(String imageUrl, String imagePath, View view, FailedReason failedReason);
     }
 
     /**
@@ -403,8 +427,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
         public void handleMessage(Message message) {
             switch (message.what) {
-                case IMAGE_LOADED_WHAT:
-                case IMAGE_RELOADED_WHAT:
+                case WHAT_GET_IMAGE_SUCCESS:
+                case WHAT_GET_IMAGE_FAILED:
                     MessageObject object = (MessageObject)message.obj;
                     if (object == null) {
                         break;
@@ -419,7 +443,12 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                 if (viewSet != null) {
                                     for (View view : viewSet) {
                                         if (view != null) {
-                                            onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view, false);
+                                            if (WHAT_GET_IMAGE_SUCCESS == message.what) {
+                                                onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, false);
+                                            } else {
+                                                onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
+                                                                                      object.failedReason);
+                                            }
                                         }
                                     }
                                 }
@@ -427,7 +456,12 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                         } else {
                             View view = viewMap.get(imageUrl);
                             if (view != null) {
-                                onImageSDCallbackListener.onImageLoaded(imageUrl, imagePath, view, false);
+                                if (WHAT_GET_IMAGE_SUCCESS == message.what) {
+                                    onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, false);
+                                } else {
+                                    onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
+                                                                          object.failedReason);
+                                }
                             }
                         }
                     }
@@ -451,25 +485,31 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      */
     private class MessageObject {
 
-        String imageUrl;
-        String imagePath;
+        String       imageUrl;
+        String       imagePath;
+        FailedReason failedReason;
 
-        public MessageObject(String imageUrl, String imagePath, List<String> urlList){
+        public MessageObject(String imageUrl, String imagePath){
             this.imageUrl = imageUrl;
             this.imagePath = imagePath;
+        }
+
+        public MessageObject(String imageUrl, String imagePath, FailedReason failedReason){
+            this.imageUrl = imageUrl;
+            this.imagePath = imagePath;
+            this.failedReason = failedReason;
         }
     }
 
     /**
      * start thread to wait for image get
      * 
-     * @param messsageWhat
      * @param imageUrl
      * @param urlList url list, if is null, not preload, else preload forward by
      * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
      * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
      */
-    private void startGetImageThread(final int messsageWhat, final String imageUrl, final List<String> urlList) {
+    private void startGetImageThread(final String imageUrl, final List<String> urlList) {
         // wait for image be got success and send message
         threadPool.execute(new Runnable() {
 
@@ -477,15 +517,23 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             public void run() {
                 CacheObject<String> object = get(imageUrl, urlList);
                 String imagePath = (object == null ? null : object.getData());
-                // if image file not exist, remove it from cache and reload it
                 if (StringUtils.isEmpty(imagePath) || !FileUtils.isFileExist(imagePath)) {
+                    // if image get fail, remove it
                     remove(imageUrl);
-                    if (messsageWhat == IMAGE_LOADED_WHAT) {
-                        startGetImageThread(IMAGE_RELOADED_WHAT, imageUrl, urlList);
+                    FailedReason failedReason;
+                    if (object == null) {
+                        failedReason = new FailedReason(FailedType.ERROR_NETWORK,
+                                                        new FailedException("get image from network error"));
+                    } else {
+                        failedReason = new FailedReason(FailedType.ERROR_IO,
+                                                        new FailedException("save image error"));
                     }
+                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
+                                                                                                       imagePath,
+                                                                                                       failedReason)));
                 } else {
-                    handler.sendMessage(handler.obtainMessage(messsageWhat, new MessageObject(imageUrl, imagePath,
-                                                                                              urlList)));
+                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
+                                                                                                        imagePath)));
                 }
             }
         });

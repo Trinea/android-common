@@ -1,6 +1,5 @@
 package cn.trinea.android.common.service.impl;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +15,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import cn.trinea.android.common.entity.FailedException;
+import cn.trinea.android.common.entity.FailedReason;
+import cn.trinea.android.common.entity.FailedReason.FailedType;
 import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.util.ImageUtils;
@@ -31,7 +33,7 @@ import cn.trinea.android.common.util.SystemUtils;
  * <ul>
  * <strong>Setting and Usage</strong>
  * <li>Use one of constructors in sections II to init cache</li>
- * <li>{@link #setOnImageCallbackListener(OnImageCallbackListener)} set callback interface after image get success</li>
+ * <li>{@link #setOnImageCallbackListener(OnImageCallbackListener)} set callback interface when getting image</li>
  * <li>{@link #get(String, List, View)} get image asynchronous and preload other images asynchronous according to
  * urlList</li>
  * <li>{@link #get(String, View)} get image asynchronous</li>
@@ -56,29 +58,31 @@ import cn.trinea.android.common.util.SystemUtils;
  */
 public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
-    private static final long                    serialVersionUID     = 1L;
+    private static final long                    serialVersionUID       = 1L;
 
-    private static final String                  TAG                  = "ImageCache";
+    private static final String                  TAG                    = "ImageCache";
 
-    /** callback interface after image get success **/
+    /** callback interface when getting image **/
     private OnImageCallbackListener              onImageCallbackListener;
     /** http read image time out, if less than 0, not set. default is not set **/
-    private int                                  httpReadTimeOut      = -1;
+    private int                                  httpReadTimeOut        = -1;
     /**
      * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
      * newest one
      **/
-    private boolean                              isOpenWaitingQueue   = true;
+    private boolean                              isOpenWaitingQueue     = true;
     /** whether http connecion is keep alive **/
     private boolean                              isConnecionKeepAlive = true;
 
     /** recommend default max cache size according to dalvik max memory **/
-    public static final int                      DEFAULT_MAX_SIZE     = getDefaultMaxSize();
-    /** image got success message what **/
-    private static final int                     IMAGE_LOADED_WHAT    = 1;
+    public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
+    /** message what for get image successfully **/
+    private static final int                     WHAT_GET_IMAGE_SUCCESS = 1;
+    /** message what for get image failed **/
+    private static final int                     WHAT_GET_IMAGE_FAILED  = 2;
 
     /** thread pool whose wait for data got, attention, not the get data thread pool **/
-    private transient ExecutorService            threadPool           = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
+    private transient ExecutorService            threadPool             = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
     /**
      * key is image url, value is the newest view which waiting for image loaded, used when {@link #isOpenWaitingQueue}
      * is false
@@ -93,7 +97,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
     /**
      * get image asynchronous. when get image success, it will pass to
-     * {@link OnImageCallbackListener#onImageLoaded(String, Drawable, View, boolean)}
+     * {@link OnImageCallbackListener#onGetSuccess(String, Drawable, View, boolean)}
      * 
      * @param imageUrl
      * @param view
@@ -118,6 +122,9 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             return false;
         }
 
+        if (onImageCallbackListener != null) {
+            onImageCallbackListener.onPreGet(imageUrl, view);
+        }
         /**
          * if already in cache, call onImageSDCallbackListener, else new thread to wait for it
          */
@@ -126,7 +133,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             Drawable drawable = object.getData();
             if (drawable != null) {
                 if (onImageCallbackListener != null) {
-                    onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, true);
+                    onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, true);
                 }
                 return true;
             } else {
@@ -151,12 +158,12 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             return false;
         }
 
-        startGetImageThread(IMAGE_LOADED_WHAT, imageUrl, urlList);
+        startGetImageThread(imageUrl, urlList);
         return false;
     }
 
     /**
-     * get callback interface after image get success
+     * get callback interface when getting image
      * 
      * @return the onImageCallbackListener
      */
@@ -165,7 +172,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     }
 
     /**
-     * set callback interface after image get success
+     * set callback interface when getting image
      * 
      * @param onImageCallbackListener
      */
@@ -237,7 +244,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     /**
      * <ul>
      * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
+     * <li>callback interface when getting image is null, can set by
      * {@link #setOnImageCallbackListener(OnImageCallbackListener)}</li>
      * <li>Maximum size of the cache is {@link #DEFAULT_MAX_SIZE}</li>
      * <li>Elements of the cache will not invalid</li>
@@ -253,7 +260,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     /**
      * <ul>
      * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
+     * <li>callback interface when getting image is null, can set by
      * {@link #setOnImageCallbackListener(OnImageCallbackListener)}</li>
      * <li>Elements of the cache will not invalid</li>
      * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
@@ -269,7 +276,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     /**
      * <ul>
      * <li>Get data listener is {@link #getDefaultOnGetImageListener()}</li>
-     * <li>Callback interface after image get success is null, can set by
+     * <li>callback interface when getting image is null, can set by
      * {@link #setOnImageCallbackListener(OnImageCallbackListener)}</li>
      * <li>Elements of the cache will not invalid</li>
      * <li>Remove type is {@link RemoveTypeUsedCountSmall} when cache is full</li>
@@ -293,21 +300,39 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     }
 
     /**
-     * callback interface after image get success
+     * callback interface when getting image
      * 
      * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
      */
-    public interface OnImageCallbackListener extends Serializable {
+    public interface OnImageCallbackListener {
 
         /**
-         * callback function after image get success, run on ui thread
+         * callback function before get image, run on ui thread
+         * 
+         * @param imageUrl imageUrl
+         * @param view view need the image
+         */
+        public void onPreGet(String imageUrl, View view);
+
+        /**
+         * callback function after get image successfully, run on ui thread
          * 
          * @param imageUrl imageUrl
          * @param imageDrawable drawable
          * @param view view need the image
          * @param isInCache whether already in cache or got realtime
          */
-        public void onImageLoaded(String imageUrl, Drawable imageDrawable, View view, boolean isInCache);
+        public void onGetSuccess(String imageUrl, Drawable imageDrawable, View view, boolean isInCache);
+
+        /**
+         * callback function after get image failed, run on ui thread
+         * 
+         * @param imageUrl imageUrl
+         * @param imageDrawable drawable
+         * @param view view need the image
+         * @param failedReason failed reason for get image
+         */
+        public void onGetFailed(String imageUrl, Drawable imageDrawable, View view, FailedReason failedReason);
     }
 
     /**
@@ -335,7 +360,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
         public void handleMessage(Message message) {
             switch (message.what) {
-                case IMAGE_LOADED_WHAT:
+                case WHAT_GET_IMAGE_SUCCESS:
+                case WHAT_GET_IMAGE_FAILED:
                     MessageObject object = (MessageObject)message.obj;
                     if (object == null) {
                         break;
@@ -350,7 +376,13 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
                                 if (viewSet != null) {
                                     for (View view : viewSet) {
                                         if (view != null) {
-                                            onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
+                                            onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, false);
+                                        }
+                                        if (WHAT_GET_IMAGE_SUCCESS == message.what) {
+                                            onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, false);
+                                        } else {
+                                            onImageCallbackListener.onGetFailed(imageUrl, drawable, view,
+                                                                                object.failedReason);
                                         }
                                     }
                                 }
@@ -358,7 +390,11 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
                         } else {
                             View view = viewMap.get(imageUrl);
                             if (view != null) {
-                                onImageCallbackListener.onImageLoaded(imageUrl, drawable, view, false);
+                                if (WHAT_GET_IMAGE_SUCCESS == message.what) {
+                                    onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, false);
+                                } else {
+                                    onImageCallbackListener.onGetFailed(imageUrl, drawable, view, object.failedReason);
+                                }
                             }
                         }
                     }
@@ -382,25 +418,32 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
      */
     private class MessageObject {
 
-        String   imageUrl;
-        Drawable drawable;
+        String            imageUrl;
+        Drawable          drawable;
+        FailedReason failedReason;
 
         public MessageObject(String imageUrl, Drawable drawable){
             this.imageUrl = imageUrl;
             this.drawable = drawable;
         }
+
+        public MessageObject(String imageUrl, Drawable drawable, FailedReason failedReason){
+            this.imageUrl = imageUrl;
+            this.drawable = drawable;
+            this.failedReason = failedReason;
+        }
+
     }
 
     /**
      * start thread to wait for image get
      * 
-     * @param messsageWhat
      * @param imageUrl
      * @param urlList url list, if is null, not preload, else preload forward by
      * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
      * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
      */
-    private void startGetImageThread(final int messsageWhat, final String imageUrl, final List<String> urlList) {
+    private void startGetImageThread(final String imageUrl, final List<String> urlList) {
         // wait for image be got success and send message
         threadPool.execute(new Runnable() {
 
@@ -408,11 +451,19 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             public void run() {
                 CacheObject<Drawable> object = get(imageUrl, urlList);
                 Drawable drawable = (object == null ? null : object.getData());
-                // if drawable is null, remove it
                 if (drawable == null) {
+                    // if drawable is null, remove it
                     remove(imageUrl);
+                    FailedReason failedReason = new FailedReason(
+                                                                           FailedType.ERROR_NETWORK,
+                                                                           new FailedException(
+                                                                                                    "get image from network error"));
+                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
+                                                                                                       drawable,
+                                                                                                       failedReason)));
                 } else {
-                    handler.sendMessage(handler.obtainMessage(IMAGE_LOADED_WHAT, new MessageObject(imageUrl, drawable)));
+                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
+                                                                                                        drawable)));
                 }
             }
         });
