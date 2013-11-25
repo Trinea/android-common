@@ -85,15 +85,14 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
      * newest one
      **/
-    private boolean                              isOpenWaitingQueue   = true;
+    private boolean                              isOpenWaitingQueue     = true;
     /** http request properties **/
-    private Map<String, String>                  requestProperties    = null;
+    private Map<String, String>                  requestProperties      = null;
 
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
     /** cache folder path which be used when saving images **/
-    public static final String                   DEFAULT_CACHE_FOLDER   = Environment.getExternalStorageDirectory()
-                                                                                     .getAbsolutePath()
+    public static final String                   DEFAULT_CACHE_FOLDER   = Environment.getExternalStorageDirectory().getAbsolutePath()
                                                                           + File.separator
                                                                           + "Trinea"
                                                                           + File.separator

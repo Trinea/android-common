@@ -70,9 +70,9 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
      * whether open waiting queue, default is true. If true, save all view waiting for image loaded, else only save the
      * newest one
      **/
-    private boolean                              isOpenWaitingQueue = true;
+    private boolean                              isOpenWaitingQueue     = true;
     /** http request properties **/
-    private Map<String, String>                  requestProperties  = null;
+    private Map<String, String>                  requestProperties      = null;
 
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
@@ -435,8 +435,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
      */
     private class MessageObject {
 
-        String            imageUrl;
-        Drawable          drawable;
+        String       imageUrl;
+        Drawable     drawable;
         FailedReason failedReason;
 
         public MessageObject(String imageUrl, Drawable drawable){
@@ -449,7 +449,6 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             this.drawable = drawable;
             this.failedReason = failedReason;
         }
-
     }
 
     /**
