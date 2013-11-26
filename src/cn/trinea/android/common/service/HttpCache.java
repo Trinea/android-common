@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.dao.HttpCacheDao;
 import cn.trinea.android.common.dao.impl.HttpCacheDaoImpl;
 import cn.trinea.android.common.entity.HttpRequest;
@@ -101,7 +102,10 @@ public class HttpCache {
             return null;
         }
 
-        HttpResponse cacheResponse = getFromCache(url);
+        HttpResponse cacheResponse = null;
+        if (!"no-cache".equals(request.getRequestProperty(HttpConstants.CACHE_CONTROL))) {
+            cacheResponse = getFromCache(url);
+        }
         return cacheResponse == null ? putIntoCache(HttpUtils.httpGet(url)) : cacheResponse;
     }
 
