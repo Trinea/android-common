@@ -546,6 +546,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
             footerButton.setEnabled(true);
             if (!hasMore) {
                 footerButton.setText(footerNoMoreText);
+                removeFooterView(footerLayout);
             } else {
                 footerButton.setText(footerDefaultText);
             }

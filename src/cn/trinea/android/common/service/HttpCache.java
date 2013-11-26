@@ -48,7 +48,7 @@ public class HttpCache {
     /** http memory cache **/
     private Map<String, HttpResponse> cache;
     /** dao to get data from http db cache **/
-    private HttpCacheDao              httpCacheDaoImpl;
+    private HttpCacheDao              httpCacheDao;
     private int                       type = -1;
 
     public HttpCache(Context context){
@@ -57,7 +57,7 @@ public class HttpCache {
         }
         this.context = context;
         cache = new ConcurrentHashMap<String, HttpResponse>();
-        httpCacheDaoImpl = new HttpCacheDaoImpl(SqliteUtils.getInstance(context));
+        httpCacheDao = new HttpCacheDaoImpl(SqliteUtils.getInstance(context));
     }
 
     /**
@@ -78,7 +78,7 @@ public class HttpCache {
      * @param type
      */
     private void initData(int type) {
-        this.cache = httpCacheDaoImpl.getHttpResponsesByType(type);
+        this.cache = httpCacheDao.getHttpResponsesByType(type);
         if (cache == null) {
             cache = new HashMap<String, HttpResponse>();
         }
@@ -215,7 +215,7 @@ public class HttpCache {
      */
     public void clear() {
         cache.clear();
-        httpCacheDaoImpl.deleteAllHttpResponse();
+        httpCacheDao.deleteAllHttpResponse();
     }
 
     /**
@@ -276,7 +276,7 @@ public class HttpCache {
         if (type != -1 && type == httpResponse.getType()) {
             cache.put(url, httpResponse);
         }
-        return (httpCacheDaoImpl.insertHttpResponse(httpResponse) == -1) ? null : httpResponse;
+        return (httpCacheDao.insertHttpResponse(httpResponse) == -1) ? null : httpResponse;
     }
 
     /**
@@ -295,7 +295,7 @@ public class HttpCache {
 
         HttpResponse cacheResponse = cache.get(url);
         if (cacheResponse == null) {
-            cacheResponse = httpCacheDaoImpl.getHttpResponse(url);
+            cacheResponse = httpCacheDao.getHttpResponse(url);
         }
         return (cacheResponse == null || cacheResponse.isExpired()) ? null : cacheResponse.setInCache(true);
     }
