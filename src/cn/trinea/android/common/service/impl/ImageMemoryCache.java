@@ -449,6 +449,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             this.drawable = drawable;
             this.failedReason = failedReason;
         }
+
     }
 
     /**
@@ -470,10 +471,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
                 if (drawable == null) {
                     // if drawable is null, remove it
                     remove(imageUrl);
-                    FailedReason failedReason = new FailedReason(
-                                                                           FailedType.ERROR_NETWORK,
-                                                                           new FailedException(
-                                                                                                    "get image from network error"));
+                    FailedReason failedReason = new FailedReason(FailedType.ERROR_NETWORK,
+                                                                 new FailedException("get image from network error"));
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
                                                                                                        drawable,
                                                                                                        failedReason)));

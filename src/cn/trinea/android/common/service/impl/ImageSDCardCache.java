@@ -92,7 +92,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
     /** cache folder path which be used when saving images **/
-    public static final String                   DEFAULT_CACHE_FOLDER   = Environment.getExternalStorageDirectory().getAbsolutePath()
+    public static final String                   DEFAULT_CACHE_FOLDER   = Environment.getExternalStorageDirectory()
+                                                                                     .getAbsolutePath()
                                                                           + File.separator
                                                                           + "Trinea"
                                                                           + File.separator
@@ -541,8 +542,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                         failedReason = new FailedReason(FailedType.ERROR_NETWORK,
                                                         new FailedException("get image from network error"));
                     } else {
-                        failedReason = new FailedReason(FailedType.ERROR_IO,
-                                                        new FailedException("save image error"));
+                        failedReason = new FailedReason(FailedType.ERROR_IO, new FailedException("save image error"));
                     }
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
                                                                                                        imagePath,
