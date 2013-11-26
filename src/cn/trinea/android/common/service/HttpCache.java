@@ -1,6 +1,8 @@
 package cn.trinea.android.common.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,10 +105,31 @@ public class HttpCache {
         }
 
         HttpResponse cacheResponse = null;
-        if (!"no-cache".equals(request.getRequestProperty(HttpConstants.CACHE_CONTROL))) {
+        boolean isNoCache = false, isNoStore = false;
+        String requestCacheControl = request.getRequestProperty(HttpConstants.CACHE_CONTROL);
+        if (!StringUtils.isEmpty(requestCacheControl)) {
+            String[] requestCacheControls = requestCacheControl.split(",");
+            if (!ArrayUtils.isEmpty(requestCacheControls)) {
+                List<String> requestCacheControlList = new ArrayList<String>();
+                for (String s : requestCacheControls) {
+                    if (s == null) {
+                        continue;
+                    }
+                    requestCacheControlList.add(s.trim());
+                }
+                if (requestCacheControlList.contains("no-cache")) {
+                    isNoCache = true;
+                }
+                if (requestCacheControlList.contains("no-store")) {
+                    isNoStore = true;
+                }
+            }
+        }
+        if (!isNoCache) {
             cacheResponse = getFromCache(url);
         }
-        return cacheResponse == null ? putIntoCache(HttpUtils.httpGet(url)) : cacheResponse;
+        return cacheResponse == null ? (isNoStore ? HttpUtils.httpGet(url) : putIntoCache(HttpUtils.httpGet(url)))
+            : cacheResponse;
     }
 
     /**
