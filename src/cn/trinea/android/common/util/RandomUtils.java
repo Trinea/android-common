@@ -142,4 +142,48 @@ public class RandomUtils {
         Random random = new Random();
         return min + random.nextInt(max - min);
     }
+
+    /**
+     * Shuffling algorithm
+     * 
+     * @param objArray
+     * @param shuffleCount
+     * @return
+     */
+    public static boolean shuffle(Object[] objArray, int shuffleCount) {
+        int length;
+        if (objArray == null || shuffleCount < 0 || (length = objArray.length) < shuffleCount) {
+            return false;
+        }
+
+        for (int i = 1; i <= shuffleCount; i++) {
+            int random = getRandom(length - i);
+            Object temp = objArray[length - i];
+            objArray[length - i] = objArray[random];
+            objArray[random] = temp;
+        }
+        return true;
+    }
+
+    /**
+     * Shuffling algorithm
+     * 
+     * @param intArray
+     * @param shuffleCount
+     * @return
+     */
+    public static boolean shuffle(int[] intArray, int shuffleCount) {
+        int length;
+        if (intArray == null || shuffleCount < 0 || (length = intArray.length) < shuffleCount) {
+            return false;
+        }
+
+        for (int i = 1; i <= shuffleCount; i++) {
+            int random = getRandom(length - i);
+            int temp = intArray[length - i];
+            intArray[length - i] = intArray[random];
+            intArray[random] = temp;
+        }
+        return true;
+    }
 }
