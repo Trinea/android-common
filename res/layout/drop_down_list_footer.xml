@@ -17,8 +17,9 @@
         android:id="@+id/drop_down_list_footer_button"
         style="@style/drop_down_list_footer_font_style"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/drop_down_list_footer_button_height"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/drop_down_list_footer_button_margin_left"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:text="@string/drop_down_list_footer_default_text" />
