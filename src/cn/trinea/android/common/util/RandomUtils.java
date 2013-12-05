@@ -172,18 +172,20 @@ public class RandomUtils {
      * @param shuffleCount
      * @return
      */
-    public static boolean shuffle(int[] intArray, int shuffleCount) {
+    public static int[] shuffle(int[] intArray, int shuffleCount) {
         int length;
         if (intArray == null || shuffleCount < 0 || (length = intArray.length) < shuffleCount) {
-            return false;
+            return null;
         }
 
+        int[] out = new int[shuffleCount]; 
         for (int i = 1; i <= shuffleCount; i++) {
             int random = getRandom(length - i);
+            out[i - 1] = intArray[random];
             int temp = intArray[length - i];
             intArray[length - i] = intArray[random];
             intArray[random] = temp;
         }
-        return true;
+        return out;
     }
 }
