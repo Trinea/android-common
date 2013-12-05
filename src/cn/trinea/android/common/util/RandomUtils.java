@@ -106,4 +106,40 @@ public class RandomUtils {
         }
         return str.toString();
     }
+
+    /**
+     * get random int between 0 and max
+     * 
+     * @param max
+     * @return <ul>
+     * <li>if max <= 0, return 0</li>
+     * <li>else return random int between 0 and max</li>
+     * </ul>
+     */
+    public static int getRandom(int max) {
+        return getRandom(0, max);
+    }
+
+    /**
+     * get random int between min and max
+     * 
+     * @param min
+     * @param max
+     * @return <ul>
+     * <li>if min > max, return 0</li>
+     * <li>if min = max, return min</li>
+     * <li>else return random int between min and max</li>
+     * </ul>
+     */
+    public static int getRandom(int min, int max) {
+        if (min > max) {
+            return 0;
+        }
+        if (min == max) {
+            return min;
+        }
+
+        Random random = new Random();
+        return min + random.nextInt(max - min);
+    }
 }
