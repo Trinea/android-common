@@ -127,7 +127,7 @@ public class RandomUtils {
      * @param max
      * @return <ul>
      * <li>if min > max, return 0</li>
-     * <li>if min = max, return min</li>
+     * <li>if min == max, return min</li>
      * <li>else return random int between min and max</li>
      * </ul>
      */
@@ -138,9 +138,7 @@ public class RandomUtils {
         if (min == max) {
             return min;
         }
-
-        Random random = new Random();
-        return min + random.nextInt(max - min);
+        return min + new Random().nextInt(max - min);
     }
 
     /**
