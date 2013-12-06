@@ -14,7 +14,7 @@ public class ListUtils {
     public static final String DEFAULT_JOIN_SEPARATOR = ",";
 
     public static <V> int getSize(List<V> sourceList) {
-        return ListUtils.isEmpty(sourceList) ? 0 : sourceList.size();
+        return sourceList == null ? 0 : sourceList.size();
     }
 
     /**
