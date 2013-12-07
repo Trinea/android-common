@@ -5,6 +5,15 @@ import java.util.Random;
 /**
  * Random Utils
  * <ul>
+ * Shuffling algorithm
+ * <li>{@link #shuffle(Object[])} Shuffling algorithm, Randomly permutes the specified array using a default source of
+ * randomness</li>
+ * <li>{@link #shuffle(Object[], int)} Shuffling algorithm, Randomly permutes the specified array</li>
+ * <li>{@link #shuffle(int[])} Shuffling algorithm, Randomly permutes the specified int array using a default source of
+ * randomness</li>
+ * <li>{@link #shuffle(int[], int)} Shuffling algorithm, Randomly permutes the specified int array</li>
+ * </ul>
+ * <ul>
  * get random int
  * <li>{@link #getRandom(int)} get random int between 0 and max</li>
  * <li>{@link #getRandom(int, int)} get random int between min and max</li>
@@ -159,7 +168,21 @@ public class RandomUtils {
     }
 
     /**
-     * Shuffling algorithm
+     * Shuffling algorithm, Randomly permutes the specified array using a default source of randomness
+     * 
+     * @param objArray
+     * @return
+     */
+    public static boolean shuffle(Object[] objArray) {
+        if (objArray == null) {
+            return false;
+        }
+
+        return shuffle(objArray, getRandom(objArray.length));
+    }
+
+    /**
+     * Shuffling algorithm, Randomly permutes the specified array
      * 
      * @param objArray
      * @param shuffleCount
@@ -181,7 +204,21 @@ public class RandomUtils {
     }
 
     /**
-     * Shuffling algorithm
+     * Shuffling algorithm, Randomly permutes the specified int array using a default source of randomness
+     * 
+     * @param intArray
+     * @return
+     */
+    public static int[] shuffle(int[] intArray) {
+        if (intArray == null) {
+            return null;
+        }
+
+        return shuffle(intArray, getRandom(intArray.length));
+    }
+
+    /**
+     * Shuffling algorithm, Randomly permutes the specified int array
      * 
      * @param intArray
      * @param shuffleCount
