@@ -94,6 +94,7 @@ public class FileUtils {
     public static boolean writeFile(String filePath, String content, boolean append) {
         FileWriter fileWriter = null;
         try {
+            makeDirs(filePath);
             fileWriter = new FileWriter(filePath, append);
             fileWriter.write(content);
             fileWriter.close();
@@ -160,6 +161,7 @@ public class FileUtils {
     public static boolean writeFile(File file, InputStream stream, boolean append) {
         OutputStream o = null;
         try {
+            makeDirs(file.getAbsolutePath());
             o = new FileOutputStream(file, append);
             byte data[] = new byte[1024];
             int length = -1;
