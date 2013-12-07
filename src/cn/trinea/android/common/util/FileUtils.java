@@ -21,6 +21,9 @@ import java.util.List;
  * <li>{@link #readFileToList(String)} read file to string list</li>
  * <li>{@link #writeFile(String, String, boolean)} write file</li>
  * <li>{@link #writeFile(String, InputStream)} write file</li>
+ * <li>{@link #writeFile(String, InputStream, boolean)} write file</li>
+ * <li>{@link #writeFile(File, InputStream)} write file</li>
+ * <li>{@link #writeFile(File, InputStream, boolean)} write file</li>
  * </ul>
  * <ul>
  * Operate file
@@ -47,7 +50,7 @@ public class FileUtils {
      * @param filePath
      * @param charsetName The name of a supported {@link java.nio.charset.Charset </code>charset<code>}
      * @return if file not exist, return null, else return content of file
-     * @throws IOException if an error occurs while operator BufferedReader
+     * @throws RuntimeException if an error occurs while operator BufferedReader
      */
     public static StringBuilder readFile(String filePath, String charsetName) {
         File file = new File(filePath);
@@ -89,7 +92,7 @@ public class FileUtils {
      * @param content
      * @param append is append, if true, write to the end of file, else clear content of file and write into it
      * @return return true
-     * @throws IOException if an error occurs while operator FileWriter
+     * @throws RuntimeException if an error occurs while operator FileWriter
      */
     public static boolean writeFile(String filePath, String content, boolean append) {
         FileWriter fileWriter = null;
@@ -131,7 +134,7 @@ public class FileUtils {
      * @param stream the input stream
      * @param append if <code>true</code>, then bytes will be written to the end of the file rather than the beginning
      * @return return true
-     * @throws IOException if an error occurs while operator FileWriter
+     * @throws RuntimeException if an error occurs while operator FileOutputStream
      */
     public static boolean writeFile(String filePath, InputStream stream, boolean append) {
         return writeFile(filePath != null ? new File(filePath) : null, stream, append);
@@ -156,7 +159,7 @@ public class FileUtils {
      * @param stream the input stream
      * @param append if <code>true</code>, then bytes will be written to the end of the file rather than the beginning
      * @return return true
-     * @throws IOException if an error occurs while operator FileWriter
+     * @throws RuntimeException if an error occurs while operator FileOutputStream
      */
     public static boolean writeFile(File file, InputStream stream, boolean append) {
         OutputStream o = null;
@@ -192,7 +195,7 @@ public class FileUtils {
      * @param filePath
      * @param charsetName The name of a supported {@link java.nio.charset.Charset </code>charset<code>}
      * @return if file not exist, return null, else return content of file
-     * @throws IOException if an error occurs while operator BufferedReader
+     * @throws RuntimeException if an error occurs while operator BufferedReader
      */
     public static List<String> readFileToList(String filePath, String charsetName) {
         File file = new File(filePath);
