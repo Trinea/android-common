@@ -116,13 +116,51 @@ public class FileUtils {
      * 
      * @param filePath
      * @param stream
+     * @return
+     * @see {@link #writeFile(String, InputStream, boolean)}
+     */
+    public static boolean writeFile(String filePath, InputStream stream) {
+        return writeFile(filePath, stream, false);
+    }
+
+    /**
+     * write file
+     * 
+     * @param file the file to be opened for writing.
+     * @param stream the input stream
+     * @param append if <code>true</code>, then bytes will be written to the end of the file rather than the beginning
      * @return return true
      * @throws IOException if an error occurs while operator FileWriter
      */
-    public static boolean writeFile(String filePath, InputStream stream) {
+    public static boolean writeFile(String filePath, InputStream stream, boolean append) {
+        return writeFile(filePath != null ? new File(filePath) : null, stream, append);
+    }
+
+    /**
+     * write file
+     * 
+     * @param file
+     * @param stream
+     * @return
+     * @see {@link #writeFile(File, InputStream, boolean)}
+     */
+    public static boolean writeFile(File file, InputStream stream) {
+        return writeFile(file, stream, false);
+    }
+
+    /**
+     * write file
+     * 
+     * @param file the file to be opened for writing.
+     * @param stream the input stream
+     * @param append if <code>true</code>, then bytes will be written to the end of the file rather than the beginning
+     * @return return true
+     * @throws IOException if an error occurs while operator FileWriter
+     */
+    public static boolean writeFile(File file, InputStream stream, boolean append) {
         OutputStream o = null;
         try {
-            o = new FileOutputStream(filePath);
+            o = new FileOutputStream(file, append);
             byte data[] = new byte[1024];
             int length = -1;
             while ((length = stream.read(data)) != -1) {
