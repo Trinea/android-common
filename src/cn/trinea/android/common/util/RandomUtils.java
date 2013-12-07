@@ -4,6 +4,23 @@ import java.util.Random;
 
 /**
  * Random Utils
+ * <ul>
+ * get random int
+ * <li>{@link #getRandom(int)} get random int between 0 and max</li>
+ * <li>{@link #getRandom(int, int)} get random int between min and max</li>
+ * </ul>
+ * <ul>
+ * get random numbers or letters
+ * <li>{@link #getRandomCapitalLetters(int)} get a fixed-length random string, its a mixture of uppercase letters</li>
+ * <li>{@link #getRandomLetters(int)} get a fixed-length random string, its a mixture of uppercase and lowercase letters
+ * </li>
+ * <li>{@link #getRandomLowerCaseLetters(int)} get a fixed-length random string, its a mixture of lowercase letters</li>
+ * <li>{@link #getRandomNumbers(int)} get a fixed-length random string, its a mixture of numbers</li>
+ * <li>{@link #getRandomNumbersAndLetters(int)} get a fixed-length random string, its a mixture of uppercase, lowercase
+ * letters and numbers</li>
+ * <li>{@link #getRandom(String, int)} get a fixed-length random string, its a mixture of chars in source</li>
+ * <li>{@link #getRandom(char[], int)} get a fixed-length random string, its a mixture of chars in sourceChar</li>
+ * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-5-12
  */
@@ -176,7 +193,7 @@ public class RandomUtils {
             return null;
         }
 
-        int[] out = new int[shuffleCount]; 
+        int[] out = new int[shuffleCount];
         for (int i = 1; i <= shuffleCount; i++) {
             int random = getRandom(length - i);
             out[i - 1] = intArray[random];
