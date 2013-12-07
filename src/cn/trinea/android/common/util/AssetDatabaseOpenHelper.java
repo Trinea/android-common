@@ -40,7 +40,7 @@ public class AssetDatabaseOpenHelper {
      */
     public synchronized SQLiteDatabase getWritableDatabase() {
         File dbFile = context.getDatabasePath(databaseName);
-        if (!dbFile.exists()) {
+        if (dbFile != null && !dbFile.exists()) {
             try {
                 copyDatabase(dbFile);
             } catch (IOException e) {
