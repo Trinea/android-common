@@ -11,17 +11,21 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import android.os.AsyncTask;
 import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.entity.HttpRequest;
 import cn.trinea.android.common.entity.HttpResponse;
+import cn.trinea.android.common.service.HttpCache;
 
 /**
  * HttpUtils
  * <ul>
- * <strong>Http get</strong>
- * <li>{@link #httpGet(HttpRequest)}</li>
- * <li>{@link #httpGet(String)}</li>
- * <li>{@link #httpGetString(String)}</li>
+ * <strong>Http get, you can also use {@link HttpCache}</strong>
+ * <li>{@link #httpGet(HttpRequest)} http get synchronous</li>
+ * <li>{@link #httpGet(String)} http get synchronous</li>
+ * <li>{@link #httpGetString(String)} http get synchronous, response is String</li>
+ * <li>{@link #httpGet(HttpRequest, HttpListener)} http get asynchronous</li>
+ * <li>{@link #httpGet(String, HttpListener)} http get asynchronous</li>
  * </ul>
  * <ul>
  * <strong>Http post</strong>
@@ -54,7 +58,7 @@ public class HttpUtils {
     public static final String EQUAL_SIGN             = "=";
 
     /**
-     * http get
+     * http get synchronous
      * <ul>
      * <li>use gzip compression default</li>
      * <li>use bufferedReader to improve the reading speed</li>
@@ -110,7 +114,7 @@ public class HttpUtils {
     }
 
     /**
-     * http get
+     * http get synchronous
      * 
      * @param httpUrl
      * @return the response of the url, if null represents http error
@@ -121,7 +125,7 @@ public class HttpUtils {
     }
 
     /**
-     * http get
+     * http get synchronous
      * 
      * @param request
      * @return the content of the url, if null represents http error
@@ -133,7 +137,7 @@ public class HttpUtils {
     }
 
     /**
-     * http get
+     * http get synchronous
      * 
      * @param httpUrl
      * @return the content of the url, if null represents http error
@@ -142,6 +146,37 @@ public class HttpUtils {
     public static String httpGetString(String httpUrl) {
         HttpResponse response = httpGet(new HttpRequest(httpUrl));
         return response == null ? null : response.getResponseBody();
+    }
+
+    /**
+     * http get asynchronous
+     * <ul>
+     * <li>It gets data from network asynchronous.</li>
+     * <li>If you want get data synchronous, use {@link #httpGet(HttpRequest)} or {@link #httpGetString(HttpRequest)}</li>
+     * </ul>
+     * 
+     * @param url
+     * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
+     * something
+     */
+    public static void httpGet(String url, HttpListener listener) {
+        new HttpStringAsyncTask(listener).execute(url);
+    }
+
+    /**
+     * http get asynchronous
+     * <ul>
+     * <li>It gets data or network asynchronous.</li>
+     * <li>If you want get data synchronous, use {@link HttpCache#httpGet(HttpRequest)} or
+     * {@link HttpCache#httpGetString(HttpRequest)}</li>
+     * </ul>
+     * 
+     * @param request
+     * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
+     * something
+     */
+    public static void httpGet(HttpRequest request, HttpListener listener) {
+        new HttpRequestAsyncTask(listener).execute(request);
     }
 
     /**
@@ -431,5 +466,99 @@ public class HttpUtils {
         response.setResponseHeader(HttpConstants.EXPIRES, urlConnection.getHeaderField("Expires"));
         response.setResponseHeader(HttpConstants.CACHE_CONTROL, urlConnection.getHeaderField("Cache-Control"));
         response.setExpiredTime(response.getExpiresInMillis());
+    }
+
+    /**
+     * AsyncTask to get data by String url
+     * 
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
+     */
+    private static class HttpStringAsyncTask extends AsyncTask<String, Void, HttpResponse> {
+
+        private HttpListener listener;
+
+        public HttpStringAsyncTask(HttpListener listener){
+            this.listener = listener;
+        }
+
+        protected HttpResponse doInBackground(String... url) {
+            if (ArrayUtils.isEmpty(url)) {
+                return null;
+            }
+            return httpGet(url[0]);
+        }
+
+        protected void onPreExecute() {
+            if (listener != null) {
+                listener.onPreGet();
+            }
+        }
+
+        protected void onPostExecute(HttpResponse httpResponse) {
+            if (listener != null) {
+                listener.onPostGet(httpResponse);
+            }
+        }
+    }
+
+    /**
+     * AsyncTask to get data by HttpRequest
+     * 
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
+     */
+    private static class HttpRequestAsyncTask extends AsyncTask<HttpRequest, Void, HttpResponse> {
+
+        private HttpListener listener;
+
+        public HttpRequestAsyncTask(HttpListener listener){
+            this.listener = listener;
+        }
+
+        protected HttpResponse doInBackground(HttpRequest... httpRequest) {
+            if (ArrayUtils.isEmpty(httpRequest)) {
+                return null;
+            }
+            return httpGet(httpRequest[0]);
+        }
+
+        protected void onPreExecute() {
+            if (listener != null) {
+                listener.onPreGet();
+            }
+        }
+
+        protected void onPostExecute(HttpResponse httpResponse) {
+            if (listener != null) {
+                listener.onPostGet(httpResponse);
+            }
+        }
+    }
+
+    /**
+     * HttpListener, can do something before or after HttpGet
+     * 
+     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-11-15
+     */
+    public static abstract class HttpListener {
+
+        /**
+         * Runs on the UI thread before httpGet.<br/>
+         * <ul>
+         * <li>this can be null if you not want to do something</li>
+         * </ul>
+         */
+        protected void onPreGet() {
+        }
+
+        /**
+         * Runs on the UI thread after httpGet. The httpResponse is returned by httpGet.
+         * <ul>
+         * <li>this can be null if you not want to do something</li>
+         * </ul>
+         * 
+         * @param httpResponse get by the url
+         */
+        protected void onPostGet(HttpResponse httpResponse) {
+        }
     }
 }

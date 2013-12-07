@@ -128,8 +128,7 @@ public class HttpCache {
         if (!isNoCache) {
             cacheResponse = getFromCache(url);
         }
-        return cacheResponse == null ? (isNoStore ? HttpUtils.httpGet(url) : putIntoCache(HttpUtils.httpGet(url)))
-            : cacheResponse;
+        return cacheResponse == null ? (isNoStore ? HttpUtils.httpGet(url) : putIntoCache(HttpUtils.httpGet(url))) : cacheResponse;
     }
 
     /**
@@ -268,7 +267,6 @@ public class HttpCache {
          */
         protected void onPostGet(HttpResponse httpResponse, boolean isInCache) {
         }
-
     }
 
     /**
