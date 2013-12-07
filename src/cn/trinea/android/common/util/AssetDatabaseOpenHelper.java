@@ -1,10 +1,8 @@
 package cn.trinea.android.common.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -60,7 +58,7 @@ public class AssetDatabaseOpenHelper {
      */
     public synchronized SQLiteDatabase getReadableDatabase() {
         File dbFile = context.getDatabasePath(databaseName);
-        if (!dbFile.exists()) {
+        if (dbFile != null && !dbFile.exists()) {
             try {
                 copyDatabase(dbFile);
             } catch (IOException e) {
@@ -79,17 +77,8 @@ public class AssetDatabaseOpenHelper {
     }
 
     private void copyDatabase(File dbFile) throws IOException {
-        InputStream is = context.getAssets().open(databaseName);
-        FileUtils.makeDirs(dbFile.getAbsolutePath());
-        OutputStream os = new FileOutputStream(dbFile);
-
-        byte[] buffer = new byte[1024];
-        while (is.read(buffer) > 0) {
-            os.write(buffer);
-        }
-
-        os.flush();
-        os.close();
-        is.close();
+        InputStream stream = context.getAssets().open(databaseName);
+        FileUtils.writeFile(dbFile, stream);
+        stream.close();
     }
 }
