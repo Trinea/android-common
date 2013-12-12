@@ -13,6 +13,19 @@ public class ListUtils {
     /** default join separator **/
     public static final String DEFAULT_JOIN_SEPARATOR = ",";
 
+    /**
+     * get size of list
+     * 
+     * <pre>
+     * getSize(null)   =   0;
+     * getSize({})     =   0;
+     * getSize({1})    =   1;
+     * </pre>
+     * 
+     * @param <V>
+     * @param sourceList
+     * @return if list is null or empty, return 0, else return {@link List#size()}.
+     */
     public static <V> int getSize(List<V> sourceList) {
         return sourceList == null ? 0 : sourceList.size();
     }

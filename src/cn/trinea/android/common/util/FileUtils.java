@@ -27,6 +27,7 @@ import java.util.List;
  * </ul>
  * <ul>
  * Operate file
+ * <li>{@link #copyFile(String, String)}</li>
  * <li>{@link #getFileExtension(String)}</li>
  * <li>{@link #getFileName(String)}</li>
  * <li>{@link #getFileNameWithoutExtension(String)}</li>
@@ -187,6 +188,24 @@ public class FileUtils {
                 }
             }
         }
+    }
+
+    /**
+     * copy file
+     * 
+     * @param sourceFilePath
+     * @param destFilePath
+     * @return
+     * @throws RuntimeException if an error occurs while operator FileOutputStream
+     */
+    public static boolean copyFile(String sourceFilePath, String destFilePath) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(sourceFilePath);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("FileNotFoundException occurred. ", e);
+        }
+        return writeFile(destFilePath, inputStream);
     }
 
     /**
