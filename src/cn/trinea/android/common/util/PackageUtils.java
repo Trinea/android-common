@@ -93,14 +93,35 @@ public class PackageUtils {
      * <li>Don't call this on the ui thread, it may costs some times.</li>
      * <li>You should add <strong>android.permission.INSTALL_PACKAGES</strong> in manifest, so no need to request root
      * permission, if you are system app.</li>
+     * <li>Default pm install params is "-r".</li>
      * </ul>
      * 
      * @param context
      * @param filePath file path of package
      * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success, other means failed. details see
      * {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
+     * @see #installSilent(Context, String, String)
      */
     public static int installSilent(Context context, String filePath) {
+        return installSilent(context, filePath, "-r");
+    }
+
+    /**
+     * install package silent by root
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>Don't call this on the ui thread, it may costs some times.</li>
+     * <li>You should add <strong>android.permission.INSTALL_PACKAGES</strong> in manifest, so no need to request root
+     * permission, if you are system app.</li>
+     * </ul>
+     * 
+     * @param context
+     * @param filePath file path of package
+     * @param pmParams pm install params
+     * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success, other means failed. details see
+     * {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
+     */
+    public static int installSilent(Context context, String filePath, String pmParams) {
         if (filePath == null || filePath.length() == 0) {
             return INSTALL_FAILED_INVALID_URI;
         }
@@ -114,7 +135,8 @@ public class PackageUtils {
          * if context is system app, don't need root permission, but should add <uses-permission
          * android:name="android.permission.INSTALL_PACKAGES" /> in mainfest
          **/
-        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install -r ")
+        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install ")
+                                                   .append(pmParams == null ? "" : pmParams).append(" ")
                                                    .append(filePath.replace(" ", "\\ "));
         CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
         if (commandResult.successMsg != null
