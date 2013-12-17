@@ -112,7 +112,7 @@ public class HttpRequest {
      * @return paras as string
      */
     public String getParas() {
-        return HttpUtils.joinParas(parasMap);
+        return HttpUtils.joinParasWithEncodedValue(parasMap);
     }
 
     /**
