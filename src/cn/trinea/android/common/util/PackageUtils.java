@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import android.app.ActivityManager;
-import android.app.DownloadManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 import cn.trinea.android.common.util.ShellUtils.CommandResult;
 
@@ -40,6 +41,7 @@ import cn.trinea.android.common.util.ShellUtils.CommandResult;
  * <strong>Others</strong>
  * <li>{@link PackageUtils#isTopActivity(Context, String)} whether the app whost package's name is packageName is on the
  * top of the stack</li>
+ * <li>{@link PackageUtils#startInstalledAppDetails(Context, String)} start InstalledAppDetails Activity</li>
  * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-15
@@ -463,6 +465,27 @@ public class PackageUtils {
             }
         }
         return -1;
+    }
+
+    /**
+     * start InstalledAppDetails Activity
+     * 
+     * @param context
+     * @param packageName
+     */
+    public static void startInstalledAppDetails(Context context, String packageName) {
+        Intent intent = new Intent();
+        int sdkVersion = Build.VERSION.SDK_INT;
+        if (sdkVersion >= 9) {
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.fromParts("package", packageName, null));
+        } else {
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+            intent.putExtra((sdkVersion == 8 ? "pkg" : "com.android.settings.ApplicationPkgName"), packageName);
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     /**
