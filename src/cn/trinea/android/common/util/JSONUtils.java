@@ -15,6 +15,8 @@ import org.json.JSONObject;
  */
 public class JSONUtils {
 
+    public static boolean isPrintException = true;
+
     /**
      * get Long from jsonObject
      * 
@@ -36,7 +38,9 @@ public class JSONUtils {
         try {
             return jsonObject.getLong(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -62,7 +66,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getLong(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -110,7 +116,9 @@ public class JSONUtils {
         try {
             return jsonObject.getInt(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -136,7 +144,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getInt(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -184,7 +194,9 @@ public class JSONUtils {
         try {
             return jsonObject.getDouble(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -210,7 +222,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getDouble(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -258,7 +272,9 @@ public class JSONUtils {
         try {
             return jsonObject.getString(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -284,7 +300,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getString(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -318,7 +336,9 @@ public class JSONUtils {
                 return value;
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
         return defaultValue;
@@ -345,7 +365,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getStringArray(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -371,7 +393,9 @@ public class JSONUtils {
         try {
             return jsonObject.getJSONObject(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -397,7 +421,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getJSONObject(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -423,7 +449,9 @@ public class JSONUtils {
         try {
             return jsonObject.getJSONArray(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -449,7 +477,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getJSONArray(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -474,7 +504,9 @@ public class JSONUtils {
         try {
             return jsonObject.getBoolean(key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -500,7 +532,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getBoolean(jsonObject, key, defaultValue);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return defaultValue;
         }
     }
@@ -544,7 +578,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(jsonData);
             return getMap(jsonObject, key);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return null;
         }
     }
@@ -592,7 +628,9 @@ public class JSONUtils {
             JSONObject jsonObject = new JSONObject(source);
             return parseKeyAndValueToMap(jsonObject);
         } catch (JSONException e) {
-            e.printStackTrace();
+            if (isPrintException) {
+                e.printStackTrace();
+            }
             return null;
         }
     }
