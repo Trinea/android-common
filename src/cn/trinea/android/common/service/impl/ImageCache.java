@@ -151,7 +151,6 @@ public class ImageCache extends ImageMemoryCache {
                         BitmapFactory.Options option = new BitmapFactory.Options();
                         option.inSampleSize = compressSize;
                         Bitmap bm = BitmapFactory.decodeFile(imagePath, option);
-                        bm = Bitmap.createBitmap(bm, 0, 0, option.outWidth, option.outHeight);
                         d = ImageUtils.bitmapToDrawable(bm);
                     } else {
                         d = ImageUtils.bitmapToDrawable(BitmapFactory.decodeFile(imagePath));
