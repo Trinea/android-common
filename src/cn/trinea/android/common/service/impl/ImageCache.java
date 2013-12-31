@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.view.View;
 import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.service.FileNameRule;
+import cn.trinea.android.common.service.impl.ImageMemoryCache.OnImageCallbackListener;
 import cn.trinea.android.common.util.FileUtils;
 import cn.trinea.android.common.util.ImageUtils;
 
@@ -57,6 +59,7 @@ public class ImageCache extends ImageMemoryCache {
 
     private static final long  serialVersionUID     = 1L;
     private ImageSDCardCache   secondaryCache;
+    private int                compressSize         = 1;
 
     /** cache folder path which be used when saving images **/
     public static final String DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -137,7 +140,17 @@ public class ImageCache extends ImageMemoryCache {
                 CacheObject<String> object = secondaryCache.get(key);
                 String imagePath = (object == null ? null : object.getData());
                 if (FileUtils.isFileExist(imagePath)) {
-                    Drawable d = ImageUtils.bitmapToDrawable(BitmapFactory.decodeFile(imagePath));
+                    compressSize = setCompressSize(imagePath);
+                    Drawable d;
+                    if (compressSize > 1) {
+                        BitmapFactory.Options option = new BitmapFactory.Options();
+                        option.inSampleSize = compressSize;
+                        Bitmap bm = BitmapFactory.decodeFile(imagePath, option);
+                        bm = Bitmap.createBitmap(bm, 0, 0, option.outWidth, option.outHeight);
+                        d = ImageUtils.bitmapToDrawable(bm);
+                    } else {
+                        d = ImageUtils.bitmapToDrawable(BitmapFactory.decodeFile(imagePath));
+                    }
                     return (d == null ? null : new CacheObject<Drawable>(d));
                 } else {
                     secondaryCache.remove(key);
@@ -151,6 +164,48 @@ public class ImageCache extends ImageMemoryCache {
         secondaryCache = new ImageSDCardCache(secondaryCacheMaxSize, secondaryCacheThreadPoolSize);
         secondaryCache.setCacheFolder(DEFAULT_CACHE_FOLDER);
         secondaryCache.setFileNameRule(new FileNameRuleImageUrl().setFileExtension(""));
+    }
+
+    /**
+     * set image compress scale
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>if this function is set, the function {@link #setCompressSize(String)} is not work</li>
+     * </ul>
+     * 
+     * @param imagePath
+     * @return return compressSize, If > 1, requests the decoder to subsample the original image, returning a smaller
+     * image to save memory. The sample size is the number of pixels in either dimension that correspond to a single
+     * pixel in the decoded bitmap. For example, inSampleSize == 4 returns an image that is 1/4 the width/height of the
+     * original, and 1/16 the number of pixels. Any value <= 1 is treated the same as 1. Note: the decoder will try to
+     * fulfill this request, but the resulting bitmap may have different dimensions that precisely what has been
+     * requested. Also, powers of 2 are often faster/easier for the decoder to honor.
+     */
+    public int setCompressSize(String imagePath) {
+        return compressSize;
+    }
+
+    /**
+     * get compressSize
+     * 
+     * @return the compressSize
+     */
+    public int getCompressSize() {
+        return compressSize;
+    }
+
+    /**
+     * set image compress scale
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>if {@link #setCompressSize(String)} is set, this function is not work</li>
+     * </ul>
+     * 
+     * @param compressSize the compressSize to set
+     * @see {@link #setCompressSize(String)}
+     */
+    public void setCompressSize(int compressSize) {
+        this.compressSize = compressSize;
     }
 
     /**
