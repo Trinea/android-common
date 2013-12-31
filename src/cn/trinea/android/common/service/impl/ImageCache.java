@@ -59,7 +59,10 @@ public class ImageCache extends ImageMemoryCache {
 
     private static final long  serialVersionUID     = 1L;
     private ImageSDCardCache   secondaryCache;
+    /** image compress size **/
     private int                compressSize         = 1;
+    /** compress listener, advanced image compress, will override compressSize **/
+    private CompressListener   compressListener;
 
     /** cache folder path which be used when saving images **/
     public static final String DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -140,7 +143,9 @@ public class ImageCache extends ImageMemoryCache {
                 CacheObject<String> object = secondaryCache.get(key);
                 String imagePath = (object == null ? null : object.getData());
                 if (FileUtils.isFileExist(imagePath)) {
-                    compressSize = setCompressSize(imagePath);
+                    if (compressListener != null) {
+                        compressSize = compressListener.getCompressSize(imagePath);
+                    }
                     Drawable d;
                     if (compressSize > 1) {
                         BitmapFactory.Options option = new BitmapFactory.Options();
@@ -167,25 +172,6 @@ public class ImageCache extends ImageMemoryCache {
     }
 
     /**
-     * set image compress scale
-     * <ul>
-     * <strong>Attentions:</strong>
-     * <li>if this function is set, the function {@link #setCompressSize(String)} is not work</li>
-     * </ul>
-     * 
-     * @param imagePath
-     * @return return compressSize, If > 1, requests the decoder to subsample the original image, returning a smaller
-     * image to save memory. The sample size is the number of pixels in either dimension that correspond to a single
-     * pixel in the decoded bitmap. For example, inSampleSize == 4 returns an image that is 1/4 the width/height of the
-     * original, and 1/16 the number of pixels. Any value <= 1 is treated the same as 1. Note: the decoder will try to
-     * fulfill this request, but the resulting bitmap may have different dimensions that precisely what has been
-     * requested. Also, powers of 2 are often faster/easier for the decoder to honor.
-     */
-    public int setCompressSize(String imagePath) {
-        return compressSize;
-    }
-
-    /**
      * get compressSize
      * 
      * @return the compressSize
@@ -198,7 +184,7 @@ public class ImageCache extends ImageMemoryCache {
      * set image compress scale
      * <ul>
      * <strong>Attentions:</strong>
-     * <li>if {@link #setCompressSize(String)} is set, this function is not work</li>
+     * <li>if {@link #setCompressListener(CompressListener)} is set, this function is not work</li>
      * </ul>
      * 
      * @param compressSize the compressSize to set
@@ -206,6 +192,51 @@ public class ImageCache extends ImageMemoryCache {
      */
     public void setCompressSize(int compressSize) {
         this.compressSize = compressSize;
+    }
+
+    /**
+     * set compressListener
+     * <ul>
+     * <strong>Attentions:</strong>
+     * <li>if this function is set, the function {@link #setCompressSize(String)} is not work</li>
+     * </ul>
+     * 
+     * @param compressListener
+     */
+    public void setCompressListener(CompressListener compressListener) {
+        this.compressListener = compressListener;
+    }
+
+    /**
+     * get compressListener
+     * 
+     * @return compressListener
+     */
+    public CompressListener getCompressListener() {
+        return compressListener;
+    }
+
+    /**
+     * set image compress scale
+     */
+    public interface CompressListener {
+
+        /**
+         * get image compress scale
+         * <ul>
+         * <strong>Attentions:</strong>
+         * <li>if this function is set, the function {@link #setCompressSize(String)} is not work</li>
+         * </ul>
+         * 
+         * @param imagePath
+         * @return return compressSize, If > 1, requests the decoder to subsample the original image, returning a
+         * smaller image to save memory. The sample size is the number of pixels in either dimension that correspond to
+         * a single pixel in the decoded bitmap. For example, inSampleSize == 4 returns an image that is 1/4 the
+         * width/height of the original, and 1/16 the number of pixels. Any value <= 1 is treated the same as 1. Note:
+         * the decoder will try to fulfill this request, but the resulting bitmap may have different dimensions that
+         * precisely what has been requested. Also, powers of 2 are often faster/easier for the decoder to honor.
+         */
+        public int getCompressSize(String imagePath);
     }
 
     /**
