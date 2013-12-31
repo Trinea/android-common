@@ -493,7 +493,7 @@ public class FileUtils {
      * <ul>
      * 
      * @param path
-     * @return
+     * @return returns the length of this file in bytes. returns -1 if the file does not exist.
      */
     public static long getFileSize(String path) {
         if (StringUtils.isBlank(path)) {
