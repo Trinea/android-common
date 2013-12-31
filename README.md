@@ -64,3 +64,7 @@
 #####4. 图片工具类
 (1)Drawable、Bitmap、byte数组相互转换; (2)根据url获得InputStream、Drawable、Bitmap  
 更多工具类介绍见[Android常用工具类](http://www.trinea.cn/android/android-common-utils/)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Trinea/androidcommon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
