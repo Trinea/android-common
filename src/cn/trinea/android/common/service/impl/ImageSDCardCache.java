@@ -142,13 +142,17 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * @return whether image already in cache or not
      */
     public boolean get(final String imageUrl, final List<String> urlList, final View view) {
-        if (StringUtils.isEmpty(imageUrl)) {
-            return false;
-        }
-
         if (onImageSDCallbackListener != null) {
             onImageSDCallbackListener.onPreGet(imageUrl, view);
         }
+
+        if (StringUtils.isEmpty(imageUrl)) {
+            if (onImageSDCallbackListener != null) {
+                onImageSDCallbackListener.onGetNotInCache(imageUrl, view);
+            }
+            return false;
+        }
+
         /**
          * if already in cache, call onImageSDCallbackListener, else new thread to wait for it
          */
@@ -178,6 +182,9 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             viewMap.put(imageUrl, view);
         }
 
+        if (onImageSDCallbackListener != null) {
+            onImageSDCallbackListener.onGetNotInCache(imageUrl, view);
+        }
         if (isExistGettingDataThread(imageUrl)) {
             return false;
         }
@@ -397,6 +404,17 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
          * @param view view need the image
          */
         public void onPreGet(String imageUrl, View view);
+
+        /**
+         * callback function when get image but image not in cache, run on ui thread.<br/>
+         * Will be called after {@link #onPreGet(String, View)}, before
+         * {@link #onGetSuccess(String, String, View, boolean)} and
+         * {@link #onGetFailed(String, String, View, FailedReason)}
+         * 
+         * @param imageUrl imageUrl
+         * @param view view need the image
+         */
+        public void onGetNotInCache(String imageUrl, View view);
 
         /**
          * callback function after get image successfully, run on ui thread
