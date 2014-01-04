@@ -92,14 +92,11 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
     /** cache folder path which be used when saving images **/
-    public static final String                   DEFAULT_CACHE_FOLDER   = Environment.getExternalStorageDirectory()
-                                                                                     .getAbsolutePath()
-                                                                          + File.separator
-                                                                          + "Trinea"
-                                                                          + File.separator
-                                                                          + "AndroidCommon"
-                                                                          + File.separator
-                                                                          + "ImageSDCardCache";
+    public static final String                   DEFAULT_CACHE_FOLDER   = new StringBuilder()
+                                                            .append(Environment.getExternalStorageDirectory().getAbsolutePath())
+                                                            .append(File.separator).append("Trinea").append(File.separator)
+                                                            .append("AndroidCommon").append(File.separator)
+                                                            .append("ImageSDCardCache").toString();
 
     /** message what for get image successfully **/
     private static final int                     WHAT_GET_IMAGE_SUCCESS = 1;

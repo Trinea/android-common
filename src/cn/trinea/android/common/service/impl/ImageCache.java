@@ -65,10 +65,11 @@ public class ImageCache extends ImageMemoryCache {
     private CompressListener   compressListener;
 
     /** cache folder path which be used when saving images **/
-    public static final String DEFAULT_CACHE_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath()
-                                                      + File.separator + "Trinea" + File.separator + "AndroidCommon"
-                                                      + File.separator + "ImageCache";
-
+    public static final String DEFAULT_CACHE_FOLDER = new StringBuilder()
+                                                .append(Environment.getExternalStorageDirectory().getAbsolutePath())
+                                                .append(File.separator).append("Trinea").append(File.separator)
+                                                .append("AndroidCommon").append(File.separator)
+                                                .append("ImageCache").toString();
     /**
      * <ul>
      * <li>max size of primary cache is {@link ImageMemoryCache#DEFAULT_MAX_SIZE}, max size of secondary cache is
