@@ -1,4 +1,4 @@
-![Trinea](http://farm8.staticflickr.com/7426/9456847893_053161c7a4_o.png)Android公共库
+![Trinea](http://farm8.staticflickr.com/7426/9456847893_053161c7a4_o.png)android-common-lib
 -------------
 **主要包括**：<strong>缓存</strong>(图片缓存、预取缓存、网络缓存)、<strong>公共View</strong>(下拉及底部加载更多ListView、底部加载更多ScrollView、滑动一页Gallery)及<strong>Android常用工具类</strong>(网络、下载、Android资源操作、shell、文件、Json、随机数、Collection等等)。    
 **示例APK**：[TrineaAndroidDemo.apk](https://play.google.com/store/apps/details?id=cn.trinea.android.demo)，示例源码：[TrineaAndroidDemo](https://github.com/Trinea/AndroidDemo)。  
