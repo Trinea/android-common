@@ -5,6 +5,7 @@
 <strong>使&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</strong>：拉取代码导入IDE，右击你的工程->properties->Android，在library中选择TrineaAndroidCommon。  
 **Api Guide**：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_android_common/index.html)。  
 **个人博客**：[www.trinea.cn](http://www.trinea.cn/) 关注于[Android](http://www.trinea.cn/category/android/)、[Java](http://www.trinea.cn/category/java/)、[性能优化](http://www.trinea.cn/category/perf/)、[开源代码](http://www.trinea.cn/category/open-code/)。  
+**更多Android开源项目见：https://github.com/Trinea/android-open-project**
 ####一. 缓存类
 主要特性：(1).使用简单 (2).轻松获取及预取取新图片 (3).包含二级缓存 (4).可选择多种缓存算法(FIFO、LIFO、LRU、MRU、LFU、MFU等13种)或自定义缓存算法 (5).可方便的保存及初始化恢复数据 (6).省流量性能佳(有且仅有一个线程获取图片) (7).支持http请求header设置及不同类型网络处理(8).可根据系统配置初始化缓存 (9).扩展性强 (10).支持等待队列 (11)包含map的大多数接口。
 #####1. 图片缓存
