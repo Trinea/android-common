@@ -66,7 +66,7 @@
 更多工具类介绍见[Android常用工具类](http://www.trinea.cn/android/android-common-utils/)
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Trinea/androidcommon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Trinea/androidcommon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")  
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/0e64e2f00112f86af822e39ce45bca31 "githalytics.com")](http://githalytics.com/Trinea/AndroidCommon)
 
