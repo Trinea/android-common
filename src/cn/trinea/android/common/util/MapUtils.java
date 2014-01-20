@@ -275,7 +275,7 @@ public class MapUtils {
         Iterator<Map.Entry<String, String>> ite = map.entrySet().iterator();
         while (ite.hasNext()) {
             Map.Entry<String, String> entry = (Map.Entry<String, String>)ite.next();
-            paras.append("\"").append(entry.getKey()).append("\":").append(entry.getValue());
+            paras.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
             if (ite.hasNext()) {
                 paras.append(",");
             }
