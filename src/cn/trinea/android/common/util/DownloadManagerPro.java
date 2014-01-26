@@ -6,6 +6,7 @@ import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 
 /**
  * DownloadManagerPro
@@ -36,7 +37,10 @@ import android.net.Uri;
 public class DownloadManagerPro {
 
     public static final Uri    CONTENT_URI                 = Uri.parse("content://downloads/my_downloads");
+    /** represents downloaded file above api 11 **/
     public static final String COLUMN_LOCAL_FILENAME       = "local_filename";
+    /** represents downloaded file below api 11 **/
+    public static final String COLUMN_LOCAL_URI            = "local_uri";
 
     public static final String METHOD_NAME_PAUSE_DOWNLOAD  = "pauseDownload";
     public static final String METHOD_NAME_RESUME_DOWNLOAD = "resumeDownload";
@@ -202,7 +206,7 @@ public class DownloadManagerPro {
      * @return
      */
     public String getFileName(long downloadId) {
-        return getString(downloadId, COLUMN_LOCAL_FILENAME);
+        return getString(downloadId, (Build.VERSION.SDK_INT < 11 ? COLUMN_LOCAL_URI : COLUMN_LOCAL_FILENAME));
     }
 
     /**
