@@ -92,6 +92,8 @@ public class DropDownListView extends ListView implements OnScrollListener {
     private boolean            hasMore                 = true;
     /** whether show footer loading progress bar when loading **/
     private boolean            isShowFooterProgressBar = true;
+    /** whether show footer when no more data **/
+    private boolean            isShowFooterWhenNoMore  = false;
 
     private int                currentScrollState;
     private int                currentHeaderStatus;
@@ -293,6 +295,24 @@ public class DropDownListView extends ListView implements OnScrollListener {
      */
     public void setShowFooterProgressBar(boolean isShowFooterProgressBar) {
         this.isShowFooterProgressBar = isShowFooterProgressBar;
+    }
+
+    /**
+     * get isShowFooterWhenNoMore
+     * 
+     * @return the isShowFooterWhenNoMore
+     */
+    public boolean isShowFooterWhenNoMore() {
+        return isShowFooterWhenNoMore;
+    }
+
+    /**
+     * set isShowFooterWhenNoMore
+     * 
+     * @param isShowFooterWhenNoMore the isShowFooterWhenNoMore to set
+     */
+    public void setShowFooterWhenNoMore(boolean isShowFooterWhenNoMore) {
+        this.isShowFooterWhenNoMore = isShowFooterWhenNoMore;
     }
 
     /**
@@ -543,12 +563,15 @@ public class DropDownListView extends ListView implements OnScrollListener {
             if (isShowFooterProgressBar) {
                 footerProgressBar.setVisibility(View.GONE);
             }
-            footerButton.setEnabled(true);
             if (!hasMore) {
                 footerButton.setText(footerNoMoreText);
-                removeFooterView(footerLayout);
+                footerButton.setEnabled(false);
+                if (!isShowFooterWhenNoMore) {
+                    removeFooterView(footerLayout);
+                }
             } else {
                 footerButton.setText(footerDefaultText);
+                footerButton.setEnabled(true);
             }
             isOnBottomLoading = false;
         }
