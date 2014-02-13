@@ -64,6 +64,12 @@ import cn.trinea.android.common.util.SystemUtils;
  * <li>{@link #ImageSDCardCache(int)}</li>
  * <li>{@link #ImageSDCardCache(int, int)}</li>
  * </ul>
+ * <ul>
+ * <strong>Attentions</strong>
+ * <li>You should add <strong>android.permission.WRITE_EXTERNAL_STORAGE</strong> in manifest, to store image to sdcard.</li>
+ * <li>You should add <strong>android.permission.ACCESS_NETWORK_STATE</strong> in manifest if you get image from
+ * network.</li>
+ * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
  */
