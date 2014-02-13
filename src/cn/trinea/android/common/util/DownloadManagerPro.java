@@ -23,6 +23,8 @@ import android.os.Build;
  * </ul>
  * <ul>
  * <strong>Operate download</strong>
+ * <li>{@link #isExistPauseAndResumeMethod()} whether exist pauseDownload and resumeDownload method in
+ * {@link DownloadManager}</li>
  * <li>{@link #pauseDownload(long...)} pause download. need pauseDownload(long...) method in {@link DownloadManager}</li>
  * <li>{@link #resumeDownload(long...)} resume download. need resumeDownload(long...) method in {@link DownloadManager}</li>
  * </ul>
