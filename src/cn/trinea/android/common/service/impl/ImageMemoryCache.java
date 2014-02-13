@@ -137,7 +137,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
             Drawable drawable = object.getData();
             if (drawable != null) {
                 if (onImageCallbackListener != null) {
-                    onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, true);
+                    onImageCallbackListener.onGetSuccess(imageUrl, drawable.getConstantState().newDrawable(), view,
+                                                         true);
                 }
                 return true;
             } else {
@@ -404,6 +405,10 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
                     String imageUrl = object.imageUrl;
                     Drawable drawable = object.drawable;
+                    // to avoid drawable dirty
+                    if (drawable != null) {
+                        drawable = drawable.getConstantState().newDrawable();
+                    }
                     if (onImageCallbackListener != null) {
                         if (isOpenWaitingQueue) {
                             synchronized (viewSetMap) {
