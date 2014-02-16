@@ -5,7 +5,6 @@
 <strong>使&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</strong>：拉取代码导入IDE，右击你的工程->properties->Android，在library中选择TrineaAndroidCommon。  
 **Api Guide**：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_android_common/index.html)。  
 **个人博客**：[www.trinea.cn](http://www.trinea.cn/) 关注于[Android](http://www.trinea.cn/category/android/)、[Java](http://www.trinea.cn/category/java/)、[性能优化](http://www.trinea.cn/category/perf/)、[开源代码](http://www.trinea.cn/category/open-code/)。  
-**更多Android开源项目见：https://github.com/Trinea/android-open-project**
 ####示例APK下载(Demo Download):  
 <a href="https://play.google.com/store/apps/details?id=cn.trinea.android.demo" target="_blank" title="从Google Play下载"><img src="http://www.android.com/images/brand/get_it_on_play_logo_small.png" title="从Google Play下载"/></a>
     <a href="http://as.baidu.com/a/item?docid=5499464" target="_blank" title="从Baidu手机助手下载"><img src="http://farm3.staticflickr.com/2826/11928623406_b9e8d39bd7_o.png" title="从Baidu手机助手下载"/></a>
@@ -15,7 +14,7 @@
 主要特性：(1).使用简单 (2).轻松获取及预取取新图片 (3).包含二级缓存 (4).可选择多种缓存算法(FIFO、LIFO、LRU、MRU、LFU、MFU等13种)或自定义缓存算法 (5).可方便的保存及初始化恢复数据 (6).省流量性能佳(有且仅有一个线程获取图片) (7).支持http请求header设置及不同类型网络处理(8).可根据系统配置初始化缓存 (9).扩展性强 (10).支持等待队列 (11)包含map的大多数接口。
 #####1. 图片缓存
 使用见：[图片缓存的使用](http://www.trinea.cn/?p=704)  
-适用：获取图片较多且图片使用频繁的应用，包含二级缓存，如新浪微博、twitter、微信头像、美丽说、蘑菇街、花瓣、淘宝等等。。效果图如下：  
+适用：获取图片较多且图片使用频繁的应用，包含二级缓存，如新浪微博、twitter、微信头像、美丽说、蘑菇街、花瓣、淘宝等等。效果图如下：  
 ![ImageCahe](http://farm4.staticflickr.com/3710/9312163125_81f1c1997b_o.jpg)
   
 
@@ -24,14 +23,17 @@
 适用：应用中获取图片较多且图片较大的情况，需要二级缓存及ListView或GridView图片加载推荐使用上面的[ImageCache](http://www.trinea.cn/?p=704)。效果图如下：  
 ![ImageSDCardCache](http://farm3.staticflickr.com/2834/9314949798_ea69bdb5e8_o.jpg)
   
+  
+#####3.  网络缓存  
+使用见：[Android网络缓存](http://www.trinea.cn/android/android-http-cache)  
+适用：网络获取内容不大的应用，尤其是api接口数据，如新浪微博、twitter的timeline、微信公众账号发送的内容等等。效果图如下：  
+![HttpCache](http://farm3.staticflickr.com/2843/12566457534_2cfa4297a1_o.jpg)  
 
-#####3. 预取数据缓存
-使用见：[预取数据缓存](http://www.trinea.cn/android/preloaddatacache%e6%94%af%e6%8c%81%e9%a2%84%e5%8f%96%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bc%93%e5%ad%98%ef%bc%8c%e4%bd%bf%e7%94%a8%e7%ae%80%e5%8d%95%ef%bc%8c%e6%94%af%e6%8c%81%e5%a4%9a%e7%a7%8d%e7%bc%93/)  
+
+#####4. 预取数据缓存
+使用见：[预取数据缓存](http://www.trinea.cn/android/preloaddatacache/)  
 缓存类关系图如下：其中HttpCache为后续计划的http缓存 
 ![ImageSDCardCache](http://farm4.staticflickr.com/3818/9318670513_1576253fd5_o.jpg)  
-  
-####4.  网络缓存  
-一期功能完成，帮助文档准备中^v^… 
 
 ####二. 公用的view
 #####1. 下拉刷新及滚动到底部加载更多的Listview
