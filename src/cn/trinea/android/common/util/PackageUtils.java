@@ -112,7 +112,7 @@ public class PackageUtils {
      * @see #installSilent(Context, String, String)
      */
     public static int installSilent(Context context, String filePath) {
-        return installSilent(context, filePath, "-r");
+        return installSilent(context, filePath, " -r " + getInstallLocationParams());
     }
 
     /**
@@ -482,7 +482,7 @@ public class PackageUtils {
      * @see {@link IPackageManager#getInstallLocation()}
      */
     public static int getInstallLocation() {
-        CommandResult commandResult = ShellUtils.execCommand("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm  get-install-location",
+        CommandResult commandResult = ShellUtils.execCommand("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location",
                                                              false, true);
         if (commandResult.result == 0 && commandResult.successMsg != null && commandResult.successMsg.length() > 0) {
             try {

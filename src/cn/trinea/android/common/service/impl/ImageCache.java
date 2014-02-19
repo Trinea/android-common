@@ -57,6 +57,7 @@ import cn.trinea.android.common.util.ImageUtils;
  * <li>You should add <strong>android.permission.ACCESS_NETWORK_STATE</strong> in manifest if you get image from
  * network.</li>
  * </ul>
+ * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-10-18
  */
 public class ImageCache extends ImageMemoryCache {
@@ -69,11 +70,14 @@ public class ImageCache extends ImageMemoryCache {
     private CompressListener   compressListener;
 
     /** cache folder path which be used when saving images **/
-    public static final String DEFAULT_CACHE_FOLDER = new StringBuilder()
-                                                .append(Environment.getExternalStorageDirectory().getAbsolutePath())
-                                                .append(File.separator).append("Trinea").append(File.separator)
-                                                .append("AndroidCommon").append(File.separator)
-                                                .append("ImageCache").toString();
+    public static final String DEFAULT_CACHE_FOLDER = new StringBuilder().append(Environment.getExternalStorageDirectory()
+                                                                                            .getAbsolutePath())
+                                                                         .append(File.separator).append("Trinea")
+                                                                         .append(File.separator)
+                                                                         .append("AndroidCommon")
+                                                                         .append(File.separator).append("ImageCache")
+                                                                         .toString();
+
     /**
      * <ul>
      * <li>max size of primary cache is {@link ImageMemoryCache#DEFAULT_MAX_SIZE}, max size of secondary cache is
@@ -455,6 +459,16 @@ public class ImageCache extends ImageMemoryCache {
      */
     public boolean saveDataToDb(Context context, String tag) {
         return ImageSDCardCache.saveDataToDb(context, secondaryCache, tag);
+    }
+
+    /**
+     * get image file path
+     * 
+     * @param imageUrl
+     * @return
+     */
+    public String getImagePath(String imageUrl) {
+        return secondaryCache.getImagePath(imageUrl);
     }
 
     /**

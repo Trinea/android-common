@@ -19,8 +19,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import cn.trinea.android.common.dao.impl.ImageSDCardCacheDaoImpl;
-import cn.trinea.android.common.entity.FailedException;
 import cn.trinea.android.common.entity.CacheObject;
+import cn.trinea.android.common.entity.FailedException;
 import cn.trinea.android.common.entity.FailedReason;
 import cn.trinea.android.common.entity.FailedReason.FailedType;
 import cn.trinea.android.common.service.CacheFullRemoveType;
@@ -98,11 +98,15 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
     /** cache folder path which be used when saving images **/
-    public static final String                   DEFAULT_CACHE_FOLDER   = new StringBuilder()
-                                                            .append(Environment.getExternalStorageDirectory().getAbsolutePath())
-                                                            .append(File.separator).append("Trinea").append(File.separator)
-                                                            .append("AndroidCommon").append(File.separator)
-                                                            .append("ImageSDCardCache").toString();
+    public static final String                   DEFAULT_CACHE_FOLDER   = new StringBuilder().append(Environment.getExternalStorageDirectory()
+                                                                                                                .getAbsolutePath())
+                                                                                             .append(File.separator)
+                                                                                             .append("Trinea")
+                                                                                             .append(File.separator)
+                                                                                             .append("AndroidCommon")
+                                                                                             .append(File.separator)
+                                                                                             .append("ImageSDCardCache")
+                                                                                             .toString();
 
     /** message what for get image successfully **/
     private static final int                     WHAT_GET_IMAGE_SUCCESS = 1;
@@ -755,6 +759,17 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
         }
         return new ImageSDCardCacheDaoImpl(SqliteUtils.getInstance(context)).deleteAndInsertImageSDCardCache(imageSDCardCache,
                                                                                                              tag);
+    }
+
+    /**
+     * get image file path
+     * 
+     * @param imageUrl
+     * @return
+     */
+    public String getImagePath(String imageUrl) {
+        return new StringBuilder(cacheFolder).append(File.separator).append(fileNameRule.getFileName(imageUrl))
+                                             .toString();
     }
 
     /**
