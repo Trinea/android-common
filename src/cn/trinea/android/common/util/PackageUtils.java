@@ -39,6 +39,7 @@ import cn.trinea.android.common.util.ShellUtils.CommandResult;
  * </ul>
  * <ul>
  * <strong>Others</strong>
+ * <li>{@link PackageUtils#getInstallLocation()} get system install location</li>
  * <li>{@link PackageUtils#isTopActivity(Context, String)} whether the app whost package's name is packageName is on the
  * top of the stack</li>
  * <li>{@link PackageUtils#startInstalledAppDetails(Context, String)} start InstalledAppDetails Activity</li>
@@ -48,7 +49,13 @@ import cn.trinea.android.common.util.ShellUtils.CommandResult;
  */
 public class PackageUtils {
 
-    public static final String TAG = "PackageUtils";
+    public static final String TAG                  = "PackageUtils";
+    /**
+     * App installation location settings values, same to {@link #PackageHelper}
+     */
+    public static final int    APP_INSTALL_AUTO     = 0;
+    public static final int    APP_INSTALL_INTERNAL = 1;
+    public static final int    APP_INSTALL_EXTERNAL = 2;
 
     /**
      * install according conditions
@@ -465,6 +472,49 @@ public class PackageUtils {
             }
         }
         return -1;
+    }
+
+    /**
+     * get system install location<br/>
+     * can be set by System Menu Setting->Storage->Prefered install location
+     * 
+     * @return
+     * @see {@link IPackageManager#getInstallLocation()}
+     */
+    public static int getInstallLocation() {
+        CommandResult commandResult = ShellUtils.execCommand("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm  get-install-location",
+                                                             false, true);
+        if (commandResult.result == 0 && commandResult.successMsg != null && commandResult.successMsg.length() > 0) {
+            try {
+                int location = Integer.parseInt(commandResult.successMsg.substring(0, 1));
+                switch (location) {
+                    case APP_INSTALL_INTERNAL:
+                        return APP_INSTALL_INTERNAL;
+                    case APP_INSTALL_EXTERNAL:
+                        return APP_INSTALL_EXTERNAL;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                Log.e(TAG, "pm get-install-location error");
+            }
+        }
+        return APP_INSTALL_AUTO;
+    }
+
+    /**
+     * get params for pm install location
+     * 
+     * @return
+     */
+    private static String getInstallLocationParams() {
+        int location = getInstallLocation();
+        switch (location) {
+            case APP_INSTALL_INTERNAL:
+                return "-f";
+            case APP_INSTALL_EXTERNAL:
+                return "-s";
+        }
+        return "";
     }
 
     /**
