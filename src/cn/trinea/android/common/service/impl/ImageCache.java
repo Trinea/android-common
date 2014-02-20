@@ -8,14 +8,12 @@ import java.util.concurrent.ExecutorService;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.View;
 import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.service.FileNameRule;
 import cn.trinea.android.common.util.FileUtils;
-import cn.trinea.android.common.util.ImageUtils;
 
 /**
  * <strong>Image Cache</strong><br/>
@@ -143,28 +141,27 @@ public class ImageCache extends ImageMemoryCache {
                       int secondaryCacheThreadPoolSize){
         super(primaryCacheMaxSize, primaryCacheThreadPoolSize);
 
-        setOnGetDataListener(new OnGetDataListener<String, Drawable>() {
+        setOnGetDataListener(new OnGetDataListener<String, Bitmap>() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public CacheObject<Drawable> onGetData(String key) {
+            public CacheObject<Bitmap> onGetData(String key) {
                 CacheObject<String> object = secondaryCache.get(key);
                 String imagePath = (object == null ? null : object.getData());
                 if (FileUtils.isFileExist(imagePath)) {
                     if (compressListener != null) {
                         compressSize = compressListener.getCompressSize(imagePath);
                     }
-                    Drawable d;
+                    Bitmap bm;
                     if (compressSize > 1) {
                         BitmapFactory.Options option = new BitmapFactory.Options();
                         option.inSampleSize = compressSize;
-                        Bitmap bm = BitmapFactory.decodeFile(imagePath, option);
-                        d = ImageUtils.bitmapToDrawable(bm);
+                        bm = BitmapFactory.decodeFile(imagePath, option);
                     } else {
-                        d = ImageUtils.bitmapToDrawable(BitmapFactory.decodeFile(imagePath));
+                        bm = BitmapFactory.decodeFile(imagePath);
                     }
-                    return (d == null ? null : new CacheObject<Drawable>(d));
+                    return (bm == null ? null : new CacheObject<Bitmap>(bm));
                 } else {
                     secondaryCache.remove(key);
                 }
@@ -172,7 +169,7 @@ public class ImageCache extends ImageMemoryCache {
             }
         });
         super.setCheckNetwork(false);
-        setCacheFullRemoveType(new RemoveTypeUsedCountSmall<Drawable>());
+        setCacheFullRemoveType(new RemoveTypeUsedCountSmall<Bitmap>());
 
         secondaryCache = new ImageSDCardCache(secondaryCacheMaxSize, secondaryCacheThreadPoolSize);
         secondaryCache.setCacheFolder(DEFAULT_CACHE_FOLDER);
@@ -495,7 +492,7 @@ public class ImageCache extends ImageMemoryCache {
      * @return
      * @see {@link PreloadDataCache#getOnGetDataListener()}
      */
-    public OnGetDataListener<String, Drawable> getOnGetImageListenerOfPrimaryCache() {
+    public OnGetDataListener<String, Bitmap> getOnGetImageListenerOfPrimaryCache() {
         return getOnGetDataListener();
     }
 
@@ -505,7 +502,7 @@ public class ImageCache extends ImageMemoryCache {
      * @param onGetImageListener
      * @see {@link PreloadDataCache#setOnGetDataListener(OnGetDataListener)}
      */
-    public void setOnGetImageListenerOfPrimaryCache(OnGetDataListener<String, Drawable> onGetImageListener) {
+    public void setOnGetImageListenerOfPrimaryCache(OnGetDataListener<String, Bitmap> onGetImageListener) {
         this.onGetDataListener = onGetImageListener;
     }
 

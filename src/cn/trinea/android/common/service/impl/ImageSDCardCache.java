@@ -815,7 +815,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                 FileUtils.writeFile(savePath, stream);
                             } else {
                                 Log.e(TAG,
-                                      new StringBuilder().append("get drawable exception while write to file, imageUrl is: ")
+                                      new StringBuilder().append("get image exception while write to file, imageUrl is: ")
                                                          .append(key).append(", savePath is ").append(savePath)
                                                          .toString(), e);
                                 savePath = null;
@@ -823,8 +823,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, new StringBuilder().append("get drawable exception, imageUrl is:").append(key)
-                                                  .toString(), e);
+                    Log.e(TAG, new StringBuilder().append("get image exception, imageUrl is:").append(key).toString(),
+                          e);
                 }
 
                 return (StringUtils.isEmpty(savePath) ? null : new CacheObject<String>(savePath));

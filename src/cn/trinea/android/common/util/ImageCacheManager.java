@@ -2,7 +2,6 @@ package cn.trinea.android.common.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
@@ -69,10 +68,10 @@ public class ImageCacheManager {
         OnImageCallbackListener imageCallBack = new OnImageCallbackListener() {
 
             @Override
-            public void onGetSuccess(String imageUrl, Drawable imageDrawable, View view, boolean isInCache) {
-                if (view != null && imageDrawable != null) {
+            public void onGetSuccess(String imageUrl, Bitmap loadedImage, View view, boolean isInCache) {
+                if (view != null && loadedImage != null) {
                     ImageView imageView = (ImageView)view;
-                    imageView.setImageDrawable(imageDrawable);
+                    imageView.setImageBitmap(loadedImage);
                     // first time show with animation
                     if (!isInCache) {
                         imageView.startAnimation(getInAlphaAnimation(2000));
@@ -85,7 +84,7 @@ public class ImageCacheManager {
             }
 
             @Override
-            public void onGetFailed(String imageUrl, Drawable imageDrawable, View view, FailedReason failedReason) {
+            public void onGetFailed(String imageUrl, Bitmap loadedImage, View view, FailedReason failedReason) {
             }
 
             @Override
@@ -93,7 +92,7 @@ public class ImageCacheManager {
             }
         };
         imageCache.setOnImageCallbackListener(imageCallBack);
-        imageCache.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<Drawable>());
+        imageCache.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<Bitmap>());
 
         imageCache.setHttpReadTimeOut(10000);
         imageCache.setValidTime(-1);

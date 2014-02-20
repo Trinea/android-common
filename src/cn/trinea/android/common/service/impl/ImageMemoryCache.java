@@ -9,16 +9,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.entity.FailedException;
 import cn.trinea.android.common.entity.FailedReason;
 import cn.trinea.android.common.entity.FailedReason.FailedType;
-import cn.trinea.android.common.entity.CacheObject;
 import cn.trinea.android.common.service.CacheFullRemoveType;
 import cn.trinea.android.common.util.ImageUtils;
 import cn.trinea.android.common.util.SizeUtils;
@@ -61,7 +61,7 @@ import cn.trinea.android.common.util.SystemUtils;
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-4-5
  */
-public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
+public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
 
     private static final long                    serialVersionUID       = 1L;
 
@@ -102,7 +102,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
     /**
      * get image asynchronous. when get image success, it will pass to
-     * {@link OnImageCallbackListener#onGetSuccess(String, Drawable, View, boolean)}
+     * {@link OnImageCallbackListener#onGetSuccess(String, Bitmap, View, boolean)}
      * 
      * @param imageUrl
      * @param view
@@ -137,13 +137,12 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
         /**
          * if already in cache, call onImageSDCallbackListener, else new thread to wait for it
          */
-        CacheObject<Drawable> object = getFromCache(imageUrl, urlList);
+        CacheObject<Bitmap> object = getFromCache(imageUrl, urlList);
         if (object != null) {
-            Drawable drawable = object.getData();
-            if (drawable != null) {
+            Bitmap bitmap = object.getData();
+            if (bitmap != null) {
                 if (onImageCallbackListener != null) {
-                    onImageCallbackListener.onGetSuccess(imageUrl, drawable.getConstantState().newDrawable(), view,
-                                                         true);
+                    onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, true);
                 }
                 return true;
             } else {
@@ -320,7 +319,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
         super(maxSize, threadPoolSize);
 
         super.setOnGetDataListener(getDefaultOnGetImageListener());
-        super.setCacheFullRemoveType(new RemoveTypeUsedCountSmall<Drawable>());
+        super.setCacheFullRemoveType(new RemoveTypeUsedCountSmall<Bitmap>());
         this.viewMap = new ConcurrentHashMap<String, View>();
         this.viewSetMap = new HashMap<String, HashSet<View>>();
         this.handler = new MyHandler();
@@ -359,21 +358,21 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
          * callback function after get image successfully, run on ui thread
          * 
          * @param imageUrl imageUrl
-         * @param imageDrawable drawable
+         * @param loadedImage loaded image bitmap
          * @param view view need the image
          * @param isInCache whether already in cache or got realtime
          */
-        public void onGetSuccess(String imageUrl, Drawable imageDrawable, View view, boolean isInCache);
+        public void onGetSuccess(String imageUrl, Bitmap loadedImage, View view, boolean isInCache);
 
         /**
          * callback function after get image failed, run on ui thread
          * 
          * @param imageUrl imageUrl
-         * @param imageDrawable drawable
+         * @param loadedImage loaded image bitmap
          * @param view view need the image
          * @param failedReason failed reason for get image
          */
-        public void onGetFailed(String imageUrl, Drawable imageDrawable, View view, FailedReason failedReason);
+        public void onGetFailed(String imageUrl, Bitmap loadedImage, View view, FailedReason failedReason);
     }
 
     /**
@@ -409,11 +408,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
                     }
 
                     String imageUrl = object.imageUrl;
-                    Drawable drawable = object.drawable;
-                    // to avoid drawable dirty
-                    if (drawable != null) {
-                        drawable = drawable.getConstantState().newDrawable();
-                    }
+                    Bitmap bitmap = object.bitmap;
                     if (onImageCallbackListener != null) {
                         if (isOpenWaitingQueue) {
                             synchronized (viewSetMap) {
@@ -421,12 +416,12 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
                                 if (viewSet != null) {
                                     for (View view : viewSet) {
                                         if (view != null) {
-                                            onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, false);
+                                            onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, false);
                                         }
                                         if (WHAT_GET_IMAGE_SUCCESS == message.what) {
-                                            onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, false);
+                                            onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, false);
                                         } else {
-                                            onImageCallbackListener.onGetFailed(imageUrl, drawable, view,
+                                            onImageCallbackListener.onGetFailed(imageUrl, bitmap, view,
                                                                                 object.failedReason);
                                         }
                                     }
@@ -436,9 +431,9 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
                             View view = viewMap.get(imageUrl);
                             if (view != null) {
                                 if (WHAT_GET_IMAGE_SUCCESS == message.what) {
-                                    onImageCallbackListener.onGetSuccess(imageUrl, drawable, view, false);
+                                    onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, false);
                                 } else {
-                                    onImageCallbackListener.onGetFailed(imageUrl, drawable, view, object.failedReason);
+                                    onImageCallbackListener.onGetFailed(imageUrl, bitmap, view, object.failedReason);
                                 }
                             }
                         }
@@ -464,17 +459,17 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
     private class MessageObject {
 
         String       imageUrl;
-        Drawable     drawable;
+        Bitmap       bitmap;
         FailedReason failedReason;
 
-        public MessageObject(String imageUrl, Drawable drawable){
+        public MessageObject(String imageUrl, Bitmap bitmap){
             this.imageUrl = imageUrl;
-            this.drawable = drawable;
+            this.bitmap = bitmap;
         }
 
-        public MessageObject(String imageUrl, Drawable drawable, FailedReason failedReason){
+        public MessageObject(String imageUrl, Bitmap bitmap, FailedReason failedReason){
             this.imageUrl = imageUrl;
-            this.drawable = drawable;
+            this.bitmap = bitmap;
             this.failedReason = failedReason;
         }
 
@@ -494,19 +489,19 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
 
             @Override
             public void run() {
-                CacheObject<Drawable> object = get(imageUrl, urlList);
-                Drawable drawable = (object == null ? null : object.getData());
-                if (drawable == null) {
-                    // if drawable is null, remove it
+                CacheObject<Bitmap> object = get(imageUrl, urlList);
+                Bitmap bitmap = (object == null ? null : object.getData());
+                if (bitmap == null) {
+                    // if bitmap is null, remove it
                     remove(imageUrl);
                     FailedReason failedReason = new FailedReason(FailedType.ERROR_NETWORK,
                                                                  new FailedException("get image from network error"));
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
-                                                                                                       drawable,
+                                                                                                       bitmap,
                                                                                                        failedReason)));
                 } else {
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
-                                                                                                        drawable)));
+                                                                                                        bitmap)));
                 }
             }
         });
@@ -517,20 +512,20 @@ public class ImageMemoryCache extends PreloadDataCache<String, Drawable> {
      * 
      * @return
      */
-    public OnGetDataListener<String, Drawable> getDefaultOnGetImageListener() {
-        return new OnGetDataListener<String, Drawable>() {
+    public OnGetDataListener<String, Bitmap> getDefaultOnGetImageListener() {
+        return new OnGetDataListener<String, Bitmap>() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public CacheObject<Drawable> onGetData(String key) {
-                Drawable d = null;
+            public CacheObject<Bitmap> onGetData(String key) {
+                Bitmap d = null;
                 try {
-                    d = ImageUtils.getDrawableFromUrl(key, httpReadTimeOut, requestProperties);
+                    d = ImageUtils.getBitmapFromUrl(key, httpReadTimeOut, requestProperties);
                 } catch (Exception e) {
-                    Log.e(TAG, "get drawable exception, imageUrl is:" + key, e);
+                    Log.e(TAG, "get image exception, imageUrl is:" + key, e);
                 }
-                return (d == null ? null : new CacheObject<Drawable>(d));
+                return (d == null ? null : new CacheObject<Bitmap>(d));
             }
         };
     }
