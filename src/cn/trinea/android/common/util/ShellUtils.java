@@ -186,7 +186,7 @@ public class ShellUtils {
     }
 
     /**
-     * result of command,
+     * result of command
      * <ul>
      * <li>{@link CommandResult#result} means result of command, 0 means normal, else means error, same to excute in
      * linux shell</li>

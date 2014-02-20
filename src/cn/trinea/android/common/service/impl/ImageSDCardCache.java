@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.View;
 import cn.trinea.android.common.dao.impl.ImageSDCardCacheDaoImpl;
 import cn.trinea.android.common.entity.CacheObject;
-import cn.trinea.android.common.entity.FailedException;
 import cn.trinea.android.common.entity.FailedReason;
 import cn.trinea.android.common.entity.FailedReason.FailedType;
 import cn.trinea.android.common.service.CacheFullRemoveType;
@@ -167,9 +166,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
         if (object != null) {
             String imagePath = object.getData();
             if (!StringUtils.isEmpty(imagePath) && FileUtils.isFileExist(imagePath)) {
-                if (onImageSDCallbackListener != null) {
-                    onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, true);
-                }
+                onGetSuccess(imageUrl, imagePath, view, true);
                 return true;
             } else {
                 remove(imageUrl);
@@ -486,7 +483,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                     for (View view : viewSet) {
                                         if (view != null) {
                                             if (WHAT_GET_IMAGE_SUCCESS == message.what) {
-                                                onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, false);
+                                                onGetSuccess(imageUrl, imagePath, view, false);
                                             } else {
                                                 onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
                                                                                       object.failedReason);
@@ -499,7 +496,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                             View view = viewMap.get(imageUrl);
                             if (view != null) {
                                 if (WHAT_GET_IMAGE_SUCCESS == message.what) {
-                                    onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, false);
+                                    onGetSuccess(imageUrl, imagePath, view, false);
                                 } else {
                                     onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
                                                                           object.failedReason);
@@ -517,6 +514,19 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                     }
                     break;
             }
+        }
+    }
+
+    private void onGetSuccess(String imageUrl, String imagePath, View view, boolean isInCache) {
+        if (onImageSDCallbackListener == null) {
+            return;
+        }
+
+        try {
+            onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, isInCache);
+        } catch (OutOfMemoryError e) {
+            onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
+                                                  new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
         }
     }
 
@@ -562,13 +572,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                 if (StringUtils.isEmpty(imagePath) || !FileUtils.isFileExist(imagePath)) {
                     // if image get fail, remove it
                     remove(imageUrl);
-                    FailedReason failedReason;
-                    if (object == null) {
-                        failedReason = new FailedReason(FailedType.ERROR_NETWORK,
-                                                        new FailedException("get image from network error"));
-                    } else {
-                        failedReason = new FailedReason(FailedType.ERROR_IO, new FailedException("save image error"));
-                    }
+                    String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
+                    FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
                                                                                                        imagePath,
                                                                                                        failedReason)));
@@ -803,30 +808,37 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             public CacheObject<String> onGetData(String key) {
 
                 String savePath = null;
+                InputStream stream = null;
                 try {
-                    InputStream stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut, requestProperties);
-                    if (stream != null) {
-                        savePath = cacheFolder + File.separator + fileNameRule.getFileName(key);
+                    stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut, requestProperties);
+                } catch (Exception e) {
+                    Log.e(TAG, new StringBuilder().append("get image exception, imageUrl is:").append(key).toString(),
+                          e);
+                }
+
+                if (stream != null) {
+                    savePath = cacheFolder + File.separator + fileNameRule.getFileName(key);
+                    try {
+                        FileUtils.writeFile(savePath, stream);
+                    } catch (Exception e1) {
                         try {
-                            FileUtils.writeFile(savePath, stream);
-                        } catch (Exception e) {
-                            if (e.getCause() instanceof FileNotFoundException) {
+                            if (e1.getCause() instanceof FileNotFoundException) {
                                 FileUtils.makeFolders(savePath);
                                 FileUtils.writeFile(savePath, stream);
                             } else {
                                 Log.e(TAG,
                                       new StringBuilder().append("get image exception while write to file, imageUrl is: ")
                                                          .append(key).append(", savePath is ").append(savePath)
-                                                         .toString(), e);
-                                savePath = null;
+                                                         .toString(), e1);
                             }
+                        } catch (Exception e2) {
+                            Log.e(TAG,
+                                  new StringBuilder().append("get image exception while write to file, imageUrl is: ")
+                                                     .append(key).append(", savePath is ").append(savePath).toString(),
+                                  e2);
                         }
                     }
-                } catch (Exception e) {
-                    Log.e(TAG, new StringBuilder().append("get image exception, imageUrl is:").append(key).toString(),
-                          e);
                 }
-
                 return (StringUtils.isEmpty(savePath) ? null : new CacheObject<String>(savePath));
             }
         };

@@ -7,11 +7,15 @@ package cn.trinea.android.common.entity;
  */
 public class FailedReason {
 
-    private FailedType           failedType;
-    /** reserved field, it's no use now, waiting to be perfect^_^ **/
-    private FailedException cause;
+    private FailedType failedType;
+    private Throwable  cause;
 
-    public FailedReason(FailedType failedType, FailedException cause){
+    public FailedReason(FailedType failedType, String cause){
+        this.failedType = failedType;
+        this.cause = new Throwable(cause);
+    }
+
+    public FailedReason(FailedType failedType, Throwable cause){
         this.failedType = failedType;
         this.cause = cause;
     }
@@ -29,18 +33,15 @@ public class FailedReason {
      * get cause
      * 
      * @return the cause
-     * @deprecated Reserved field, it's no use now, waiting to be perfect^_^
      */
-    public FailedException getCause() {
+    public Throwable getCause() {
         return cause;
     }
 
     public static enum FailedType {
-        /** get image error from network **/
-        ERROR_NETWORK,
-        /** save image to sdcard error **/
+        /** get image from network or save image to sdcard error **/
         ERROR_IO,
-        /** reserved field, it's no use now, waiting to be perfect^_^ **/
+        /** get image with out of memory error **/
         ERROR_OUT_OF_MEMORY,
         /** reserved field, it's no use now, waiting to be perfect^_^ **/
         ERROR_UNKNOWN,

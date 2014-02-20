@@ -16,7 +16,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import cn.trinea.android.common.entity.CacheObject;
-import cn.trinea.android.common.entity.FailedException;
 import cn.trinea.android.common.entity.FailedReason;
 import cn.trinea.android.common.entity.FailedReason.FailedType;
 import cn.trinea.android.common.service.CacheFullRemoveType;
@@ -141,9 +140,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
         if (object != null) {
             Bitmap bitmap = object.getData();
             if (bitmap != null) {
-                if (onImageCallbackListener != null) {
-                    onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, true);
-                }
+                onGetSuccess(imageUrl, bitmap, view, true);
                 return true;
             } else {
                 remove(imageUrl);
@@ -416,13 +413,12 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
                                 if (viewSet != null) {
                                     for (View view : viewSet) {
                                         if (view != null) {
-                                            onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, false);
-                                        }
-                                        if (WHAT_GET_IMAGE_SUCCESS == message.what) {
-                                            onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, false);
-                                        } else {
-                                            onImageCallbackListener.onGetFailed(imageUrl, bitmap, view,
-                                                                                object.failedReason);
+                                            if (WHAT_GET_IMAGE_SUCCESS == message.what) {
+                                                onGetSuccess(imageUrl, bitmap, view, false);
+                                            } else {
+                                                onImageCallbackListener.onGetFailed(imageUrl, bitmap, view,
+                                                                                    object.failedReason);
+                                            }
                                         }
                                     }
                                 }
@@ -431,7 +427,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
                             View view = viewMap.get(imageUrl);
                             if (view != null) {
                                 if (WHAT_GET_IMAGE_SUCCESS == message.what) {
-                                    onImageCallbackListener.onGetSuccess(imageUrl, bitmap, view, false);
+                                    onGetSuccess(imageUrl, bitmap, view, false);
                                 } else {
                                     onImageCallbackListener.onGetFailed(imageUrl, bitmap, view, object.failedReason);
                                 }
@@ -450,6 +446,19 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
             }
         }
     };
+
+    private void onGetSuccess(String imageUrl, Bitmap loadedImage, View view, boolean isInCache) {
+        if (onImageCallbackListener == null) {
+            return;
+        }
+
+        try {
+            onImageCallbackListener.onGetSuccess(imageUrl, loadedImage, view, isInCache);
+        } catch (OutOfMemoryError e) {
+            onImageCallbackListener.onGetFailed(imageUrl, loadedImage, view,
+                                                new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+        }
+    }
 
     /**
      * message object
@@ -494,8 +503,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
                 if (bitmap == null) {
                     // if bitmap is null, remove it
                     remove(imageUrl);
-                    FailedReason failedReason = new FailedReason(FailedType.ERROR_NETWORK,
-                                                                 new FailedException("get image from network error"));
+                    String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
+                    FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
                                                                                                        bitmap,
                                                                                                        failedReason)));
