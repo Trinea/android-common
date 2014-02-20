@@ -465,7 +465,7 @@ public class ImageCache extends ImageMemoryCache {
      * get image file path
      * 
      * @param imageUrl
-     * @return
+     * @return if not in cache return null, else return full path.
      */
     public String getImagePath(String imageUrl) {
         return secondaryCache.getImagePath(imageUrl);

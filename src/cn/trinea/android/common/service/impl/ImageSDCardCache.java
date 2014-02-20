@@ -765,11 +765,12 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * get image file path
      * 
      * @param imageUrl
-     * @return
+     * @return if not in cache return null, else return full path.
      */
     public String getImagePath(String imageUrl) {
-        return new StringBuilder(cacheFolder).append(File.separator).append(fileNameRule.getFileName(imageUrl))
-                                             .toString();
+        return (this.containsKey(imageUrl)) ? new StringBuilder(cacheFolder).append(File.separator)
+                                                                            .append(fileNameRule.getFileName(imageUrl))
+                                                                            .toString() : null;
     }
 
     /**
