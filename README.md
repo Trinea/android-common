@@ -55,7 +55,7 @@
 
 ####三. 工具类
 具体介绍可见：[Android常用工具类](http://www.trinea.cn/android/android-common-utils/)  
-目前包括HttpUtils、DownloadManagerPro、ShellUtils、PackageUtils、PreferencesUtils、JSONUtils、FileUtils、ResourceUtils、StringUtils、ParcelUtils、RandomUtils、ArrayUtils、ImageUtils、ListUtils、MapUtils、ObjectUtils、SerializeUtils、SystemUtils、TimeUtils。  
+目前包括HttpUtils、[DownloadManagerPro](http://www.trinea.cn/android/android-downloadmanager/)、[ShellUtils](http://www.trinea.cn/android/android-java-execute-shell-commands/)、[PackageUtils](http://www.trinea.cn/android/android-silent-install/)、PreferencesUtils、JSONUtils、FileUtils、ResourceUtils、StringUtils、ParcelUtils、RandomUtils、ArrayUtils、ImageUtils、ListUtils、MapUtils、ObjectUtils、SerializeUtils、SystemUtils、TimeUtils。  
 <br/>
 #####1. Android系统下载管理DownloadManager使用
 使用示例：[Android系统下载管理DownloadManager功能介绍及使用示例](http://www.trinea.cn/android/android%E7%B3%BB%E7%BB%9F%E4%B8%8B%E8%BD%BD%E7%AE%A1%E7%90%86downloadmanager%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/)  
