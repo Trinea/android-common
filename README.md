@@ -72,7 +72,14 @@
 #####4. 图片工具类
 (1)Drawable、Bitmap、byte数组相互转换; (2)根据url获得InputStream、Drawable、Bitmap  
 更多工具类介绍见[Android常用工具类](http://www.trinea.cn/android/android-common-utils/)
-
+   
+   
+### Proguard
+``` xml
+-keep class cn.trinea.android.** { *; }
+-keepclassmembers class cn.trinea.android.** { *; }
+-dontwarn cn.trinea.android.**
+```
 
 ## License
 
