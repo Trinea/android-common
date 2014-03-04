@@ -20,9 +20,8 @@ import cn.trinea.android.common.util.TimeUtils;
  * <strong>Get</strong>
  * <li>{@link #getResponseBody()}</li>
  * <li>{@link #getUrl()}</li>
- * <li>{@link #getExpiresInMillis()} expires time</li>
+ * <li>{@link #getExpiredTime()} expires time</li>
  * <li>{@link #getExpiresHeader()}</li>
- * <li>{@link #getCacheControlMaxAge()}</li>
  * </ul>
  * <ul>
  * <strong>Setting</strong>
@@ -47,6 +46,7 @@ public class HttpResponse {
     /** this is a client mark, whether this response is in client cache **/
     private boolean             isInCache;
 
+    private boolean             isInitExpiredTime;
     /**
      * An <code>int</code> representing the three digit HTTP Status-Code.
      * <ul>
@@ -63,6 +63,7 @@ public class HttpResponse {
         this.url = url;
         type = 0;
         isInCache = false;
+        isInitExpiredTime = false;
         responseHeaders = new HashMap<String, Object>();
     }
 
@@ -155,6 +156,7 @@ public class HttpResponse {
      * @param expiredTime
      */
     public void setExpiredTime(long expiredTime) {
+        isInitExpiredTime = true;
         this.expiredTime = expiredTime;
     }
 
@@ -171,7 +173,12 @@ public class HttpResponse {
      * </ul>
      */
     public long getExpiredTime() {
-        return expiredTime;
+        if (isInitExpiredTime) {
+            return expiredTime;
+        } else {
+            isInitExpiredTime = true;
+            return expiredTime = getExpiresInMillis();
+        }
     }
 
     /**
@@ -222,7 +229,7 @@ public class HttpResponse {
      * 
      * @return -1 represents http error or no cache-control in response headers, or max-age in seconds
      */
-    public int getCacheControlMaxAge() {
+    private int getCacheControlMaxAge() {
         try {
             String cacheControl = (String)responseHeaders.get(HttpConstants.CACHE_CONTROL);
             if (!StringUtils.isEmpty(cacheControl)) {
@@ -254,7 +261,7 @@ public class HttpResponse {
      * <li>if something error, return -1</li>
      * </ul>
      */
-    public long getExpiresInMillis() {
+    private long getExpiresInMillis() {
         int maxAge = getCacheControlMaxAge();
         if (maxAge != -1) {
             return System.currentTimeMillis() + maxAge * 1000;
