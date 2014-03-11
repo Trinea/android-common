@@ -567,19 +567,24 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
 
             @Override
             public void run() {
-                CacheObject<String> object = get(imageUrl, urlList);
-                String imagePath = (object == null ? null : object.getData());
-                if (StringUtils.isEmpty(imagePath) || !FileUtils.isFileExist(imagePath)) {
-                    // if image get fail, remove it
-                    remove(imageUrl);
-                    String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
-                    FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
-                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
-                                                                                                       imagePath,
-                                                                                                       failedReason)));
-                } else {
-                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
-                                                                                                        imagePath)));
+                try {
+                    CacheObject<String> object = get(imageUrl, urlList);
+                    String imagePath = (object == null ? null : object.getData());
+                    if (StringUtils.isEmpty(imagePath) || !FileUtils.isFileExist(imagePath)) {
+                        // if image get fail, remove it
+                        remove(imageUrl);
+                        String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
+                        FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
+                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED,
+                                                                  new MessageObject(imageUrl, imagePath, failedReason)));
+                    } else {
+                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
+                                                                                                            imagePath)));
+                    }
+                } catch (OutOfMemoryError e) {
+                    MessageObject msg = new MessageObject(imageUrl, null,
+                                                          new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, msg));
                 }
             }
         });

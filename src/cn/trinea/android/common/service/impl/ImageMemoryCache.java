@@ -498,19 +498,24 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
 
             @Override
             public void run() {
-                CacheObject<Bitmap> object = get(imageUrl, urlList);
-                Bitmap bitmap = (object == null ? null : object.getData());
-                if (bitmap == null) {
-                    // if bitmap is null, remove it
-                    remove(imageUrl);
-                    String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
-                    FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
-                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
-                                                                                                       bitmap,
-                                                                                                       failedReason)));
-                } else {
-                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
-                                                                                                        bitmap)));
+                try {
+                    CacheObject<Bitmap> object = get(imageUrl, urlList);
+                    Bitmap bitmap = (object == null ? null : object.getData());
+                    if (bitmap == null) {
+                        // if bitmap is null, remove it
+                        remove(imageUrl);
+                        String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
+                        FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
+                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED,
+                                                                  new MessageObject(imageUrl, bitmap, failedReason)));
+                    } else {
+                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
+                                                                                                            bitmap)));
+                    }
+                } catch (OutOfMemoryError e) {
+                    MessageObject msg = new MessageObject(imageUrl, null,
+                                                          new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+                    handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, msg));
                 }
             }
         });
