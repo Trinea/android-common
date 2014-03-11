@@ -7,7 +7,6 @@ gen
 bin/*
 
 *.pydevproject
-.project
 .metadata
 bin/
 tmp/
