@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.trinea.android.common"
-    android:versionCode="29"
-    android:versionName="4.2.9" >
+    android:versionCode="30"
+    android:versionName="4.2.10" >
 
-    <uses-sdk android:minSdkVersion="9" />
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="14" />
 
     <application>
     </application>
