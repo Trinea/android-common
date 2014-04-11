@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -18,6 +20,7 @@ import cn.trinea.android.common.util.ArrayUtils;
 import cn.trinea.android.common.util.HttpUtils;
 import cn.trinea.android.common.util.SqliteUtils;
 import cn.trinea.android.common.util.StringUtils;
+import cn.trinea.android.common.util.SystemUtils;
 
 /**
  * <strong>Http Cache</strong><br/>
@@ -51,7 +54,10 @@ public class HttpCache {
     private Map<String, HttpResponse> cache;
     /** dao to get data from http db cache **/
     private HttpCacheDao              httpCacheDao;
-    private int                       type = -1;
+    private int                       type                 = -1;
+
+    /** Default {@link Executor} that be used to execute tasks in parallel. **/
+    public static final Executor      THREAD_POOL_EXECUTOR = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
 
     public HttpCache(Context context){
         if (context == null) {
@@ -128,7 +134,8 @@ public class HttpCache {
         if (!isNoCache) {
             cacheResponse = getFromCache(url);
         }
-        return cacheResponse == null ? (isNoStore ? HttpUtils.httpGet(url) : putIntoCache(HttpUtils.httpGet(url))) : cacheResponse;
+        return cacheResponse == null ? (isNoStore ? HttpUtils.httpGet(url) : putIntoCache(HttpUtils.httpGet(url)))
+            : cacheResponse;
     }
 
     /**
@@ -144,7 +151,7 @@ public class HttpCache {
      * something
      */
     public void httpGet(String url, HttpCacheListener listener) {
-        new HttpCacheStringAsyncTask(listener).execute(url);
+        new HttpCacheStringAsyncTask(listener).executeOnExecutor(THREAD_POOL_EXECUTOR, url);
     }
 
     /**
@@ -160,7 +167,7 @@ public class HttpCache {
      * something
      */
     public void httpGet(HttpRequest request, HttpCacheListener listener) {
-        new HttpCacheRequestAsyncTask(listener).execute(request);
+        new HttpCacheRequestAsyncTask(listener).executeOnExecutor(THREAD_POOL_EXECUTOR, request);
     }
 
     /**
@@ -309,7 +316,7 @@ public class HttpCache {
      * <li>if is expired, return null, otherwise return cache response</li>
      * </ul>
      */
-    private HttpResponse getFromCache(String url) {
+    public HttpResponse getFromCache(String url) {
         if (StringUtils.isEmpty(url)) {
             return null;
         }

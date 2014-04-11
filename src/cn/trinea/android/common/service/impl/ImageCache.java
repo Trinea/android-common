@@ -147,23 +147,27 @@ public class ImageCache extends ImageMemoryCache {
 
             @Override
             public CacheObject<Bitmap> onGetData(String key) {
-                CacheObject<String> object = secondaryCache.get(key);
-                String imagePath = (object == null ? null : object.getData());
-                if (FileUtils.isFileExist(imagePath)) {
-                    if (compressListener != null) {
-                        compressSize = compressListener.getCompressSize(imagePath);
-                    }
-                    Bitmap bm;
-                    if (compressSize > 1) {
-                        BitmapFactory.Options option = new BitmapFactory.Options();
-                        option.inSampleSize = compressSize;
-                        bm = BitmapFactory.decodeFile(imagePath, option);
+                try {
+                    CacheObject<String> object = secondaryCache.get(key);
+                    String imagePath = (object == null ? null : object.getData());
+                    if (FileUtils.isFileExist(imagePath)) {
+                        if (compressListener != null) {
+                            compressSize = compressListener.getCompressSize(imagePath);
+                        }
+                        Bitmap bm;
+                        if (compressSize > 1) {
+                            BitmapFactory.Options option = new BitmapFactory.Options();
+                            option.inSampleSize = compressSize;
+                            bm = BitmapFactory.decodeFile(imagePath, option);
+                        } else {
+                            bm = BitmapFactory.decodeFile(imagePath);
+                        }
+                        return (bm == null ? null : new CacheObject<Bitmap>(bm));
                     } else {
-                        bm = BitmapFactory.decodeFile(imagePath);
+                        secondaryCache.remove(key);
                     }
-                    return (bm == null ? null : new CacheObject<Bitmap>(bm));
-                } else {
-                    secondaryCache.remove(key);
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
                 }
                 return null;
             }
