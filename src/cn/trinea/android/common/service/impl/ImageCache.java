@@ -179,7 +179,41 @@ public class ImageCache extends ImageMemoryCache {
         secondaryCache.setCacheFolder(DEFAULT_CACHE_FOLDER);
         secondaryCache.setFileNameRule(new FileNameRuleImageUrl().setFileExtension(""));
     }
+    /**
+    set image data from  Local
+    */
+     public void setDataFromLocal()
+    {
+    	setOnGetDataListener(new OnGetDataListener<String, Bitmap>() {
 
+			@Override
+			public CacheObject<Bitmap> onGetData(String key) {
+				if(FileUtils.isFileExist(key))
+				{
+					Bitmap b;
+					
+					if(getCompressListener()!=null)
+					{
+						CompressListener compress_listener=getCompressListener();
+						compressSize=compress_listener.getCompressSize(key);
+					}	
+				   if(compressSize>1)
+				   {
+						BitmapFactory.Options option = new BitmapFactory.Options();
+	                    option.inSampleSize = compressSize;
+	                    b = BitmapFactory.decodeFile(key, option);
+				   }
+				    else
+				    {
+						b=BitmapFactory.decodeFile(key);
+					}
+						return new CacheObject<Bitmap>(b);				
+				}else
+					return null;
+				
+			}
+		});
+    }
     /**
      * get compressSize
      * 
