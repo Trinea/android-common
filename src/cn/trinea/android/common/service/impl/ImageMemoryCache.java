@@ -523,7 +523,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
     }
 
     /**
-     * default get image listener
+     * default get image from network listener
      * 
      * @return
      */
