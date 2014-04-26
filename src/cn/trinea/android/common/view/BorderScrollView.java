@@ -19,15 +19,15 @@ public class BorderScrollView extends ScrollView {
     private OnBorderListener onBorderListener;
     private View             contentView;
 
-    public BorderScrollView(Context context){
+    public BorderScrollView(Context context) {
         super(context);
     }
 
-    public BorderScrollView(Context context, AttributeSet attrs){
+    public BorderScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BorderScrollView(Context context, AttributeSet attrs, int defStyle){
+    public BorderScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

@@ -16,6 +16,6 @@ public class RemoveTypeEnterTimeFirst<T> implements CacheFullRemoveType<T> {
     @Override
     public int compare(CacheObject<T> obj1, CacheObject<T> obj2) {
         return (obj1.getEnterTime() > obj2.getEnterTime()) ? 1
-            : ((obj1.getEnterTime() == obj2.getEnterTime()) ? 0 : -1);
+                : ((obj1.getEnterTime() == obj2.getEnterTime()) ? 0 : -1);
     }
 }

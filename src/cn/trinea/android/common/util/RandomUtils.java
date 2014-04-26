@@ -102,9 +102,9 @@ public class RandomUtils {
      * @param source
      * @param length
      * @return <ul>
-     * <li>if source is null or empty, return null</li>
-     * <li>else see {@link RandomUtils#getRandom(char[] sourceChar, int length)}</li>
-     * </ul>
+     *         <li>if source is null or empty, return null</li>
+     *         <li>else see {@link RandomUtils#getRandom(char[] sourceChar, int length)}</li>
+     *         </ul>
      */
     public static String getRandom(String source, int length) {
         return StringUtils.isEmpty(source) ? null : getRandom(source.toCharArray(), length);
@@ -116,9 +116,9 @@ public class RandomUtils {
      * @param sourceChar
      * @param length
      * @return <ul>
-     * <li>if sourceChar is null or empty, return null</li>
-     * <li>if length less than 0, return null</li>
-     * </ul>
+     *         <li>if sourceChar is null or empty, return null</li>
+     *         <li>if length less than 0, return null</li>
+     *         </ul>
      */
     public static String getRandom(char[] sourceChar, int length) {
         if (sourceChar == null || sourceChar.length == 0 || length < 0) {
@@ -138,9 +138,9 @@ public class RandomUtils {
      * 
      * @param max
      * @return <ul>
-     * <li>if max <= 0, return 0</li>
-     * <li>else return random int between 0 and max</li>
-     * </ul>
+     *         <li>if max <= 0, return 0</li>
+     *         <li>else return random int between 0 and max</li>
+     *         </ul>
      */
     public static int getRandom(int max) {
         return getRandom(0, max);
@@ -152,10 +152,10 @@ public class RandomUtils {
      * @param min
      * @param max
      * @return <ul>
-     * <li>if min > max, return 0</li>
-     * <li>if min == max, return min</li>
-     * <li>else return random int between min and max</li>
-     * </ul>
+     *         <li>if min > max, return 0</li>
+     *         <li>if min == max, return min</li>
+     *         <li>else return random int between min and max</li>
+     *         </ul>
      */
     public static int getRandom(int min, int max) {
         if (min > max) {

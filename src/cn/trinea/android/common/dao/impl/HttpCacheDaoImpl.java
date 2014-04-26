@@ -21,7 +21,7 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
 
     private SqliteUtils sqliteUtils;
 
-    public HttpCacheDaoImpl(SqliteUtils sqliteUtils){
+    public HttpCacheDaoImpl(SqliteUtils sqliteUtils) {
         this.sqliteUtils = sqliteUtils;
     }
 
@@ -44,10 +44,10 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
 
         StringBuilder appWhere = new StringBuilder();
         appWhere.append(DbConstants.HTTP_CACHE_TABLE_URL).append("=?");
-        String[] appWhereArgs = { url };
+        String[] appWhereArgs = {url};
         synchronized (HttpCacheDaoImpl.class) {
             Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
-                                                       appWhere.toString(), appWhereArgs, null, null, null);
+                    appWhere.toString(), appWhereArgs, null, null, null);
             if (cursor == null) {
                 return null;
             }
@@ -67,11 +67,11 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
     public Map<String, HttpResponse> getHttpResponsesByType(int type) {
         StringBuilder whereClause = new StringBuilder();
         whereClause.append(DbConstants.HTTP_CACHE_TABLE_TYPE).append("=?");
-        String[] whereClauseArgs = { Integer.toString(type) };
+        String[] whereClauseArgs = {Integer.toString(type)};
 
         synchronized (HttpCacheDaoImpl.class) {
             Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
-                                                       whereClause.toString(), whereClauseArgs, null, null, null);
+                    whereClause.toString(), whereClauseArgs, null, null, null);
 
             if (cursor == null) {
                 return null;

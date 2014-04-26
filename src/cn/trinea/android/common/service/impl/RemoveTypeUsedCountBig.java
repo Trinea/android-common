@@ -16,6 +16,6 @@ public class RemoveTypeUsedCountBig<T> implements CacheFullRemoveType<T> {
     @Override
     public int compare(CacheObject<T> obj1, CacheObject<T> obj2) {
         return (obj2.getUsedCount() > obj1.getUsedCount()) ? 1
-            : ((obj2.getUsedCount() == obj1.getUsedCount()) ? 0 : -1);
+                : ((obj2.getUsedCount() == obj1.getUsedCount()) ? 0 : -1);
     }
 }

@@ -16,6 +16,6 @@ public class RemoveTypeEnterTimeLast<T> implements CacheFullRemoveType<T> {
     @Override
     public int compare(CacheObject<T> obj1, CacheObject<T> obj2) {
         return (obj2.getEnterTime() > obj1.getEnterTime()) ? 1
-            : ((obj2.getEnterTime() == obj1.getEnterTime()) ? 0 : -1);
+                : ((obj2.getEnterTime() == obj1.getEnterTime()) ? 0 : -1);
     }
 }

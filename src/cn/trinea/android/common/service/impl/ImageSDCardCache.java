@@ -97,15 +97,16 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     /** recommend default max cache size according to dalvik max memory **/
     public static final int                      DEFAULT_MAX_SIZE       = getDefaultMaxSize();
     /** cache folder path which be used when saving images **/
-    public static final String                   DEFAULT_CACHE_FOLDER   = new StringBuilder().append(Environment.getExternalStorageDirectory()
-                                                                                                                .getAbsolutePath())
-                                                                                             .append(File.separator)
-                                                                                             .append("Trinea")
-                                                                                             .append(File.separator)
-                                                                                             .append("AndroidCommon")
-                                                                                             .append(File.separator)
-                                                                                             .append("ImageSDCardCache")
-                                                                                             .toString();
+    public static final String                   DEFAULT_CACHE_FOLDER   = new StringBuilder()
+                                                                                .append(Environment
+                                                                                        .getExternalStorageDirectory()
+                                                                                        .getAbsolutePath())
+                                                                                .append(File.separator)
+                                                                                .append("Trinea")
+                                                                                .append(File.separator)
+                                                                                .append("AndroidCommon")
+                                                                                .append(File.separator)
+                                                                                .append("ImageSDCardCache").toString();
 
     /** message what for get image successfully **/
     private static final int                     WHAT_GET_IMAGE_SUCCESS = 1;
@@ -113,7 +114,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
     private static final int                     WHAT_GET_IMAGE_FAILED  = 2;
 
     /** thread pool whose wait for data got, attention, not the get data thread pool **/
-    private transient ExecutorService            threadPool             = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
+    private transient ExecutorService            threadPool             = Executors
+                                                                                .newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
     /**
      * key is image url, value is the newest view which waiting for image loaded, used when {@link #isOpenWaitingQueue}
      * is false
@@ -142,8 +144,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * 
      * @param imageUrl
      * @param urlList url list, if is null, not preload, else preload forward by
-     * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
-     * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
+     *        {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
+     *        {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
      * @param view
      * @return whether image already in cache or not
      */
@@ -348,7 +350,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * 
      * @see PreloadDataCache#PreloadDataCache()
      */
-    public ImageSDCardCache(){
+    public ImageSDCardCache() {
         this(DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
@@ -364,7 +366,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * @param maxSize maximum size of the cache
      * @see PreloadDataCache#PreloadDataCache(int)
      */
-    public ImageSDCardCache(int maxSize){
+    public ImageSDCardCache(int maxSize) {
         this(maxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
@@ -381,7 +383,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * @param threadPoolSize getting data thread pool size
      * @see PreloadDataCache#PreloadDataCache(int, int)
      */
-    public ImageSDCardCache(int maxSize, int threadPoolSize){
+    public ImageSDCardCache(int maxSize, int threadPoolSize) {
         super(maxSize, threadPoolSize);
 
         super.setOnGetDataListener(getDefaultOnGetImageListener());
@@ -468,7 +470,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             switch (message.what) {
                 case WHAT_GET_IMAGE_SUCCESS:
                 case WHAT_GET_IMAGE_FAILED:
-                    MessageObject object = (MessageObject)message.obj;
+                    MessageObject object = (MessageObject) message.obj;
                     if (object == null) {
                         break;
                     }
@@ -486,7 +488,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                                 onGetSuccess(imageUrl, imagePath, view, false);
                                             } else {
                                                 onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
-                                                                                      object.failedReason);
+                                                        object.failedReason);
                                             }
                                         }
                                     }
@@ -499,7 +501,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                     onGetSuccess(imageUrl, imagePath, view, false);
                                 } else {
                                     onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
-                                                                          object.failedReason);
+                                            object.failedReason);
                                 }
                             }
                         }
@@ -525,8 +527,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
         try {
             onImageSDCallbackListener.onGetSuccess(imageUrl, imagePath, view, isInCache);
         } catch (OutOfMemoryError e) {
-            onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view,
-                                                  new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+            onImageSDCallbackListener.onGetFailed(imageUrl, imagePath, view, new FailedReason(
+                    FailedType.ERROR_OUT_OF_MEMORY, e));
         }
     }
 
@@ -541,12 +543,12 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
         String       imagePath;
         FailedReason failedReason;
 
-        public MessageObject(String imageUrl, String imagePath){
+        public MessageObject(String imageUrl, String imagePath) {
             this.imageUrl = imageUrl;
             this.imagePath = imagePath;
         }
 
-        public MessageObject(String imageUrl, String imagePath, FailedReason failedReason){
+        public MessageObject(String imageUrl, String imagePath, FailedReason failedReason) {
             this.imageUrl = imageUrl;
             this.imagePath = imagePath;
             this.failedReason = failedReason;
@@ -558,8 +560,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * 
      * @param imageUrl
      * @param urlList url list, if is null, not preload, else preload forward by
-     * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
-     * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
+     *        {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
+     *        {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
      */
     private void startGetImageThread(final String imageUrl, final List<String> urlList) {
         // wait for image be got success and send message
@@ -575,15 +577,15 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                         remove(imageUrl);
                         String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
                         FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
-                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED,
-                                                                  new MessageObject(imageUrl, imagePath, failedReason)));
+                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
+                                imagePath, failedReason)));
                     } else {
                         handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
-                                                                                                            imagePath)));
+                                imagePath)));
                     }
                 } catch (OutOfMemoryError e) {
-                    MessageObject msg = new MessageObject(imageUrl, null,
-                                                          new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+                    MessageObject msg = new MessageObject(imageUrl, null, new FailedReason(
+                            FailedType.ERROR_OUT_OF_MEMORY, e));
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, msg));
                 }
             }
@@ -689,7 +691,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * 
      * @param context
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      * @see #loadDataFromDb(Context, ImageSDCardCache, String)
      */
@@ -709,7 +711,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * 
      * @param context
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      * @see #saveDataToDb(Context, ImageSDCardCache, String)
      */
@@ -729,7 +731,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * @param context
      * @param imageSDCardCache
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      */
     public static boolean loadDataFromDb(Context context, ImageSDCardCache imageSDCardCache, String tag) {
@@ -740,7 +742,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             throw new IllegalArgumentException("The tag can not be null or empty.");
         }
         return new ImageSDCardCacheDaoImpl(SqliteUtils.getInstance(context)).putIntoImageSDCardCache(imageSDCardCache,
-                                                                                                     tag);
+                tag);
     }
 
     /**
@@ -757,7 +759,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      * @param context
      * @param imageSDCardCache
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      */
     public static boolean saveDataToDb(Context context, ImageSDCardCache imageSDCardCache, String tag) {
@@ -767,8 +769,8 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
         if (StringUtils.isEmpty(tag)) {
             throw new IllegalArgumentException("The tag can not be null or empty.");
         }
-        return new ImageSDCardCacheDaoImpl(SqliteUtils.getInstance(context)).deleteAndInsertImageSDCardCache(imageSDCardCache,
-                                                                                                             tag);
+        return new ImageSDCardCacheDaoImpl(SqliteUtils.getInstance(context)).deleteAndInsertImageSDCardCache(
+                imageSDCardCache, tag);
     }
 
     /**
@@ -779,8 +781,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
      */
     public String getImagePath(String imageUrl) {
         return (this.containsKey(imageUrl)) ? new StringBuilder(cacheFolder).append(File.separator)
-                                                                            .append(fileNameRule.getFileName(imageUrl))
-                                                                            .toString() : null;
+                .append(fileNameRule.getFileName(imageUrl)).toString() : null;
     }
 
     /**
@@ -818,7 +819,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                     stream = ImageUtils.getInputStreamFromUrl(key, httpReadTimeOut, requestProperties);
                 } catch (Exception e) {
                     Log.e(TAG, new StringBuilder().append("get image exception, imageUrl is:").append(key).toString(),
-                          e);
+                            e);
                 }
 
                 if (stream != null) {
@@ -832,15 +833,15 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
                                 FileUtils.writeFile(savePath, stream);
                             } else {
                                 Log.e(TAG,
-                                      new StringBuilder().append("get image exception while write to file, imageUrl is: ")
-                                                         .append(key).append(", savePath is ").append(savePath)
-                                                         .toString(), e1);
+                                        new StringBuilder()
+                                                .append("get image exception while write to file, imageUrl is: ")
+                                                .append(key).append(", savePath is ").append(savePath).toString(), e1);
                             }
                         } catch (Exception e2) {
                             Log.e(TAG,
-                                  new StringBuilder().append("get image exception while write to file, imageUrl is: ")
-                                                     .append(key).append(", savePath is ").append(savePath).toString(),
-                                  e2);
+                                    new StringBuilder()
+                                            .append("get image exception while write to file, imageUrl is: ")
+                                            .append(key).append(", savePath is ").append(savePath).toString(), e2);
                         }
                     }
                 }
@@ -860,7 +861,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             return 256;
         }
 
-        int mb = (int)(maxMemory / SizeUtils.MB_2_BYTE);
+        int mb = (int) (maxMemory / SizeUtils.MB_2_BYTE);
         return mb > 8 ? mb : 8;
     }
 }

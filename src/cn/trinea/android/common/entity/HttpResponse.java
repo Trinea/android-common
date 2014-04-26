@@ -59,7 +59,7 @@ public class HttpResponse {
      */
     private int                 responseCode = -1;
 
-    public HttpResponse(String url){
+    public HttpResponse(String url) {
         this.url = url;
         type = 0;
         isInCache = false;
@@ -67,7 +67,7 @@ public class HttpResponse {
         responseHeaders = new HashMap<String, Object>();
     }
 
-    public HttpResponse(){
+    public HttpResponse() {
         responseHeaders = new HashMap<String, Object>();
     }
 
@@ -91,14 +91,14 @@ public class HttpResponse {
      * get reponse code
      * 
      * @return An <code>int</code> representing the three digit HTTP Status-Code.
-     * <ul>
-     * <li>1xx: Informational
-     * <li>2xx: Success
-     * <li>3xx: Redirection
-     * <li>4xx: Client Error
-     * <li>5xx: Server Error
-     * <li>-1: http error
-     * </ul>
+     *         <ul>
+     *         <li>1xx: Informational
+     *         <li>2xx: Success
+     *         <li>3xx: Redirection
+     *         <li>4xx: Client Error
+     *         <li>5xx: Server Error
+     *         <li>-1: http error
+     *         </ul>
      */
     public int getResponseCode() {
         return responseCode;
@@ -167,10 +167,10 @@ public class HttpResponse {
      * </ul>
      * 
      * @return <ul>
-     * <li>if max-age in cache-control is exists, return current time plus it</li>
-     * <li>else return expires</li>
-     * <li>if something error, return -1</li>
-     * </ul>
+     *         <li>if max-age in cache-control is exists, return current time plus it</li>
+     *         <li>else return expires</li>
+     *         <li>if something error, return -1</li>
+     *         </ul>
      */
     public long getExpiredTime() {
         if (isInitExpiredTime) {
@@ -217,7 +217,7 @@ public class HttpResponse {
      */
     public String getExpiresHeader() {
         try {
-            return responseHeaders == null ? null : (String)responseHeaders.get(HttpConstants.EXPIRES);
+            return responseHeaders == null ? null : (String) responseHeaders.get(HttpConstants.EXPIRES);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -231,7 +231,7 @@ public class HttpResponse {
      */
     private int getCacheControlMaxAge() {
         try {
-            String cacheControl = (String)responseHeaders.get(HttpConstants.CACHE_CONTROL);
+            String cacheControl = (String) responseHeaders.get(HttpConstants.CACHE_CONTROL);
             if (!StringUtils.isEmpty(cacheControl)) {
                 int start = cacheControl.indexOf("max-age=");
                 if (start != -1) {
@@ -256,10 +256,10 @@ public class HttpResponse {
      * get expires
      * 
      * @return <ul>
-     * <li>if max-age in cache-control is exists, return current time plus it</li>
-     * <li>else return expires</li>
-     * <li>if something error, return -1</li>
-     * </ul>
+     *         <li>if max-age in cache-control is exists, return current time plus it</li>
+     *         <li>else return expires</li>
+     *         <li>if something error, return -1</li>
+     *         </ul>
      */
     private long getExpiresInMillis() {
         int maxAge = getCacheControlMaxAge();

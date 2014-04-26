@@ -13,15 +13,15 @@ import android.widget.Gallery;
  */
 public class SlideOnePageGallery extends Gallery {
 
-    public SlideOnePageGallery(Context context, AttributeSet attrs, int defStyle){
+    public SlideOnePageGallery(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public SlideOnePageGallery(Context context, AttributeSet attrs){
+    public SlideOnePageGallery(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SlideOnePageGallery(Context context){
+    public SlideOnePageGallery(Context context) {
         super(context);
     }
 

@@ -10,7 +10,7 @@ public class PatchResult {
     private int    status;
     private String message;
 
-    public PatchResult(int status, String message){
+    public PatchResult(int status, String message) {
         this.status = status;
         this.message = message;
     }

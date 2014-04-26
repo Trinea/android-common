@@ -16,7 +16,7 @@ public class SqliteUtils {
     private SQLiteDatabase              wDb;
     private SQLiteDatabase              rDb;
 
-    private SqliteUtils(Context context){
+    private SqliteUtils(Context context) {
         dbHelper = new DbHelper(context);
         wDb = dbHelper.getWritableDatabase();
         rDb = dbHelper.getReadableDatabase();

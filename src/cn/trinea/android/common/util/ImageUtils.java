@@ -74,7 +74,7 @@ public class ImageUtils {
      * @return
      */
     public static Bitmap drawableToBitmap(Drawable d) {
-        return d == null ? null : ((BitmapDrawable)d).getBitmap();
+        return d == null ? null : ((BitmapDrawable) d).getBitmap();
     }
 
     /**
@@ -130,11 +130,11 @@ public class ImageUtils {
      * @throws IOException
      */
     public static InputStream getInputStreamFromUrl(String imageUrl, int readTimeOutMillis,
-                                                    Map<String, String> requestProperties) {
+            Map<String, String> requestProperties) {
         InputStream stream = null;
         try {
             URL url = new URL(imageUrl);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             HttpUtils.setURLConnection(requestProperties, con);
             if (readTimeOutMillis > 0) {
                 con.setReadTimeout(readTimeOutMillis);
@@ -171,7 +171,7 @@ public class ImageUtils {
      * @return
      */
     public static Drawable getDrawableFromUrl(String imageUrl, int readTimeOutMillis,
-                                              Map<String, String> requestProperties) {
+            Map<String, String> requestProperties) {
         InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis, requestProperties);
         Drawable d = Drawable.createFromStream(stream, "src");
         closeInputStream(stream);
@@ -213,7 +213,7 @@ public class ImageUtils {
      * @return
      */
     public static Bitmap scaleImageTo(Bitmap org, int newWidth, int newHeight) {
-        return scaleImage(org, (float)newWidth / org.getWidth(), (float)newHeight / org.getHeight());
+        return scaleImage(org, (float) newWidth / org.getWidth(), (float) newHeight / org.getHeight());
     }
 
     /**

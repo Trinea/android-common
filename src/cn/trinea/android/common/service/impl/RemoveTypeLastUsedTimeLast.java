@@ -15,7 +15,7 @@ public class RemoveTypeLastUsedTimeLast<T> implements CacheFullRemoveType<T> {
 
     @Override
     public int compare(CacheObject<T> obj1, CacheObject<T> obj2) {
-        return (obj2.getLastUsedTime() > obj1.getLastUsedTime()) ? 1
-            : ((obj2.getLastUsedTime() == obj1.getLastUsedTime()) ? 0 : -1);
+        return (obj2.getLastUsedTime() > obj1.getLastUsedTime()) ? 1 : ((obj2.getLastUsedTime() == obj1
+                .getLastUsedTime()) ? 0 : -1);
     }
 }

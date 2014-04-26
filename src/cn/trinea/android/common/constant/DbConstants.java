@@ -69,7 +69,7 @@ public class DbConstants {
          **/
         CREATE_IMAGE_SDCARD_CACHE_TABLE_SQL.append("CREATE TABLE ").append(IMAGE_SDCARD_CACHE_TABLE_TABLE_NAME);
         CREATE_IMAGE_SDCARD_CACHE_TABLE_SQL.append(" (").append(IMAGE_SDCARD_CACHE_TABLE_ID)
-                                           .append(" integer primary key autoincrement,");
+                .append(" integer primary key autoincrement,");
         CREATE_IMAGE_SDCARD_CACHE_TABLE_SQL.append(IMAGE_SDCARD_CACHE_TABLE_TAG).append(" text,");
         CREATE_IMAGE_SDCARD_CACHE_TABLE_SQL.append(IMAGE_SDCARD_CACHE_TABLE_URL).append(" text,");
         CREATE_IMAGE_SDCARD_CACHE_TABLE_SQL.append(IMAGE_SDCARD_CACHE_TABLE_PATH).append(" text,");
@@ -82,19 +82,17 @@ public class DbConstants {
         CREATE_IMAGE_SDCARD_CACHE_TABLE_SQL.append(TERMINATOR);
 
         CREATE_IMAGE_SDCARD_CACHE_TABLE_INDEX_SQL.append("CREATE INDEX ").append(IMAGE_SDCARD_CACHE_TABLE_INDEX_TAG)
-                                                 .append(" ON ").append(IMAGE_SDCARD_CACHE_TABLE_TABLE_NAME)
-                                                 .append("(").append(IMAGE_SDCARD_CACHE_TABLE_TAG).append(")")
-                                                 .append(TERMINATOR).append("CREATE INDEX ")
-                                                 .append(IMAGE_SDCARD_CACHE_TABLE_INDEX_URL).append(" ON ")
-                                                 .append(IMAGE_SDCARD_CACHE_TABLE_TABLE_NAME).append("(")
-                                                 .append(IMAGE_SDCARD_CACHE_TABLE_URL).append(")").append(TERMINATOR);
+                .append(" ON ").append(IMAGE_SDCARD_CACHE_TABLE_TABLE_NAME).append("(")
+                .append(IMAGE_SDCARD_CACHE_TABLE_TAG).append(")").append(TERMINATOR).append("CREATE INDEX ")
+                .append(IMAGE_SDCARD_CACHE_TABLE_INDEX_URL).append(" ON ").append(IMAGE_SDCARD_CACHE_TABLE_TABLE_NAME)
+                .append("(").append(IMAGE_SDCARD_CACHE_TABLE_URL).append(")").append(TERMINATOR);
 
         /**
          * sql to http response table
          **/
         CREATE_HTTP_CACHE_TABLE_SQL.append("CREATE TABLE ").append(HTTP_CACHE_TABLE_TABLE_NAME);
         CREATE_HTTP_CACHE_TABLE_SQL.append(" (").append(HTTP_CACHE_TABLE_ID)
-                                   .append(" integer primary key autoincrement,");
+                .append(" integer primary key autoincrement,");
         CREATE_HTTP_CACHE_TABLE_SQL.append(HTTP_CACHE_TABLE_URL).append(" text,");
         CREATE_HTTP_CACHE_TABLE_SQL.append(HTTP_CACHE_TABLE_RESPONSE).append(" text,");
         CREATE_HTTP_CACHE_TABLE_SQL.append(HTTP_CACHE_TABLE_EXPIRES).append(" integer,");
@@ -102,11 +100,11 @@ public class DbConstants {
         CREATE_HTTP_CACHE_TABLE_SQL.append(HTTP_CACHE_TABLE_TYPE).append(" integer)").append(TERMINATOR);
 
         CREATE_HTTP_CACHE_TABLE_UNIQUE_INDEX.append("CREATE UNIQUE INDEX ").append(HTTP_CACHE_TABLE_UNIQUE_INDEX_URL)
-                                            .append(" ON ").append(HTTP_CACHE_TABLE_TABLE_NAME).append("(")
-                                            .append(HTTP_CACHE_TABLE_URL).append(")").append(TERMINATOR);
+                .append(" ON ").append(HTTP_CACHE_TABLE_TABLE_NAME).append("(").append(HTTP_CACHE_TABLE_URL)
+                .append(")").append(TERMINATOR);
         CREATE_HTTP_CACHE_TABLE_INDEX_SQL.append("CREATE INDEX ").append(HTTP_CACHE_TABLE_INDEX_TYPE).append(" ON ")
-                                         .append(HTTP_CACHE_TABLE_TABLE_NAME).append("(").append(HTTP_CACHE_TABLE_TYPE)
-                                         .append(")").append(TERMINATOR);
+                .append(HTTP_CACHE_TABLE_TABLE_NAME).append("(").append(HTTP_CACHE_TABLE_TYPE).append(")")
+                .append(TERMINATOR);
 
     }
 }

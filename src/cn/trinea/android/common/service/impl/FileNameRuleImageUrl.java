@@ -32,11 +32,10 @@ public class FileNameRuleImageUrl implements FileNameRule {
         }
 
         String ext = (fileExtension == null ? FileUtils.getFileExtension(imageUrl) : fileExtension);
-        String fileName = (imageUrl.length() > MAX_FILE_NAME_LENGTH
-            ? imageUrl.substring(imageUrl.length() - MAX_FILE_NAME_LENGTH, imageUrl.length()) : imageUrl).replaceAll("[\\W]",
-                                                                                                                     "_");
-        return StringUtils.isEmpty(ext) ? fileName
-            : (new StringBuilder().append(fileName).append(".").append(ext.replaceAll("[\\W]", "_")).toString());
+        String fileName = (imageUrl.length() > MAX_FILE_NAME_LENGTH ? imageUrl.substring(imageUrl.length()
+                - MAX_FILE_NAME_LENGTH, imageUrl.length()) : imageUrl).replaceAll("[\\W]", "_");
+        return StringUtils.isEmpty(ext) ? fileName : (new StringBuilder().append(fileName).append(".")
+                .append(ext.replaceAll("[\\W]", "_")).toString());
     }
 
     public FileNameRuleImageUrl setFileExtension(String fileExtension) {

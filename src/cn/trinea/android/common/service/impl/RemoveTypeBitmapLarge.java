@@ -25,8 +25,8 @@ public class RemoveTypeBitmapLarge implements CacheFullRemoveType<Bitmap> {
         long sizeOfFile2 = getSize(obj2);
         if (sizeOfFile1 == sizeOfFile2) {
             if (obj1.getUsedCount() == obj2.getUsedCount()) {
-                return (obj1.getEnterTime() > obj2.getEnterTime()) ? 1 : ((obj1.getEnterTime() == obj2.getEnterTime())
-                    ? 0 : -1);
+                return (obj1.getEnterTime() > obj2.getEnterTime()) ? 1
+                        : ((obj1.getEnterTime() == obj2.getEnterTime()) ? 0 : -1);
             }
             return (obj1.getUsedCount() > obj2.getUsedCount() ? 1 : -1);
         }

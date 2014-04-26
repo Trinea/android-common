@@ -24,8 +24,8 @@ public class RemoveTypeFileSmall implements CacheFullRemoveType<String> {
         long sizeOfFile2 = (obj2 == null ? -1 : FileUtils.getFileSize(obj2.getData()));
         if (sizeOfFile1 == sizeOfFile2) {
             if (obj1.getUsedCount() == obj2.getUsedCount()) {
-                return (obj1.getEnterTime() > obj2.getEnterTime()) ? 1 : ((obj1.getEnterTime() == obj2.getEnterTime())
-                    ? 0 : -1);
+                return (obj1.getEnterTime() > obj2.getEnterTime()) ? 1
+                        : ((obj1.getEnterTime() == obj2.getEnterTime()) ? 0 : -1);
             }
             return (obj1.getUsedCount() > obj2.getUsedCount() ? 1 : -1);
         }

@@ -57,9 +57,10 @@ public class HttpCache {
     private int                       type                 = -1;
 
     /** Default {@link Executor} that be used to execute tasks in parallel. **/
-    public static final Executor      THREAD_POOL_EXECUTOR = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
+    public static final Executor      THREAD_POOL_EXECUTOR = Executors
+                                                                   .newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
 
-    public HttpCache(Context context){
+    public HttpCache(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("The context can not be null.");
         }
@@ -74,7 +75,7 @@ public class HttpCache {
      * @param context
      * @param type get httpResponse whose type is type into memory as primary cache to improve performance
      */
-    private HttpCache(Context context, int type){
+    private HttpCache(Context context, int type) {
         this(context);
         this.type = type;
         initData(type);
@@ -135,7 +136,7 @@ public class HttpCache {
             cacheResponse = getFromCache(url);
         }
         return cacheResponse == null ? (isNoStore ? HttpUtils.httpGet(url) : putIntoCache(HttpUtils.httpGet(url)))
-            : cacheResponse;
+                : cacheResponse;
     }
 
     /**
@@ -148,7 +149,7 @@ public class HttpCache {
      * 
      * @param url
      * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
-     * something
+     *        something
      */
     public void httpGet(String url, HttpCacheListener listener) {
         new HttpCacheStringAsyncTask(listener).executeOnExecutor(THREAD_POOL_EXECUTOR, url);
@@ -164,7 +165,7 @@ public class HttpCache {
      * 
      * @param request
      * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
-     * something
+     *        something
      */
     public void httpGet(HttpRequest request, HttpCacheListener listener) {
         new HttpCacheRequestAsyncTask(listener).executeOnExecutor(THREAD_POOL_EXECUTOR, request);
@@ -260,8 +261,7 @@ public class HttpCache {
          * <li>this can be null if you not want to do something</li>
          * </ul>
          */
-        protected void onPreGet() {
-        }
+        protected void onPreGet() {}
 
         /**
          * Runs on the UI thread after httpGet. The httpResponse is returned by httpGet.
@@ -272,8 +272,7 @@ public class HttpCache {
          * @param httpResponse get by the url
          * @param isInCache the data responsed to the url whether is in cache
          */
-        protected void onPostGet(HttpResponse httpResponse, boolean isInCache) {
-        }
+        protected void onPostGet(HttpResponse httpResponse, boolean isInCache) {}
     }
 
     /**
@@ -312,9 +311,9 @@ public class HttpCache {
      * 
      * @param url
      * @return <ul>
-     * <li>if neither exit in memory cache nor db, return null</li>
-     * <li>if is expired, return null, otherwise return cache response</li>
-     * </ul>
+     *         <li>if neither exit in memory cache nor db, return null</li>
+     *         <li>if is expired, return null, otherwise return cache response</li>
+     *         </ul>
      */
     public HttpResponse getFromCache(String url) {
         if (StringUtils.isEmpty(url)) {
@@ -337,7 +336,7 @@ public class HttpCache {
 
         private HttpCacheListener listener;
 
-        public HttpCacheStringAsyncTask(HttpCacheListener listener){
+        public HttpCacheStringAsyncTask(HttpCacheListener listener) {
             this.listener = listener;
         }
 
@@ -370,7 +369,7 @@ public class HttpCache {
 
         private HttpCacheListener listener;
 
-        public HttpCacheRequestAsyncTask(HttpCacheListener listener){
+        public HttpCacheRequestAsyncTask(HttpCacheListener listener) {
             this.listener = listener;
         }
 

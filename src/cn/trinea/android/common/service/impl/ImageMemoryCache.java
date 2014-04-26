@@ -86,7 +86,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
     private static final int                     WHAT_GET_IMAGE_FAILED  = 2;
 
     /** thread pool whose wait for data got, attention, not the get data thread pool **/
-    private transient ExecutorService            threadPool             = Executors.newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
+    private transient ExecutorService            threadPool             = Executors
+                                                                                .newFixedThreadPool(SystemUtils.DEFAULT_THREAD_POOL_SIZE);
     /**
      * key is image url, value is the newest view which waiting for image loaded, used when {@link #isOpenWaitingQueue}
      * is false
@@ -116,8 +117,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
      * 
      * @param imageUrl
      * @param urlList url list, if is null, not preload, else preload forward by
-     * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
-     * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
+     *        {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
+     *        {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
      * @param view
      * @return whether image already in cache or not
      */
@@ -279,7 +280,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
      * 
      * @see PreloadDataCache#PreloadDataCache()
      */
-    public ImageMemoryCache(){
+    public ImageMemoryCache() {
         this(DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
@@ -295,7 +296,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
      * @param maxSize maximum size of the cache
      * @see PreloadDataCache#PreloadDataCache(int)
      */
-    public ImageMemoryCache(int maxSize){
+    public ImageMemoryCache(int maxSize) {
         this(maxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
@@ -312,7 +313,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
      * @param threadPoolSize getting data thread pool size
      * @see PreloadDataCache#PreloadDataCache(int, int)
      */
-    public ImageMemoryCache(int maxSize, int threadPoolSize){
+    public ImageMemoryCache(int maxSize, int threadPoolSize) {
         super(maxSize, threadPoolSize);
 
         super.setOnGetDataListener(getDefaultOnGetImageListener());
@@ -399,7 +400,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
             switch (message.what) {
                 case WHAT_GET_IMAGE_SUCCESS:
                 case WHAT_GET_IMAGE_FAILED:
-                    MessageObject object = (MessageObject)message.obj;
+                    MessageObject object = (MessageObject) message.obj;
                     if (object == null) {
                         break;
                     }
@@ -417,7 +418,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
                                                 onGetSuccess(imageUrl, bitmap, view, false);
                                             } else {
                                                 onImageCallbackListener.onGetFailed(imageUrl, bitmap, view,
-                                                                                    object.failedReason);
+                                                        object.failedReason);
                                             }
                                         }
                                     }
@@ -455,8 +456,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
         try {
             onImageCallbackListener.onGetSuccess(imageUrl, loadedImage, view, isInCache);
         } catch (OutOfMemoryError e) {
-            onImageCallbackListener.onGetFailed(imageUrl, loadedImage, view,
-                                                new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+            onImageCallbackListener.onGetFailed(imageUrl, loadedImage, view, new FailedReason(
+                    FailedType.ERROR_OUT_OF_MEMORY, e));
         }
     }
 
@@ -471,12 +472,12 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
         Bitmap       bitmap;
         FailedReason failedReason;
 
-        public MessageObject(String imageUrl, Bitmap bitmap){
+        public MessageObject(String imageUrl, Bitmap bitmap) {
             this.imageUrl = imageUrl;
             this.bitmap = bitmap;
         }
 
-        public MessageObject(String imageUrl, Bitmap bitmap, FailedReason failedReason){
+        public MessageObject(String imageUrl, Bitmap bitmap, FailedReason failedReason) {
             this.imageUrl = imageUrl;
             this.bitmap = bitmap;
             this.failedReason = failedReason;
@@ -489,8 +490,8 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
      * 
      * @param imageUrl
      * @param urlList url list, if is null, not preload, else preload forward by
-     * {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
-     * {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
+     *        {@link PreloadDataCache#preloadDataForward(Object, List, int)}, preload backward by
+     *        {@link PreloadDataCache#preloadDataBackward(Object, List, int)}
      */
     private void startGetImageThread(final String imageUrl, final List<String> urlList) {
         // wait for image be got success and send message
@@ -506,15 +507,15 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
                         remove(imageUrl);
                         String failedException = "get image from network or save image to sdcard error. please make sure you have added permission android.permission.WRITE_EXTERNAL_STORAGE and android.permission.ACCESS_NETWORK_STATE";
                         FailedReason failedReason = new FailedReason(FailedType.ERROR_IO, failedException);
-                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED,
-                                                                  new MessageObject(imageUrl, bitmap, failedReason)));
+                        handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, new MessageObject(imageUrl,
+                                bitmap, failedReason)));
                     } else {
                         handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_SUCCESS, new MessageObject(imageUrl,
-                                                                                                            bitmap)));
+                                bitmap)));
                     }
                 } catch (OutOfMemoryError e) {
-                    MessageObject msg = new MessageObject(imageUrl, null,
-                                                          new FailedReason(FailedType.ERROR_OUT_OF_MEMORY, e));
+                    MessageObject msg = new MessageObject(imageUrl, null, new FailedReason(
+                            FailedType.ERROR_OUT_OF_MEMORY, e));
                     handler.sendMessage(handler.obtainMessage(WHAT_GET_IMAGE_FAILED, msg));
                 }
             }
@@ -555,7 +556,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
             return 512;
         }
 
-        int mb = (int)(maxMemory / SizeUtils.MB_2_BYTE);
+        int mb = (int) (maxMemory / SizeUtils.MB_2_BYTE);
         return mb > 16 ? mb * 2 : 16;
     }
 }

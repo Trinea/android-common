@@ -19,7 +19,7 @@ public interface ImageSDCardCacheDao {
      * 
      * @param imageSDCardCache
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      */
     public boolean putIntoImageSDCardCache(ImageSDCardCache imageSDCardCache, String tag);

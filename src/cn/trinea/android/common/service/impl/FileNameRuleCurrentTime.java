@@ -24,7 +24,7 @@ public class FileNameRuleCurrentTime implements FileNameRule {
     /**
      * @param timeRule see {@link TimeRule}
      */
-    public FileNameRuleCurrentTime(TimeRule timeRule){
+    public FileNameRuleCurrentTime(TimeRule timeRule) {
         super();
         this.timeRule = timeRule;
     }
@@ -48,7 +48,7 @@ public class FileNameRuleCurrentTime implements FileNameRule {
                 break;
             case HOUR_OF_DAY_TO_MILLIS:
                 time = ((now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE)) * 60 + now.get(Calendar.SECOND))
-                       * 1000 + now.get(Calendar.MILLISECOND);
+                        * 1000 + now.get(Calendar.MILLISECOND);
                 break;
             case HOUR_OF_DAY_TO_SECONDS:
                 time = (now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE)) * 60 + now.get(Calendar.SECOND);
@@ -58,7 +58,7 @@ public class FileNameRuleCurrentTime implements FileNameRule {
                 break;
             case HOUR_TO_MILLIS:
                 time = ((now.get(Calendar.HOUR) * 60 + now.get(Calendar.MINUTE)) * 60 + now.get(Calendar.SECOND))
-                       * 1000 + now.get(Calendar.MILLISECOND);
+                        * 1000 + now.get(Calendar.MILLISECOND);
                 break;
             case MINUTE_TO_SECONDS:
                 time = now.get(Calendar.MINUTE) * 60 + now.get(Calendar.SECOND);
@@ -98,7 +98,6 @@ public class FileNameRuleCurrentTime implements FileNameRule {
      * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-7-6
      */
     public enum TimeRule {
-        YEAR, DAY_OF_MONTH, MILLISECOND, HOUR_OF_DAY_TO_MILLIS, HOUR_OF_DAY_TO_SECONDS, HOUR_OF_DAY_TO_MINUTES,
-        HOUR_TO_MILLIS, MINUTE_TO_SECONDS, TO_MILLIS, TO_SECONDS
+        YEAR, DAY_OF_MONTH, MILLISECOND, HOUR_OF_DAY_TO_MILLIS, HOUR_OF_DAY_TO_SECONDS, HOUR_OF_DAY_TO_MINUTES, HOUR_TO_MILLIS, MINUTE_TO_SECONDS, TO_MILLIS, TO_SECONDS
     }
 }

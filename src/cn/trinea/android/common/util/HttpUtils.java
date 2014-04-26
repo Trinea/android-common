@@ -79,7 +79,7 @@ public class HttpUtils {
             try {
                 HttpResponse response = new HttpResponse(request.getUrl());
                 // default gzip encode
-                con = (HttpURLConnection)url.openConnection();
+                con = (HttpURLConnection) url.openConnection();
                 setURLConnection(request, con);
                 input = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 StringBuilder sb = new StringBuilder();
@@ -157,7 +157,7 @@ public class HttpUtils {
      * 
      * @param url
      * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
-     * something
+     *        something
      */
     public static void httpGet(String url, HttpListener listener) {
         new HttpStringAsyncTask(listener).execute(url);
@@ -173,7 +173,7 @@ public class HttpUtils {
      * 
      * @param request
      * @param listener listener which can do something before or after HttpGet. this can be null if you not want to do
-     * something
+     *        something
      */
     public static void httpGet(HttpRequest request, HttpListener listener) {
         new HttpRequestAsyncTask(listener).execute(request);
@@ -202,7 +202,7 @@ public class HttpUtils {
             try {
                 HttpResponse response = new HttpResponse(request.getUrl());
                 // default gzip encode
-                con = (HttpURLConnection)url.openConnection();
+                con = (HttpURLConnection) url.openConnection();
                 setURLConnection(request, con);
                 con.setRequestMethod("POST");
                 con.setDoOutput(true);
@@ -270,7 +270,7 @@ public class HttpUtils {
      * 
      * @param httpUrl
      * @param parasMap paras map, key is para name, value is para value. will be transfrom to String by
-     * {@link HttpUtils#joinParas(Map)}
+     *        {@link HttpUtils#joinParas(Map)}
      * @return the content of the url, if null represents http error
      * @see HttpUtils#httpPost(HttpRequest)
      */
@@ -334,7 +334,7 @@ public class HttpUtils {
         StringBuilder paras = new StringBuilder();
         Iterator<Map.Entry<String, String>> ite = parasMap.entrySet().iterator();
         while (ite.hasNext()) {
-            Map.Entry<String, String> entry = (Map.Entry<String, String>)ite.next();
+            Map.Entry<String, String> entry = (Map.Entry<String, String>) ite.next();
             paras.append(entry.getKey()).append(EQUAL_SIGN).append(entry.getValue());
             if (ite.hasNext()) {
                 paras.append(PARAMETERS_SEPARATOR);
@@ -357,7 +357,7 @@ public class HttpUtils {
             Iterator<Map.Entry<String, String>> ite = parasMap.entrySet().iterator();
             try {
                 while (ite.hasNext()) {
-                    Map.Entry<String, String> entry = (Map.Entry<String, String>)ite.next();
+                    Map.Entry<String, String> entry = (Map.Entry<String, String>) ite.next();
                     paras.append(entry.getKey()).append(EQUAL_SIGN).append(StringUtils.utf8Encode(entry.getValue()));
                     if (ite.hasNext()) {
                         paras.append(PARAMETERS_SEPARATOR);
@@ -393,7 +393,7 @@ public class HttpUtils {
     }
 
     private static final SimpleDateFormat GMT_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z",
-                                                                            Locale.ENGLISH);
+                                                             Locale.ENGLISH);
 
     /**
      * parse gmt time to long
@@ -476,7 +476,7 @@ public class HttpUtils {
 
         private HttpListener listener;
 
-        public HttpStringAsyncTask(HttpListener listener){
+        public HttpStringAsyncTask(HttpListener listener) {
             this.listener = listener;
         }
 
@@ -509,7 +509,7 @@ public class HttpUtils {
 
         private HttpListener listener;
 
-        public HttpRequestAsyncTask(HttpListener listener){
+        public HttpRequestAsyncTask(HttpListener listener) {
             this.listener = listener;
         }
 
@@ -546,8 +546,7 @@ public class HttpUtils {
          * <li>this can be null if you not want to do something</li>
          * </ul>
          */
-        protected void onPreGet() {
-        }
+        protected void onPreGet() {}
 
         /**
          * Runs on the UI thread after httpGet. The httpResponse is returned by httpGet.
@@ -557,7 +556,6 @@ public class HttpUtils {
          * 
          * @param httpResponse get by the url
          */
-        protected void onPostGet(HttpResponse httpResponse) {
-        }
+        protected void onPostGet(HttpResponse httpResponse) {}
     }
 }

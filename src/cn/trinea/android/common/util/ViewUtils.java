@@ -122,7 +122,7 @@ public class ViewUtils {
             demo = Class.forName(CLASS_NAME_GRID_VIEW);
             Field field = demo.getDeclaredField(FIELD_NAME_VERTICAL_SPACING);
             field.setAccessible(true);
-            verticalSpacing = (Integer)field.get(view);
+            verticalSpacing = (Integer) field.get(view);
             return verticalSpacing;
         } catch (Exception e) {
             /**
@@ -212,7 +212,7 @@ public class ViewUtils {
      */
     public static void setSearchViewOnClickListener(View v, OnClickListener listener) {
         if (v instanceof ViewGroup) {
-            ViewGroup group = (ViewGroup)v;
+            ViewGroup group = (ViewGroup) v;
             int count = group.getChildCount();
             for (int i = 0; i < count; i++) {
                 View child = group.getChildAt(i);
@@ -221,7 +221,7 @@ public class ViewUtils {
                 }
 
                 if (child instanceof TextView) {
-                    TextView text = (TextView)child;
+                    TextView text = (TextView) child;
                     text.setFocusable(false);
                 }
                 child.setOnClickListener(listener);

@@ -97,8 +97,8 @@ public class StringUtils {
         }
 
         char c = str.charAt(0);
-        return (!Character.isLetter(c) || Character.isUpperCase(c)) ? str
-            : new StringBuilder(str.length()).append(Character.toUpperCase(c)).append(str.substring(1)).toString();
+        return (!Character.isLetter(c) || Character.isUpperCase(c)) ? str : new StringBuilder(str.length())
+                .append(Character.toUpperCase(c)).append(str.substring(1)).toString();
     }
 
     /**
@@ -164,10 +164,10 @@ public class StringUtils {
      * 
      * @param href
      * @return <ul>
-     * <li>if href is null, return ""</li>
-     * <li>if not match regx, return source</li>
-     * <li>return the last string that match regx</li>
-     * </ul>
+     *         <li>if href is null, return ""</li>
+     *         <li>if not match regx, return source</li>
+     *         <li>return the last string that match regx</li>
+     *         </ul>
      */
     public static String getHrefInnerHtml(String href) {
         if (isEmpty(href)) {
@@ -202,7 +202,7 @@ public class StringUtils {
      */
     public static String htmlEscapeCharsToString(String source) {
         return StringUtils.isEmpty(source) ? source : source.replaceAll("&lt;", "<").replaceAll("&gt;", ">")
-                                                            .replaceAll("&amp;", "&").replaceAll("&quot;", "\"");
+                .replaceAll("&amp;", "&").replaceAll("&quot;", "\"");
     }
 
     /**
@@ -230,7 +230,7 @@ public class StringUtils {
                 // } else if (source[i] == 12290) {
                 // source[i] = '.';
             } else if (source[i] >= 65281 && source[i] <= 65374) {
-                source[i] = (char)(source[i] - 65248);
+                source[i] = (char) (source[i] - 65248);
             } else {
                 source[i] = source[i];
             }
@@ -259,11 +259,11 @@ public class StringUtils {
         char[] source = s.toCharArray();
         for (int i = 0; i < source.length; i++) {
             if (source[i] == ' ') {
-                source[i] = (char)12288;
+                source[i] = (char) 12288;
                 // } else if (source[i] == '.') {
                 // source[i] = (char)12290;
             } else if (source[i] >= 33 && source[i] <= 126) {
-                source[i] = (char)(source[i] + 65248);
+                source[i] = (char) (source[i] + 65248);
             } else {
                 source[i] = source[i];
             }

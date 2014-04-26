@@ -33,14 +33,14 @@ public class HttpRequest {
     private Map<String, String> parasMap;
     private Map<String, String> requestProperties;
 
-    public HttpRequest(String url){
+    public HttpRequest(String url) {
         this.url = url;
         this.connectTimeout = -1;
         this.readTimeout = -1;
         requestProperties = new HashMap<String, String>();
     }
 
-    public HttpRequest(String url, Map<String, String> parasMap){
+    public HttpRequest(String url, Map<String, String> parasMap) {
         this.url = url;
         this.parasMap = parasMap;
         this.connectTimeout = -1;

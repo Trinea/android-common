@@ -116,18 +116,18 @@ public class DropDownListView extends ListView implements OnScrollListener {
     /** whether is on bottom loading **/
     private boolean            isOnBottomLoading       = false;
 
-    public DropDownListView(Context context){
+    public DropDownListView(Context context) {
         super(context);
         init(context);
     }
 
-    public DropDownListView(Context context, AttributeSet attrs){
+    public DropDownListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getAttrs(context, attrs);
         init(context);
     }
 
-    public DropDownListView(Context context, AttributeSet attrs, int defStyle){
+    public DropDownListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         getAttrs(context, attrs);
         init(context);
@@ -158,15 +158,15 @@ public class DropDownListView extends ListView implements OnScrollListener {
             return;
         }
 
-        headerReleaseMinDistance = context.getResources()
-                                          .getDimensionPixelSize(R.dimen.drop_down_list_header_release_min_distance);
+        headerReleaseMinDistance = context.getResources().getDimensionPixelSize(
+                R.dimen.drop_down_list_header_release_min_distance);
         flipAnimation = new RotateAnimation(0, 180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                                            RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         flipAnimation.setInterpolator(new LinearInterpolator());
         flipAnimation.setDuration(250);
         flipAnimation.setFillAfter(true);
         reverseFlipAnimation = new RotateAnimation(-180, 0, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                                                   RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         reverseFlipAnimation.setInterpolator(new LinearInterpolator());
         reverseFlipAnimation.setDuration(250);
         reverseFlipAnimation.setFillAfter(true);
@@ -176,12 +176,12 @@ public class DropDownListView extends ListView implements OnScrollListener {
         headerReleaseText = context.getString(R.string.drop_down_list_header_release_text);
         headerLoadingText = context.getString(R.string.drop_down_list_header_loading_text);
 
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        headerLayout = (RelativeLayout)inflater.inflate(R.layout.drop_down_list_header, this, false);
-        headerText = (TextView)headerLayout.findViewById(R.id.drop_down_list_header_default_text);
-        headerImage = (ImageView)headerLayout.findViewById(R.id.drop_down_list_header_image);
-        headerProgressBar = (ProgressBar)headerLayout.findViewById(R.id.drop_down_list_header_progress_bar);
-        headerSecondText = (TextView)headerLayout.findViewById(R.id.drop_down_list_header_second_text);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        headerLayout = (RelativeLayout) inflater.inflate(R.layout.drop_down_list_header, this, false);
+        headerText = (TextView) headerLayout.findViewById(R.id.drop_down_list_header_default_text);
+        headerImage = (ImageView) headerLayout.findViewById(R.id.drop_down_list_header_image);
+        headerProgressBar = (ProgressBar) headerLayout.findViewById(R.id.drop_down_list_header_progress_bar);
+        headerSecondText = (TextView) headerLayout.findViewById(R.id.drop_down_list_header_second_text);
         headerLayout.setClickable(true);
         headerLayout.setOnClickListener(new OnClickListener() {
 
@@ -219,13 +219,13 @@ public class DropDownListView extends ListView implements OnScrollListener {
         footerLoadingText = context.getString(R.string.drop_down_list_footer_loading_text);
         footerNoMoreText = context.getString(R.string.drop_down_list_footer_no_more_text);
 
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        footerLayout = (RelativeLayout)inflater.inflate(R.layout.drop_down_list_footer, this, false);
-        footerButton = (Button)footerLayout.findViewById(R.id.drop_down_list_footer_button);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footerLayout = (RelativeLayout) inflater.inflate(R.layout.drop_down_list_footer, this, false);
+        footerButton = (Button) footerLayout.findViewById(R.id.drop_down_list_footer_button);
         footerButton.setDrawingCacheBackgroundColor(0);
         footerButton.setEnabled(true);
 
-        footerProgressBar = (ProgressBar)footerLayout.findViewById(R.id.drop_down_list_footer_progress_bar);
+        footerProgressBar = (ProgressBar) footerLayout.findViewById(R.id.drop_down_list_footer_progress_bar);
         addFooterView(footerLayout);
     }
 
@@ -427,7 +427,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
                     setHeaderStatusClickToLoad();
                 }
             } else if (currentScrollState == SCROLL_STATE_FLING && firstVisibleItem == 0
-                       && currentHeaderStatus != HEADER_STATUS_LOADING) {
+                    && currentHeaderStatus != HEADER_STATUS_LOADING) {
                 /**
                  * when state of ListView is SCROLL_STATE_FLING(ListView is scrolling but finger has leave screen) and
                  * first item(header layout) is visible and header status is not HEADER_STATUS_LOADING, then hide first
@@ -897,10 +897,12 @@ public class DropDownListView extends ListView implements OnScrollListener {
         }
         for (int i = 0; i < pointerCount; i++) {
             if (currentHeaderStatus == HEADER_STATUS_DROP_DOWN_TO_LOAD
-                || currentHeaderStatus == HEADER_STATUS_RELEASE_TO_LOAD) {
-                headerLayout.setPadding(headerLayout.getPaddingLeft(),
-                                        (int)(((ev.getHistoricalY(i) - actionDownPointY) - headerOriginalHeight) / headerPaddingTopRate),
-                                        headerLayout.getPaddingRight(), headerLayout.getPaddingBottom());
+                    || currentHeaderStatus == HEADER_STATUS_RELEASE_TO_LOAD) {
+                headerLayout
+                        .setPadding(
+                                headerLayout.getPaddingLeft(),
+                                (int) (((ev.getHistoricalY(i) - actionDownPointY) - headerOriginalHeight) / headerPaddingTopRate),
+                                headerLayout.getPaddingRight(), headerLayout.getPaddingBottom());
             }
         }
     }
@@ -910,7 +912,7 @@ public class DropDownListView extends ListView implements OnScrollListener {
      */
     private void resetHeaderPadding() {
         headerLayout.setPadding(headerLayout.getPaddingLeft(), headerOriginalTopPadding,
-                                headerLayout.getPaddingRight(), headerLayout.getPaddingBottom());
+                headerLayout.getPaddingRight(), headerLayout.getPaddingBottom());
     }
 
     /**

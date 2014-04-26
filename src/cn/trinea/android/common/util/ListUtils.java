@@ -112,7 +112,7 @@ public class ListUtils {
      * @return join list to string. if list is empty, return ""
      */
     public static String join(List<String> list, char separator) {
-        return join(list, new String(new char[] { separator }));
+        return join(list, new String(new char[] {separator}));
     }
 
     /**
@@ -215,10 +215,10 @@ public class ListUtils {
      * @param sourceList
      * @param value
      * @return <ul>
-     * <li>if sourceList is null, return false</li>
-     * <li>if value is null, return false</li>
-     * <li>return {@link List#add(Object)}</li>
-     * </ul>
+     *         <li>if sourceList is null, return false</li>
+     *         <li>if value is null, return false</li>
+     *         <li>return {@link List#add(Object)}</li>
+     *         </ul>
      */
     public static <V> boolean addListNotNullValue(List<V> sourceList, V value) {
         return (sourceList != null && value != null) ? sourceList.add(value) : false;
@@ -229,7 +229,7 @@ public class ListUtils {
      */
     @SuppressWarnings("unchecked")
     public static <V> V getLast(List<V> sourceList, V value) {
-        return (sourceList == null) ? null : (V)ArrayUtils.getLast(sourceList.toArray(), value, true);
+        return (sourceList == null) ? null : (V) ArrayUtils.getLast(sourceList.toArray(), value, true);
     }
 
     /**
@@ -237,7 +237,7 @@ public class ListUtils {
      */
     @SuppressWarnings("unchecked")
     public static <V> V getNext(List<V> sourceList, V value) {
-        return (sourceList == null) ? null : (V)ArrayUtils.getNext(sourceList.toArray(), value, true);
+        return (sourceList == null) ? null : (V) ArrayUtils.getNext(sourceList.toArray(), value, true);
     }
 
     /**

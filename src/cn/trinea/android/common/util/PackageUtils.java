@@ -108,7 +108,7 @@ public class PackageUtils {
      * @param context
      * @param filePath file path of package
      * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success, other means failed. details see
-     * {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
+     *         {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
      * @see #installSilent(Context, String, String)
      */
     public static int installSilent(Context context, String filePath) {
@@ -128,7 +128,7 @@ public class PackageUtils {
      * @param filePath file path of package
      * @param pmParams pm install params
      * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success, other means failed. details see
-     * {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
+     *         {@link PackageUtils}.INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
      */
     public static int installSilent(Context context, String filePath, String pmParams) {
         if (filePath == null || filePath.length() == 0) {
@@ -145,17 +145,16 @@ public class PackageUtils {
          * android:name="android.permission.INSTALL_PACKAGES" /> in mainfest
          **/
         StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install ")
-                                                   .append(pmParams == null ? "" : pmParams).append(" ")
-                                                   .append(filePath.replace(" ", "\\ "));
+                .append(pmParams == null ? "" : pmParams).append(" ").append(filePath.replace(" ", "\\ "));
         CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
         if (commandResult.successMsg != null
-            && (commandResult.successMsg.contains("Success") || commandResult.successMsg.contains("success"))) {
+                && (commandResult.successMsg.contains("Success") || commandResult.successMsg.contains("success"))) {
             return INSTALL_SUCCEEDED;
         }
 
         Log.e(TAG,
-              new StringBuilder().append("installSilent successMsg:").append(commandResult.successMsg)
-                                 .append(", ErrorMsg:").append(commandResult.errorMsg).toString());
+                new StringBuilder().append("installSilent successMsg:").append(commandResult.successMsg)
+                        .append(", ErrorMsg:").append(commandResult.errorMsg).toString());
         if (commandResult.errorMsg == null) {
             return INSTALL_FAILED_OTHER;
         }
@@ -299,7 +298,7 @@ public class PackageUtils {
         }
 
         Intent i = new Intent(Intent.ACTION_DELETE, Uri.parse(new StringBuilder(32).append("package:")
-                                                                                   .append(packageName).toString()));
+                .append(packageName).toString()));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
         return true;
@@ -330,10 +329,10 @@ public class PackageUtils {
      * @param packageName package name of app
      * @param isKeepData whether keep the data and cache directories around after package removal
      * @return <ul>
-     * <li>{@link #DELETE_SUCCEEDED} means uninstall success</li>
-     * <li>{@link #DELETE_FAILED_INTERNAL_ERROR} means internal error</li>
-     * <li>{@link #DELETE_FAILED_INVALID_PACKAGE} means package name error</li>
-     * <li>{@link #DELETE_FAILED_PERMISSION_DENIED} means permission denied</li>
+     *         <li>{@link #DELETE_SUCCEEDED} means uninstall success</li>
+     *         <li>{@link #DELETE_FAILED_INTERNAL_ERROR} means internal error</li>
+     *         <li>{@link #DELETE_FAILED_INVALID_PACKAGE} means package name error</li>
+     *         <li>{@link #DELETE_FAILED_PERMISSION_DENIED} means permission denied</li>
      */
     public static int uninstallSilent(Context context, String packageName, boolean isKeepData) {
         if (packageName == null || packageName.length() == 0) {
@@ -345,16 +344,15 @@ public class PackageUtils {
          * android:name="android.permission.DELETE_PACKAGES" /> in mainfest
          **/
         StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm uninstall")
-                                                   .append(isKeepData ? " -k " : " ")
-                                                   .append(packageName.replace(" ", "\\ "));
+                .append(isKeepData ? " -k " : " ").append(packageName.replace(" ", "\\ "));
         CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
         if (commandResult.successMsg != null
-            && (commandResult.successMsg.contains("Success") || commandResult.successMsg.contains("success"))) {
+                && (commandResult.successMsg.contains("Success") || commandResult.successMsg.contains("success"))) {
             return DELETE_SUCCEEDED;
         }
         Log.e(TAG,
-              new StringBuilder().append("uninstallSilent successMsg:").append(commandResult.successMsg)
-                                 .append(", ErrorMsg:").append(commandResult.errorMsg).toString());
+                new StringBuilder().append("uninstallSilent successMsg:").append(commandResult.successMsg)
+                        .append(", ErrorMsg:").append(commandResult.errorMsg).toString());
         if (commandResult.errorMsg == null) {
             return DELETE_FAILED_INTERNAL_ERROR;
         }
@@ -399,12 +397,12 @@ public class PackageUtils {
      * @param packageManager
      * @param packageName
      * @return <ul>
-     * <li>if packageManager is null, return false</li>
-     * <li>if package name is null or is empty, return false</li>
-     * <li>if package name not exit, return false</li>
-     * <li>if package name exit, but not system app, return false</li>
-     * <li>else return true</li>
-     * </ul>
+     *         <li>if packageManager is null, return false</li>
+     *         <li>if package name is null or is empty, return false</li>
+     *         <li>if package name not exit, return false</li>
+     *         <li>if package name exit, but not system app, return false</li>
+     *         <li>else return true</li>
+     *         </ul>
      */
     public static boolean isSystemApplication(PackageManager packageManager, String packageName) {
         if (packageManager == null || packageName == null || packageName.length() == 0) {
@@ -430,14 +428,14 @@ public class PackageUtils {
      * @param context
      * @param packageName
      * @return if params error or task stack is null, return null, otherwise retun whether the app is on the top of
-     * stack
+     *         stack
      */
     public static Boolean isTopActivity(Context context, String packageName) {
         if (context == null || StringUtils.isEmpty(packageName)) {
             return null;
         }
 
-        ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
         if (ListUtils.isEmpty(tasksInfo)) {
             return null;
@@ -482,8 +480,8 @@ public class PackageUtils {
      * @see {@link IPackageManager#getInstallLocation()}
      */
     public static int getInstallLocation() {
-        CommandResult commandResult = ShellUtils.execCommand("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location",
-                                                             false, true);
+        CommandResult commandResult = ShellUtils.execCommand(
+                "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location", false, true);
         if (commandResult.result == 0 && commandResult.successMsg != null && commandResult.successMsg.length() > 0) {
             try {
                 int location = Integer.parseInt(commandResult.successMsg.substring(0, 1));

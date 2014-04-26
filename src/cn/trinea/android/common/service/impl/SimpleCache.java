@@ -80,7 +80,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * <li>Remove type is {@link RemoveTypeEnterTimeFirst} when cache is full</li>
      * </ul>
      */
-    public SimpleCache(){
+    public SimpleCache() {
         this(DEFAULT_MAX_SIZE);
     }
 
@@ -92,7 +92,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * 
      * @param maxSize maximum size of the cache
      */
-    public SimpleCache(int maxSize){
+    public SimpleCache(int maxSize) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("The maxSize of cache must be greater than 0.");
         }
@@ -125,7 +125,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * set valid time of elements in cache, in mills
      * 
      * @param validTime valid time of elements in cache, in mills. If less than 0, it will be set to -1 and means not
-     * invalid. Rule of invalid see {@link #isExpired(CacheObject)}
+     *        invalid. Rule of invalid see {@link #isExpired(CacheObject)}
      */
     public void setValidTime(long validTime) {
         this.validTime = validTime <= 0 ? -1 : validTime;
@@ -363,7 +363,8 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      */
     protected boolean isExpired(CacheObject<V> obj) {
         return validTime != -1
-               && (obj == null || (obj.isExpired() && !obj.isForever()) || (obj.getEnterTime() + validTime) < System.currentTimeMillis());
+                && (obj == null || (obj.isExpired() && !obj.isForever()) || (obj.getEnterTime() + validTime) < System
+                        .currentTimeMillis());
     }
 
     /**
@@ -388,7 +389,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
     @Override
     public synchronized double getHitRate() {
         long total = hitCount.get() + missCount.get();
-        return (total == 0 ? 0 : ((double)hitCount.get()) / total);
+        return (total == 0 ? 0 : ((double) hitCount.get()) / total);
     }
 
     /**
@@ -429,7 +430,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> SimpleCache<K, V> loadCache(String filePath) {
-        return (SimpleCache<K, V>)SerializeUtils.deserialization(filePath);
+        return (SimpleCache<K, V>) SerializeUtils.deserialization(filePath);
     }
 
     /**

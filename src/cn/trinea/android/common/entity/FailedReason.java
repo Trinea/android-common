@@ -10,12 +10,12 @@ public class FailedReason {
     private FailedType failedType;
     private Throwable  cause;
 
-    public FailedReason(FailedType failedType, String cause){
+    public FailedReason(FailedType failedType, String cause) {
         this.failedType = failedType;
         this.cause = new Throwable(cause);
     }
 
-    public FailedReason(FailedType failedType, Throwable cause){
+    public FailedReason(FailedType failedType, Throwable cause) {
         this.failedType = failedType;
         this.cause = cause;
     }

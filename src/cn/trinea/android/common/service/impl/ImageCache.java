@@ -68,13 +68,12 @@ public class ImageCache extends ImageMemoryCache {
     private CompressListener   compressListener;
 
     /** cache folder path which be used when saving images **/
-    public static final String DEFAULT_CACHE_FOLDER = new StringBuilder().append(Environment.getExternalStorageDirectory()
-                                                                                            .getAbsolutePath())
-                                                                         .append(File.separator).append("Trinea")
-                                                                         .append(File.separator)
-                                                                         .append("AndroidCommon")
-                                                                         .append(File.separator).append("ImageCache")
-                                                                         .toString();
+    public static final String DEFAULT_CACHE_FOLDER = new StringBuilder()
+                                                            .append(Environment.getExternalStorageDirectory()
+                                                                    .getAbsolutePath()).append(File.separator)
+                                                            .append("Trinea").append(File.separator)
+                                                            .append("AndroidCommon").append(File.separator)
+                                                            .append("ImageCache").toString();
 
     /**
      * <ul>
@@ -86,9 +85,9 @@ public class ImageCache extends ImageMemoryCache {
      * 
      * @see {@link #ImageCache(int, int, int, int)}
      */
-    public ImageCache(){
+    public ImageCache() {
         this(ImageMemoryCache.DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE,
-             ImageSDCardCache.DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
+                ImageSDCardCache.DEFAULT_MAX_SIZE, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
     /**
@@ -102,9 +101,9 @@ public class ImageCache extends ImageMemoryCache {
      * @param secondaryCacheMaxSize
      * @see {@link #ImageCache(int, int, int, int)}
      */
-    public ImageCache(int primaryCacheMaxSize){
+    public ImageCache(int primaryCacheMaxSize) {
         this(primaryCacheMaxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE, ImageSDCardCache.DEFAULT_MAX_SIZE,
-             PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
+                PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
     /**
@@ -114,9 +113,9 @@ public class ImageCache extends ImageMemoryCache {
      * @param secondaryCacheMaxSize
      * @see {@link #ImageCache(int, int, int, int)}
      */
-    public ImageCache(int primaryCacheMaxSize, int secondaryCacheMaxSize){
+    public ImageCache(int primaryCacheMaxSize, int secondaryCacheMaxSize) {
         this(primaryCacheMaxSize, PreloadDataCache.DEFAULT_THREAD_POOL_SIZE, secondaryCacheMaxSize,
-             PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
+                PreloadDataCache.DEFAULT_THREAD_POOL_SIZE);
     }
 
     /**
@@ -138,7 +137,7 @@ public class ImageCache extends ImageMemoryCache {
      * @param secondaryCacheThreadPoolSize getting data thread pool size of the secondary cache
      */
     public ImageCache(int primaryCacheMaxSize, int primaryCacheThreadPoolSize, int secondaryCacheMaxSize,
-                      int secondaryCacheThreadPoolSize){
+            int secondaryCacheThreadPoolSize) {
         super(primaryCacheMaxSize, primaryCacheThreadPoolSize);
 
         setOnGetDataListener(new OnGetDataListener<String, Bitmap>() {
@@ -239,11 +238,12 @@ public class ImageCache extends ImageMemoryCache {
          * 
          * @param imagePath
          * @return return compressSize, If > 1, requests the decoder to subsample the original image, returning a
-         * smaller image to save memory. The sample size is the number of pixels in either dimension that correspond to
-         * a single pixel in the decoded bitmap. For example, inSampleSize == 4 returns an image that is 1/4 the
-         * width/height of the original, and 1/16 the number of pixels. Any value <= 1 is treated the same as 1. Note:
-         * the decoder will try to fulfill this request, but the resulting bitmap may have different dimensions that
-         * precisely what has been requested. Also, powers of 2 are often faster/easier for the decoder to honor.
+         *         smaller image to save memory. The sample size is the number of pixels in either dimension that
+         *         correspond to a single pixel in the decoded bitmap. For example, inSampleSize == 4 returns an image
+         *         that is 1/4 the width/height of the original, and 1/16 the number of pixels. Any value <= 1 is
+         *         treated the same as 1. Note: the decoder will try to fulfill this request, but the resulting bitmap
+         *         may have different dimensions that precisely what has been requested. Also, powers of 2 are often
+         *         faster/easier for the decoder to honor.
          */
         public int getCompressSize(String imagePath);
     }
@@ -434,7 +434,7 @@ public class ImageCache extends ImageMemoryCache {
      * 
      * @param context
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      * @see ImageSDCardCache#loadDataFromDb(Context, ImageSDCardCache, String)
      */
@@ -454,7 +454,7 @@ public class ImageCache extends ImageMemoryCache {
      * 
      * @param context
      * @param tag tag used to mark this cache when save to and load from db, should be unique and cannot be null or
-     * empty
+     *        empty
      * @return
      * @see ImageSDCardCache#saveDataToDb(Context, ImageSDCardCache, String)
      */

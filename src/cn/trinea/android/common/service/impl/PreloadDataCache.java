@@ -101,8 +101,8 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * 
      * @param key
      * @param keyList key list, if is null, not preload, else preload forward by
-     * {@link #preloadDataForward(Object, List, int)}, preload backward by
-     * {@link #preloadDataBackward(Object, List, int)}
+     *        {@link #preloadDataForward(Object, List, int)}, preload backward by
+     *        {@link #preloadDataBackward(Object, List, int)}
      * @return element if this cache contains the specified key, else get data realtime and wait for it
      * @see PreloadDataCache#get(Object)
      */
@@ -175,8 +175,8 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * 
      * @param key
      * @param keyList key list, if is null, not preload, else preload forward by
-     * {@link #preloadDataForward(Object, List, int)}, preload backward by
-     * {@link #preloadDataBackward(Object, List, int)}
+     *        {@link #preloadDataForward(Object, List, int)}, preload backward by
+     *        {@link #preloadDataBackward(Object, List, int)}
      * @return element if this cache contains the specified key, null otherwise.
      * @see #getFromCache(Object)
      */
@@ -317,7 +317,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * <li>Size of getting data thread pool is {@link #DEFAULT_THREAD_POOL_SIZE}</li>
      * </ul>
      */
-    public PreloadDataCache(){
+    public PreloadDataCache() {
         this(DEFAULT_MAX_SIZE, DEFAULT_THREAD_POOL_SIZE);
     }
 
@@ -330,7 +330,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * 
      * @param maxSize maximum size of the cache
      */
-    public PreloadDataCache(int maxSize){
+    public PreloadDataCache(int maxSize) {
         this(maxSize, DEFAULT_THREAD_POOL_SIZE);
     }
 
@@ -343,7 +343,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * @param maxSize maximum size of the cache
      * @param threadPoolSize getting data thread pool size
      */
-    public PreloadDataCache(int maxSize, int threadPoolSize){
+    public PreloadDataCache(int maxSize, int threadPoolSize) {
         super(maxSize);
 
         if (threadPoolSize <= 0) {
@@ -464,15 +464,15 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      * 
      * @param networkType a constant from ConnectivityManager.TYPE_*.
      * @return one of the NETWORK_* constants
-     * <ul>
-     * <li>if {@link #getContext()} is null, return true</li>
-     * <li>if network is not avaliable, return false</li>
-     * <li>if {@link #getAllowedNetworkTypes()} is not match network, return false</li>
-     * </ul>
+     *         <ul>
+     *         <li>if {@link #getContext()} is null, return true</li>
+     *         <li>if network is not avaliable, return false</li>
+     *         <li>if {@link #getAllowedNetworkTypes()} is not match network, return false</li>
+     *         </ul>
      */
     public boolean checkIsNetworkTypeAllowed() {
         if (connectivityManager == null && context != null) {
-            connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         }
 
         if (connectivityManager == null) {
@@ -481,7 +481,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
 
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null
-               && (allowedNetworkTypes == ~0 || (translateNetworkTypeToApiFlag(networkInfo.getType()) & allowedNetworkTypes) != 0);
+                && (allowedNetworkTypes == ~0 || (translateNetworkTypeToApiFlag(networkInfo.getType()) & allowedNetworkTypes) != 0);
     }
 
     /**
@@ -508,7 +508,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> PreloadDataCache<K, V> loadCache(String filePath) {
-        return (PreloadDataCache<K, V>)SerializeUtils.deserialization(filePath);
+        return (PreloadDataCache<K, V>) SerializeUtils.deserialization(filePath);
     }
 
     /**
@@ -558,7 +558,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
          * @param key
          * @param onGetDataListener
          */
-        public GetDataThread(K key, OnGetDataListener<K, V> onGetDataListener){
+        public GetDataThread(K key, OnGetDataListener<K, V> onGetDataListener) {
             this.key = key;
             this.onGetDataListener = onGetDataListener;
             finishGetDataLock = new CountDownLatch(1);

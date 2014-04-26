@@ -24,7 +24,7 @@ public class AssetDatabaseOpenHelper {
     private Context context;
     private String  databaseName;
 
-    public AssetDatabaseOpenHelper(Context context, String databaseName){
+    public AssetDatabaseOpenHelper(Context context, String databaseName) {
         this.context = context;
         this.databaseName = databaseName;
     }

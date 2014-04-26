@@ -12,7 +12,7 @@ import cn.trinea.android.common.constant.DbConstants;
  */
 public class DbHelper extends SQLiteOpenHelper {
 
-    public DbHelper(Context context){
+    public DbHelper(Context context) {
         super(context, DbConstants.DB_NAME, null, DbConstants.DB_VERSION);
     }
 
@@ -33,6 +33,5 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 }

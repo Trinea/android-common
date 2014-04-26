@@ -13,9 +13,9 @@ public class ObjectUtils {
      * @param actual
      * @param expected
      * @return <ul>
-     * <li>if both are null, return true</li>
-     * <li>return actual.{@link Object#equals(Object)}</li>
-     * </ul>
+     *         <li>if both are null, return true</li>
+     *         <li>return actual.{@link Object#equals(Object)}</li>
+     *         </ul>
      */
     public static boolean isEquals(Object actual, Object expected) {
         return actual == expected || (actual == null ? expected == null : actual.equals(expected));
@@ -97,8 +97,8 @@ public class ObjectUtils {
      * @param v2
      * @return
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <V> int compare(V v1, V v2) {
-        return v1 == null ? (v2 == null ? 0 : -1) : (v2 == null ? 1 : ((Comparable)v1).compareTo(v2));
+        return v1 == null ? (v2 == null ? 0 : -1) : (v2 == null ? 1 : ((Comparable) v1).compareTo(v2));
     }
 }
