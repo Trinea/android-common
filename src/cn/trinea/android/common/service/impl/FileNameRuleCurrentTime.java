@@ -98,6 +98,7 @@ public class FileNameRuleCurrentTime implements FileNameRule {
      * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2012-7-6
      */
     public enum TimeRule {
-        YEAR, DAY_OF_MONTH, MILLISECOND, HOUR_OF_DAY_TO_MILLIS, HOUR_OF_DAY_TO_SECONDS, HOUR_OF_DAY_TO_MINUTES, HOUR_TO_MILLIS, MINUTE_TO_SECONDS, TO_MILLIS, TO_SECONDS
+        YEAR, DAY_OF_MONTH, MILLISECOND, HOUR_OF_DAY_TO_MILLIS, HOUR_OF_DAY_TO_SECONDS, HOUR_OF_DAY_TO_MINUTES,
+        HOUR_TO_MILLIS, MINUTE_TO_SECONDS, TO_MILLIS, TO_SECONDS
     }
 }
