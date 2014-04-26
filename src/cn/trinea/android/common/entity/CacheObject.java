@@ -200,7 +200,7 @@ public class CacheObject<V> implements Serializable, Comparable<CacheObject<V>> 
             return false;
         }
 
-        CacheObject<V> obj = (CacheObject<V>) (o);
+        CacheObject<V> obj = (CacheObject<V>)(o);
         return (ObjectUtils.isEquals(this.data, obj.data) && this.enterTime == obj.enterTime
                 && this.priority == obj.priority && this.isExpired == obj.isExpired && this.isForever == obj.isForever);
     }

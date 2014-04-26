@@ -472,7 +472,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      */
     public boolean checkIsNetworkTypeAllowed() {
         if (connectivityManager == null && context != null) {
-            connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         }
 
         if (connectivityManager == null) {
@@ -508,7 +508,7 @@ public class PreloadDataCache<K, V> extends SimpleCache<K, V> {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> PreloadDataCache<K, V> loadCache(String filePath) {
-        return (PreloadDataCache<K, V>) SerializeUtils.deserialization(filePath);
+        return (PreloadDataCache<K, V>)SerializeUtils.deserialization(filePath);
     }
 
     /**

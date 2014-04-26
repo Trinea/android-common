@@ -99,7 +99,7 @@ public class ParcelUtils {
         Map<String, V> map = new HashMap<String, V>();
         for (int i = 0; i < size; i++) {
             String key = in.readString();
-            map.put(key, (V) in.readParcelable(loader));
+            map.put(key, (V)in.readParcelable(loader));
         }
         return map;
     }
@@ -145,7 +145,7 @@ public class ParcelUtils {
 
         Map<K, V> map = new HashMap<K, V>();
         for (int i = 0; i < size; i++) {
-            map.put((K) in.readParcelable(loader), (V) in.readParcelable(loader));
+            map.put((K)in.readParcelable(loader), (V)in.readParcelable(loader));
         }
         return map;
     }

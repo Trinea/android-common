@@ -230,7 +230,7 @@ public class StringUtils {
                 // } else if (source[i] == 12290) {
                 // source[i] = '.';
             } else if (source[i] >= 65281 && source[i] <= 65374) {
-                source[i] = (char) (source[i] - 65248);
+                source[i] = (char)(source[i] - 65248);
             } else {
                 source[i] = source[i];
             }
@@ -259,11 +259,11 @@ public class StringUtils {
         char[] source = s.toCharArray();
         for (int i = 0; i < source.length; i++) {
             if (source[i] == ' ') {
-                source[i] = (char) 12288;
+                source[i] = (char)12288;
                 // } else if (source[i] == '.') {
                 // source[i] = (char)12290;
             } else if (source[i] >= 33 && source[i] <= 126) {
-                source[i] = (char) (source[i] + 65248);
+                source[i] = (char)(source[i] + 65248);
             } else {
                 source[i] = source[i];
             }

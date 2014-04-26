@@ -29,10 +29,10 @@ public class ScreenUtils {
     }
 
     public static float dpToPxInt(Context context, float dp) {
-        return (int) (dpToPx(context, dp) + 0.5f);
+        return (int)(dpToPx(context, dp) + 0.5f);
     }
 
     public static float pxToDpCeilInt(Context context, float px) {
-        return (int) (pxToDp(context, px) + 0.5f);
+        return (int)(pxToDp(context, px) + 0.5f);
     }
 }

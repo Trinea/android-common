@@ -127,7 +127,7 @@ public class DownloadManagerPro {
         }
 
         try {
-            return ((Integer) pauseDownload.invoke(downloadManager, ids)).intValue();
+            return ((Integer)pauseDownload.invoke(downloadManager, ids)).intValue();
         } catch (Exception e) {
             /**
              * accept all exception, include ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
@@ -151,7 +151,7 @@ public class DownloadManagerPro {
         }
 
         try {
-            return ((Integer) resumeDownload.invoke(downloadManager, ids)).intValue();
+            return ((Integer)resumeDownload.invoke(downloadManager, ids)).intValue();
         } catch (Exception e) {
             /**
              * accept all exception, include ClassNotFoundException, NoSuchMethodException, InvocationTargetException,

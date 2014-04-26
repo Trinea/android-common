@@ -81,7 +81,7 @@ public class JSONUtils {
      * @see JSONUtils#getLong(JSONObject, String, Long)
      */
     public static long getLong(JSONObject jsonObject, String key, long defaultValue) {
-        return getLong(jsonObject, key, (Long) defaultValue);
+        return getLong(jsonObject, key, (Long)defaultValue);
     }
 
     /**
@@ -92,7 +92,7 @@ public class JSONUtils {
      * @see JSONUtils#getLong(String, String, Long)
      */
     public static long getLong(String jsonData, String key, long defaultValue) {
-        return getLong(jsonData, key, (Long) defaultValue);
+        return getLong(jsonData, key, (Long)defaultValue);
     }
 
     /**
@@ -159,7 +159,7 @@ public class JSONUtils {
      * @see JSONUtils#getInt(JSONObject, String, Integer)
      */
     public static int getInt(JSONObject jsonObject, String key, int defaultValue) {
-        return getInt(jsonObject, key, (Integer) defaultValue);
+        return getInt(jsonObject, key, (Integer)defaultValue);
     }
 
     /**
@@ -170,7 +170,7 @@ public class JSONUtils {
      * @see JSONUtils#getInt(String, String, Integer)
      */
     public static int getInt(String jsonData, String key, int defaultValue) {
-        return getInt(jsonData, key, (Integer) defaultValue);
+        return getInt(jsonData, key, (Integer)defaultValue);
     }
 
     /**
@@ -237,7 +237,7 @@ public class JSONUtils {
      * @see JSONUtils#getDouble(JSONObject, String, Double)
      */
     public static double getDouble(JSONObject jsonObject, String key, double defaultValue) {
-        return getDouble(jsonObject, key, (Double) defaultValue);
+        return getDouble(jsonObject, key, (Double)defaultValue);
     }
 
     /**
@@ -248,7 +248,7 @@ public class JSONUtils {
      * @see JSONUtils#getDouble(String, String, Double)
      */
     public static double getDouble(String jsonData, String key, double defaultValue) {
-        return getDouble(jsonData, key, (Double) defaultValue);
+        return getDouble(jsonData, key, (Double)defaultValue);
     }
 
     /**
@@ -602,7 +602,7 @@ public class JSONUtils {
 
         Map<String, String> keyAndValueMap = new HashMap<String, String>();
         for (Iterator iter = sourceObj.keys(); iter.hasNext();) {
-            String key = (String) iter.next();
+            String key = (String)iter.next();
             MapUtils.putMapNotEmptyKey(keyAndValueMap, key, getString(sourceObj, key, ""));
 
         }

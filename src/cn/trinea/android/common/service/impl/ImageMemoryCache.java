@@ -400,7 +400,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
             switch (message.what) {
                 case WHAT_GET_IMAGE_SUCCESS:
                 case WHAT_GET_IMAGE_FAILED:
-                    MessageObject object = (MessageObject) message.obj;
+                    MessageObject object = (MessageObject)message.obj;
                     if (object == null) {
                         break;
                     }
@@ -556,7 +556,7 @@ public class ImageMemoryCache extends PreloadDataCache<String, Bitmap> {
             return 512;
         }
 
-        int mb = (int) (maxMemory / SizeUtils.MB_2_BYTE);
+        int mb = (int)(maxMemory / SizeUtils.MB_2_BYTE);
         return mb > 16 ? mb * 2 : 16;
     }
 }

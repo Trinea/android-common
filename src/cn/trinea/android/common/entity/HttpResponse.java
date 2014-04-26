@@ -217,7 +217,7 @@ public class HttpResponse {
      */
     public String getExpiresHeader() {
         try {
-            return responseHeaders == null ? null : (String) responseHeaders.get(HttpConstants.EXPIRES);
+            return responseHeaders == null ? null : (String)responseHeaders.get(HttpConstants.EXPIRES);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -231,7 +231,7 @@ public class HttpResponse {
      */
     private int getCacheControlMaxAge() {
         try {
-            String cacheControl = (String) responseHeaders.get(HttpConstants.CACHE_CONTROL);
+            String cacheControl = (String)responseHeaders.get(HttpConstants.CACHE_CONTROL);
             if (!StringUtils.isEmpty(cacheControl)) {
                 int start = cacheControl.indexOf("max-age=");
                 if (start != -1) {

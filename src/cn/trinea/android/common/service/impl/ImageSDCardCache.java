@@ -470,7 +470,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             switch (message.what) {
                 case WHAT_GET_IMAGE_SUCCESS:
                 case WHAT_GET_IMAGE_FAILED:
-                    MessageObject object = (MessageObject) message.obj;
+                    MessageObject object = (MessageObject)message.obj;
                     if (object == null) {
                         break;
                     }
@@ -861,7 +861,7 @@ public class ImageSDCardCache extends PreloadDataCache<String, String> {
             return 256;
         }
 
-        int mb = (int) (maxMemory / SizeUtils.MB_2_BYTE);
+        int mb = (int)(maxMemory / SizeUtils.MB_2_BYTE);
         return mb > 8 ? mb : 8;
     }
 }

@@ -70,7 +70,7 @@ public class ImageCacheManager {
             @Override
             public void onGetSuccess(String imageUrl, Bitmap loadedImage, View view, boolean isInCache) {
                 if (view != null && loadedImage != null) {
-                    ImageView imageView = (ImageView) view;
+                    ImageView imageView = (ImageView)view;
                     imageView.setImageBitmap(loadedImage);
                     // first time show with animation
                     if (!isInCache) {
@@ -109,7 +109,7 @@ public class ImageCacheManager {
 
             @Override
             public void onGetSuccess(String imageUrl, String imagePath, View view, boolean isInCache) {
-                ImageView imageView = (ImageView) view;
+                ImageView imageView = (ImageView)view;
 
                 // if oom please use BitmapFactory.decodeFile(imagePath, option)
                 Bitmap bm = BitmapFactory.decodeFile(imagePath);

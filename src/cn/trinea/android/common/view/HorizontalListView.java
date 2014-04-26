@@ -290,7 +290,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
     protected boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         synchronized (HorizontalListView.this) {
-            mScroller.fling(mNextX, 0, (int) -velocityX, 0, 0, mMaxX, 0, 0);
+            mScroller.fling(mNextX, 0, (int)-velocityX, 0, 0, mMaxX, 0, 0);
         }
         requestLayout();
 
@@ -320,7 +320,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                                                      float distanceY) {
 
                                                  synchronized (HorizontalListView.this) {
-                                                     mNextX += (int) distanceX;
+                                                     mNextX += (int)distanceX;
                                                  }
                                                  requestLayout();
 
@@ -376,7 +376,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                                                  int top = childPosition[1];
                                                  int bottom = top + child.getHeight();
                                                  viewRect.set(left, top, right, bottom);
-                                                 return viewRect.contains((int) e.getRawX(), (int) e.getRawY());
+                                                 return viewRect.contains((int)e.getRawX(), (int)e.getRawY());
                                              }
                                          };
 

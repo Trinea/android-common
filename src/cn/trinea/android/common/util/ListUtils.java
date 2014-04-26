@@ -229,7 +229,7 @@ public class ListUtils {
      */
     @SuppressWarnings("unchecked")
     public static <V> V getLast(List<V> sourceList, V value) {
-        return (sourceList == null) ? null : (V) ArrayUtils.getLast(sourceList.toArray(), value, true);
+        return (sourceList == null) ? null : (V)ArrayUtils.getLast(sourceList.toArray(), value, true);
     }
 
     /**
@@ -237,7 +237,7 @@ public class ListUtils {
      */
     @SuppressWarnings("unchecked")
     public static <V> V getNext(List<V> sourceList, V value) {
-        return (sourceList == null) ? null : (V) ArrayUtils.getNext(sourceList.toArray(), value, true);
+        return (sourceList == null) ? null : (V)ArrayUtils.getNext(sourceList.toArray(), value, true);
     }
 
     /**

@@ -389,7 +389,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
     @Override
     public synchronized double getHitRate() {
         long total = hitCount.get() + missCount.get();
-        return (total == 0 ? 0 : ((double) hitCount.get()) / total);
+        return (total == 0 ? 0 : ((double)hitCount.get()) / total);
     }
 
     /**
@@ -430,7 +430,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> SimpleCache<K, V> loadCache(String filePath) {
-        return (SimpleCache<K, V>) SerializeUtils.deserialization(filePath);
+        return (SimpleCache<K, V>)SerializeUtils.deserialization(filePath);
     }
 
     /**

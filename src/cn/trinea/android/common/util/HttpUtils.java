@@ -79,7 +79,7 @@ public class HttpUtils {
             try {
                 HttpResponse response = new HttpResponse(request.getUrl());
                 // default gzip encode
-                con = (HttpURLConnection) url.openConnection();
+                con = (HttpURLConnection)url.openConnection();
                 setURLConnection(request, con);
                 input = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 StringBuilder sb = new StringBuilder();
@@ -202,7 +202,7 @@ public class HttpUtils {
             try {
                 HttpResponse response = new HttpResponse(request.getUrl());
                 // default gzip encode
-                con = (HttpURLConnection) url.openConnection();
+                con = (HttpURLConnection)url.openConnection();
                 setURLConnection(request, con);
                 con.setRequestMethod("POST");
                 con.setDoOutput(true);
@@ -334,7 +334,7 @@ public class HttpUtils {
         StringBuilder paras = new StringBuilder();
         Iterator<Map.Entry<String, String>> ite = parasMap.entrySet().iterator();
         while (ite.hasNext()) {
-            Map.Entry<String, String> entry = (Map.Entry<String, String>) ite.next();
+            Map.Entry<String, String> entry = (Map.Entry<String, String>)ite.next();
             paras.append(entry.getKey()).append(EQUAL_SIGN).append(entry.getValue());
             if (ite.hasNext()) {
                 paras.append(PARAMETERS_SEPARATOR);
@@ -357,7 +357,7 @@ public class HttpUtils {
             Iterator<Map.Entry<String, String>> ite = parasMap.entrySet().iterator();
             try {
                 while (ite.hasNext()) {
-                    Map.Entry<String, String> entry = (Map.Entry<String, String>) ite.next();
+                    Map.Entry<String, String> entry = (Map.Entry<String, String>)ite.next();
                     paras.append(entry.getKey()).append(EQUAL_SIGN).append(StringUtils.utf8Encode(entry.getValue()));
                     if (ite.hasNext()) {
                         paras.append(PARAMETERS_SEPARATOR);
