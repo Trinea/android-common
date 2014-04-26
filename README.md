@@ -12,7 +12,8 @@ Api Guide：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_a
     <a href="http://as.baidu.com/a/item?docid=5499464" target="_blank" title="从Baidu手机助手下载"><img src="http://farm3.staticflickr.com/2826/11928623406_b9e8d39bd7_o.png" title="从Baidu手机助手下载"/></a>
     <a href="http://zhushou.360.cn/detail/index/soft_id/994107" target="_blank" title="从360手机助手下载"><img src="http://farm4.staticflickr.com/3775/11983355756_f8548f4c17_o.png" title="从360手机助手下载"/></a>
     <a href="http://app.xiaomi.com/detail/54761" target="_blank" title="从小米应用商店下载"><img src="http://farm8.staticflickr.com/7380/11982503045_b0538df5f5_o.png" title="从小米应用商店下载"/></a>
-    <a href="http://trinea.github.com/apk/trinea-android-demo.apk" target="_blank" title="二维码扫描下载"><img src="https://farm6.staticflickr.com/5515/14014260712_e5a3b206ba_o.png" title="二维码扫描下载"/></a>  
+    <a href="http://trinea.github.com/apk/trinea-android-demo.apk" target="_blank" title="二维码扫描下载"><img src="https://farm6.staticflickr.com/5515/14014260712_e5a3b206ba_o.png" title="二维码扫描下载"/></a>
+    <a href="http://trinea.github.com/apk/trinea-android-demo.apk" target="_blank" title="点击下载到本地">本地下载</a>  
 ####一. 缓存类
 主要特性：(1).使用简单 (2).轻松获取及预取取新图片 (3).包含二级缓存 (4).可选择多种缓存算法(FIFO、LIFO、LRU、MRU、LFU、MFU等13种)或自定义缓存算法 (5).可方便的保存及初始化恢复数据 (6).省流量性能佳(有且仅有一个线程获取图片) (7).支持http请求header设置及不同类型网络处理(8).可根据系统配置初始化缓存 (9).扩展性强 (10).支持等待队列 (11)包含map的大多数接口。
 #####1. 图片缓存
@@ -99,8 +100,4 @@ Api Guide：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_a
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Trinea/androidcommon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")  
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/0e64e2f00112f86af822e39ce45bca31 "githalytics.com")](http://githalytics.com/Trinea/AndroidCommon)
 
