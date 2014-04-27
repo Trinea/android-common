@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build.VERSION;
 import cn.trinea.android.common.constant.HttpConstants;
 import cn.trinea.android.common.dao.HttpCacheDao;
 import cn.trinea.android.common.dao.impl.HttpCacheDaoImpl;
@@ -152,7 +153,12 @@ public class HttpCache {
      *        something
      */
     public void httpGet(String url, HttpCacheListener listener) {
-        new HttpCacheStringAsyncTask(listener).executeOnExecutor(THREAD_POOL_EXECUTOR, url);
+        // if bigger than android 4.0 use executeOnExecutor, else use execute
+        if (VERSION.SDK_INT >= 14) {
+            new HttpCacheStringAsyncTask(listener).executeOnExecutor(THREAD_POOL_EXECUTOR, url);
+        } else {
+            new HttpCacheStringAsyncTask(listener).execute(url);
+        }
     }
 
     /**
