@@ -7,11 +7,19 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.trinea.android.common</groupId>
     <artifactId>trinea-android-common</artifactId>
-    <version>4.2.10-SNAPSHOT</version>
-    <packaging>apklib</packaging>
+    <packaging>pom</packaging>
 
-    <url>https://github.com/Trinea/android-common</url>
     <name>Trinea Android Common Library</name>
+    <version>4.2.10-SNAPSHOT</version>
+    <url>https://github.com/Trinea/android-common</url>
+    <description>Android common lib, include ImageCache, HttpCache, DropDownListView, DownloadManager, Utils and so on</description>
+    <inceptionYear>2012</inceptionYear>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <licenses>
         <license>
@@ -21,13 +29,10 @@
         </license>
     </licenses>
     <scm>
-        <url>http://svn.apache.org/viewcvs.cgi/maven</url>
-        <connection>http://svn.apache.org/viewcvs.cgi/maven</connection>
+        <connection>scm:git:git://github.com/Trinea/android-common.git</connection>
+        <developerConnection>scm:git:git@github.com:Trinea/android-common.git</developerConnection>
+        <url>https://github.com/Trinea/android-common</url>
     </scm>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <developers>
         <developer>
@@ -36,6 +41,16 @@
             <email>trinea.cn+code@gmail.com</email>
         </developer>
     </developers>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/Trinea/android-common/issues</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
     <dependencies>
         <!--Android deps -->
@@ -53,27 +68,81 @@
 
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.8.0</version>
                 <configuration>
                     <sdk>
-                        <platform>17</platform>
+                        <platform>${android.platform}</platform>
                     </sdk>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
                 <extensions>true</extensions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com.google.android:android</exclude>
+                    </excludes>
+                    <buildOutputDirectory>bin</buildOutputDirectory>
+                    <classpathContainers>
+                        <classpathContainer>com.android.ide.eclipse.adt.ANDROID_FRAMEWORK</classpathContainer>
+                    </classpathContainers>
+                    <additionalProjectnatures>
+                        <projectnature>com.android.ide.eclipse.adt.AndroidNature</projectnature>
+                    </additionalProjectnatures>
+                    <additionalBuildcommands>
+                        <buildcommand>com.android.ide.eclipse.adt.ResourceManagerBuilder</buildcommand>
+                        <buildcommand>com.android.ide.eclipse.adt.PreCompilerBuilder</buildcommand>
+                        <buildcommand>com.android.ide.eclipse.adt.ApkBuilder</buildcommand>
+                    </additionalBuildcommands>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
