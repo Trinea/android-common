@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.trinea.android.common</groupId>
     <artifactId>trinea-android-common</artifactId>
-    <packaging>pom</packaging>
+    <packaging>apklib</packaging>
 
     <name>Trinea Android Common Library</name>
     <version>4.2.14-SNAPSHOT</version>
