@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.trinea.android.common</groupId>
     <artifactId>trinea-android-common</artifactId>
-    <packaging>apklib</packaging>
+    <packaging>aar</packaging>
 
     <name>Trinea Android Common Library</name>
     <version>4.2.14-SNAPSHOT</version>
@@ -29,7 +29,6 @@
         <connection>scm:git:git://github.com/Trinea/android-common.git</connection>
         <developerConnection>scm:git:git@github.com:Trinea/android-common.git</developerConnection>
         <url>https://github.com/Trinea/android-common</url>
-        <tag>HEAD</tag>
     </scm>
 
     <developers>
@@ -87,9 +86,6 @@
                 <artifactId>android-maven-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <sdk>
-                        <platform>${android.platform}</platform>
-                    </sdk>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
                 <extensions>true</extensions>
