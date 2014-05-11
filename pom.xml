@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.trinea.android.common</groupId>
@@ -10,7 +7,7 @@
     <packaging>pom</packaging>
 
     <name>Trinea Android Common Library</name>
-    <version>4.2.13-SNAPSHOT</version>
+    <version>4.2.13</version>
     <url>https://github.com/Trinea/android-common</url>
     <description>Android common lib, include ImageCache, HttpCache, DropDownListView, DownloadManager, Utils and so on</description>
     <inceptionYear>2012</inceptionYear>
@@ -32,7 +29,7 @@
         <connection>scm:git:git://github.com/Trinea/android-common.git</connection>
         <developerConnection>scm:git:git@github.com:Trinea/android-common.git</developerConnection>
         <url>https://github.com/Trinea/android-common</url>
-        <tag>HEAD</tag>
+        <tag>v4.2.13</tag>
     </scm>
 
     <developers>
