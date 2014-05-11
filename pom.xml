@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
 
     <name>Trinea Android Common Library</name>
-    <version>4.2.13</version>
+    <version>4.2.14-SNAPSHOT</version>
     <url>https://github.com/Trinea/android-common</url>
     <description>Android common lib, include ImageCache, HttpCache, DropDownListView, DownloadManager, Utils and so on</description>
     <inceptionYear>2012</inceptionYear>
@@ -29,7 +29,7 @@
         <connection>scm:git:git://github.com/Trinea/android-common.git</connection>
         <developerConnection>scm:git:git@github.com:Trinea/android-common.git</developerConnection>
         <url>https://github.com/Trinea/android-common</url>
-        <tag>v4.2.13</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
