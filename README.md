@@ -37,7 +37,7 @@ Api Guide：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_a
 #####4. 预取数据缓存
 使用见：[预取数据缓存](http://www.trinea.cn/android/preloaddatacache/)  
 缓存类关系图如下：其中HttpCache为后续计划的http缓存 
-![ImageSDCardCache](http://farm4.staticflickr.com/3818/9318670513_1576253fd5_o.jpg)  
+![Image Cache](https://farm8.staticflickr.com/7336/13991252450_f1e154012d_o.png)  
 
 ####二. 公用的view
 #####1. 下拉刷新及滚动到底部加载更多的Listview
