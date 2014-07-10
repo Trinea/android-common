@@ -3,8 +3,8 @@ package cn.trinea.android.common.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import cn.trinea.android.common.util.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 
@@ -66,6 +66,63 @@ public class ResourceUtils {
                 s.append(line);
             }
             return s.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * same to {@link ResourceUtils#geFileFromAssets(Context, String)}, but return type is List<String>
+     * 
+     * @param context
+     * @param fileName
+     * @return
+     */
+    public static List<String> geFileToListFromAssets(Context context, String fileName) {
+        if (context == null || StringUtils.isEmpty(fileName)) {
+            return null;
+        }
+
+        List<String> fileContent = new ArrayList<String>();
+        try {
+            InputStreamReader in = new InputStreamReader(context.getResources().getAssets().open(fileName));
+            BufferedReader br = new BufferedReader(in);
+            String line;
+            while ((line = br.readLine()) != null) {
+                fileContent.add(line);
+            }
+            br.close();
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * same to {@link ResourceUtils#geFileFromRaw(Context, int)}, but return type is List<String>
+     * 
+     * @param context
+     * @param resId
+     * @return
+     */
+    public static List<String> geFileToListFromRaw(Context context, int resId) {
+        if (context == null) {
+            return null;
+        }
+
+        List<String> fileContent = new ArrayList<String>();
+        BufferedReader reader = null;
+        try {
+            InputStreamReader in = new InputStreamReader(context.getResources().openRawResource(resId));
+            reader = new BufferedReader(in);
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                fileContent.add(line);
+            }
+            reader.close();
+            return fileContent;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
