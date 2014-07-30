@@ -524,13 +524,14 @@ public class PackageUtils {
     public static void startInstalledAppDetails(Context context, String packageName) {
         Intent intent = new Intent();
         int sdkVersion = Build.VERSION.SDK_INT;
-        if (sdkVersion >= 9) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.fromParts("package", packageName, null));
         } else {
             intent.setAction(Intent.ACTION_VIEW);
             intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-            intent.putExtra((sdkVersion == 8 ? "pkg" : "com.android.settings.ApplicationPkgName"), packageName);
+            intent.putExtra((sdkVersion == Build.VERSION_CODES.FROYO ? "pkg"
+                    : "com.android.settings.ApplicationPkgName"), packageName);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);

@@ -208,7 +208,8 @@ public class DownloadManagerPro {
      * @return
      */
     public String getFileName(long downloadId) {
-        return getString(downloadId, (Build.VERSION.SDK_INT < 11 ? COLUMN_LOCAL_URI : COLUMN_LOCAL_FILENAME));
+        return getString(downloadId, (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? COLUMN_LOCAL_URI
+                : COLUMN_LOCAL_FILENAME));
     }
 
     /**

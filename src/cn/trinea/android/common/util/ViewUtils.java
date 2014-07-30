@@ -84,7 +84,7 @@ public class ViewUtils {
     // if (view == null || view.getChildCount() <= 0) {
     // return 0;
     // }
-    // if (Build.VERSION.SDK_INT >= 11) {
+    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
     // return getNumColumnsCompat11(view);
     //
     // } else {
