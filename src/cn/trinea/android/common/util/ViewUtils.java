@@ -1,6 +1,8 @@
 package cn.trinea.android.common.util;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -227,5 +229,30 @@ public class ViewUtils {
                 child.setOnClickListener(listener);
             }
         }
+    }
+    
+    /**
+     * get descended views from parent.
+     * 
+     * @param parent
+     * @param filter Type of views which will be returned.
+     * @param includeSubClass Whether returned list will include views which are subclass of filter or not.
+     * @return
+     */
+    public static <T extends View> List<T> getDescendants(ViewGroup parent, Class<T> filter, boolean includeSubClass) {
+        List<T> allDescendedView = new ArrayList<T>();
+
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = parent.getChildAt(i);
+            Class<? extends View> childsClass = child.getClass();
+            if (includeSubClass && filter.isAssignableFrom(childsClass) || !includeSubClass && childsClass == filter) {
+                allDescendedView.add(filter.cast(child));
+            }
+            if (child instanceof ViewGroup) {
+                allDescendedView.addAll(getDescendants((ViewGroup) child, filter, includeSubClass));
+            }
+        }
+        return allDescendedView;
     }
 }
