@@ -230,7 +230,7 @@ public class ViewUtils {
             }
         }
     }
-    
+
     /**
      * get descended views from parent.
      * 
@@ -240,19 +240,19 @@ public class ViewUtils {
      * @return
      */
     public static <T extends View> List<T> getDescendants(ViewGroup parent, Class<T> filter, boolean includeSubClass) {
-        List<T> allDescendedView = new ArrayList<T>();
-
+        List<T> descendedViewList = new ArrayList<T>();
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             Class<? extends View> childsClass = child.getClass();
-            if (includeSubClass && filter.isAssignableFrom(childsClass) || !includeSubClass && childsClass == filter) {
-                allDescendedView.add(filter.cast(child));
+            if ((includeSubClass && filter.isAssignableFrom(childsClass))
+                    || (!includeSubClass && childsClass == filter)) {
+                descendedViewList.add(filter.cast(child));
             }
             if (child instanceof ViewGroup) {
-                allDescendedView.addAll(getDescendants((ViewGroup) child, filter, includeSubClass));
+                descendedViewList.addAll(getDescendants((ViewGroup)child, filter, includeSubClass));
             }
         }
-        return allDescendedView;
+        return descendedViewList;
     }
 }
