@@ -1,7 +1,9 @@
 package cn.trinea.android.common.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -373,9 +375,74 @@ public class JSONUtils {
     }
 
     /**
+     * get String list from jsonObject
+     * 
+     * @param jsonObject
+     * @param key
+     * @param defaultValue
+     * @return <ul>
+     *         <li>if jsonObject is null, return defaultValue</li>
+     *         <li>if key is null or empty, return defaultValue</li>
+     *         <li>if {@link JSONObject#getJSONArray(String)} exception, return defaultValue</li>
+     *         <li>if {@link JSONArray#getString(int)} exception, return defaultValue</li>
+     *         <li>return string array</li>
+     *         </ul>
+     */
+    public static List<String> getStringList(JSONObject jsonObject, String key, List<String> defaultValue) {
+        if (jsonObject == null || StringUtils.isEmpty(key)) {
+            return defaultValue;
+        }
+
+        try {
+            JSONArray statusArray = jsonObject.getJSONArray(key);
+            if (statusArray != null) {
+                List<String> list = new ArrayList<String>();
+                for (int i = 0; i < statusArray.length(); i++) {
+                    list.add(statusArray.getString(i));
+                }
+                return list;
+            }
+        } catch (JSONException e) {
+            if (isPrintException) {
+                e.printStackTrace();
+            }
+            return defaultValue;
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get String list from jsonData
+     * 
+     * @param jsonData
+     * @param key
+     * @param defaultValue
+     * @return <ul>
+     *         <li>if jsonObject is null, return defaultValue</li>
+     *         <li>if jsonData {@link JSONObject#JSONObject(String)} exception, return defaultValue</li>
+     *         <li>return {@link JSONUtils#getStringList(JSONObject, String, List)}</li>
+     *         </ul>
+     */
+    public static List<String> getStringList(String jsonData, String key, List<String> defaultValue) {
+        if (StringUtils.isEmpty(jsonData)) {
+            return defaultValue;
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            return getStringList(jsonObject, key, defaultValue);
+        } catch (JSONException e) {
+            if (isPrintException) {
+                e.printStackTrace();
+            }
+            return defaultValue;
+        }
+    }
+
+    /**
      * get JSONObject from jsonObject
      * 
-     * @param jsonObject<em><em></em></em>
+     * @param jsonObject
      * @param key
      * @param defaultValue
      * @return <ul>
