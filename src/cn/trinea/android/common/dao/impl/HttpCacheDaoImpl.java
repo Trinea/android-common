@@ -32,7 +32,7 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
             return -1;
         }
         synchronized (HttpCacheDaoImpl.class) {
-            return sqliteUtils.getWDb().replace(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null, contentValues);
+            return sqliteUtils.getDb().replace(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null, contentValues);
         }
     }
 
@@ -46,7 +46,7 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
         appWhere.append(DbConstants.HTTP_CACHE_TABLE_URL).append("=?");
         String[] appWhereArgs = {url};
         synchronized (HttpCacheDaoImpl.class) {
-            Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
+            Cursor cursor = sqliteUtils.getDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
                     appWhere.toString(), appWhereArgs, null, null, null);
             if (cursor == null) {
                 return null;
@@ -70,7 +70,7 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
         String[] whereClauseArgs = {Integer.toString(type)};
 
         synchronized (HttpCacheDaoImpl.class) {
-            Cursor cursor = sqliteUtils.getRDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
+            Cursor cursor = sqliteUtils.getDb().query(DbConstants.HTTP_CACHE_TABLE_TABLE_NAME, null,
                     whereClause.toString(), whereClauseArgs, null, null, null);
 
             if (cursor == null) {
@@ -100,7 +100,7 @@ public class HttpCacheDaoImpl implements HttpCacheDao {
 
     @Override
     public int deleteAllHttpResponse() {
-        return sqliteUtils.getWDb().delete(DbConstants.HTTP_CACHE_TABLE_TYPE, null, null);
+        return sqliteUtils.getDb().delete(DbConstants.HTTP_CACHE_TABLE_TYPE, null, null);
     }
 
     /**

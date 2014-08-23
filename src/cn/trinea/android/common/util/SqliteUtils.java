@@ -13,13 +13,11 @@ public class SqliteUtils {
     private static volatile SqliteUtils instance;
 
     private DbHelper                    dbHelper;
-    private SQLiteDatabase              wDb;
-    private SQLiteDatabase              rDb;
+    private SQLiteDatabase              db;
 
     private SqliteUtils(Context context) {
         dbHelper = new DbHelper(context);
-        wDb = dbHelper.getWritableDatabase();
-        rDb = dbHelper.getReadableDatabase();
+        db = dbHelper.getWritableDatabase();
     }
 
     public static SqliteUtils getInstance(Context context) {
@@ -33,11 +31,7 @@ public class SqliteUtils {
         return instance;
     }
 
-    public SQLiteDatabase getWDb() {
-        return wDb;
-    }
-
-    public SQLiteDatabase getRDb() {
-        return rDb;
+    public SQLiteDatabase getDb() {
+        return db;
     }
 }
