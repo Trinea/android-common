@@ -21,7 +21,7 @@ import android.widget.TextView;
 import cn.trinea.android.common.R;
 
 /**
- * <strong> Listview whick can do something when drop down or scroll to bottom. for example, drop down to refresh and
+ * <strong> Listview which can do something when drop down or scroll to bottom. for example, drop down to refresh and
  * load more when scroll to bottom</strong>
  * <ul>
  * <strong>DropDown Listener</strong>
