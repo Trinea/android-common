@@ -86,6 +86,16 @@ Api Guide：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_a
 -dontwarn cn.trinea.android.**
 ```
 
+### Download
+Maven:
+``` xml
+<dependency>
+    <groupId>cn.trinea.android.common</groupId>
+    <artifactId>trinea-android-common</artifactId>
+    <version>4.2.15</version>
+</dependency>
+```
+
 ## License
 
     Copyright 2013 trinea.cn
