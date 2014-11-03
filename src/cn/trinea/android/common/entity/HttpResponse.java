@@ -229,7 +229,7 @@ public class HttpResponse {
      * 
      * @return -1 represents http error or no cache-control in response headers, or max-age in seconds
      */
-    private int getCacheControlMaxAge() {
+    private long getCacheControlMaxAge() {
         try {
             String cacheControl = (String)responseHeaders.get(HttpConstants.CACHE_CONTROL);
             if (!StringUtils.isEmpty(cacheControl)) {
@@ -242,7 +242,7 @@ public class HttpResponse {
                     } else {
                         maxAge = cacheControl.substring(start + "max-age=".length());
                     }
-                    return Integer.parseInt(maxAge);
+                    return Long.parseLong(maxAge);
                 }
             }
             return -1;
@@ -262,7 +262,7 @@ public class HttpResponse {
      *         </ul>
      */
     private long getExpiresInMillis() {
-        int maxAge = getCacheControlMaxAge();
+        long maxAge = getCacheControlMaxAge();
         if (maxAge != -1) {
             return System.currentTimeMillis() + maxAge * 1000;
         } else {
