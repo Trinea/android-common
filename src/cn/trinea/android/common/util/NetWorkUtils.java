@@ -8,6 +8,10 @@ import android.text.TextUtils;
 
 /**
  * NetWork Utils
+ * <ul>
+ * <strong>Attentions</strong>
+ * <li>You should add <strong>android.permission.ACCESS_NETWORK_STATE</strong> in manifest, to get network status.</li>
+ * </ul>
  * 
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2014-11-03
  */
