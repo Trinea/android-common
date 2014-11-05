@@ -3,6 +3,8 @@ package cn.trinea.android.common.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
+
 /**
  * List Utils
  * 
@@ -136,21 +138,7 @@ public class ListUtils {
      * @return join list to string with separator. if list is empty, return ""
      */
     public static String join(List<String> list, String separator) {
-        if (isEmpty(list)) {
-            return "";
-        }
-        if (separator == null) {
-            separator = DEFAULT_JOIN_SEPARATOR;
-        }
-
-        StringBuilder joinStr = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            joinStr.append(list.get(i));
-            if (i != list.size() - 1) {
-                joinStr.append(separator);
-            }
-        }
-        return joinStr.toString();
+        return list == null ? "" : TextUtils.join(separator, list);
     }
 
     /**

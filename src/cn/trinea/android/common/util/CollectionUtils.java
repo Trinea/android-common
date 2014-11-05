@@ -2,6 +2,8 @@ package cn.trinea.android.common.util;
 
 import java.util.Collection;
 
+import android.text.TextUtils;
+
 /**
  * CollectionUtils
  * 
@@ -10,7 +12,7 @@ import java.util.Collection;
 public class CollectionUtils {
 
     /** default join separator **/
-    public static final String DEFAULT_JOIN_SEPARATOR = ",";
+    public static final CharSequence DEFAULT_JOIN_SEPARATOR = ",";
 
     private CollectionUtils() {
         throw new AssertionError();
@@ -34,7 +36,7 @@ public class CollectionUtils {
     }
 
     /**
-     * join collection to string, separator is ","
+     * join collection to string, separator is {@link #DEFAULT_JOIN_SEPARATOR}
      * 
      * <pre>
      * join(null)      =   "";
@@ -42,78 +44,11 @@ public class CollectionUtils {
      * join({a,b})     =   "a,b";
      * </pre>
      * 
-     * @param c
-     * @return join collection to string, separator is ",". if collection is empty, return ""
-     */
-    public static <T> String join(Collection<T> c) {
-        return join(c, DEFAULT_JOIN_SEPARATOR);
-    }
-
-    /**
-     * join collection to string
-     * 
-     * <pre>
-     * join(null, '#')     =   "";
-     * join({}, '#')       =   "";
-     * join({a,b,c}, ' ')  =   "abc";
-     * join({a,b,c}, '#')  =   "a#b#c";
-     * </pre>
-     * 
      * @param collection
-     * @param separator
-     * @return join collection to string. if collection is empty, return ""
+     * @return join collection to string, separator is {@link #DEFAULT_JOIN_SEPARATOR}. if collection is empty, return
+     *         ""
      */
-    public static <T> String join(Collection<T> c, char separator) {
-        return join(c, new String(new char[] {separator}));
-    }
-
-    /**
-     * join collection to string. if separator is null, use {@link #DEFAULT_JOIN_SEPARATOR}
-     * 
-     * <pre>
-     * join(null, "#")     =   "";
-     * join({}, "#$")      =   "";
-     * join({a,b,c}, null) =   "a,b,c";
-     * join({a,b,c}, "")   =   "abc";
-     * join({a,b,c}, "#")  =   "a#b#c";
-     * join({a,b,c}, "#$") =   "a#$b#$c";
-     * </pre>
-     * 
-     * @param <T>
-     * 
-     * @param c
-     * @param separator
-     * @return join collection to string with separator. if collection is empty, return ""
-     */
-    public static <T> String join(Collection<T> c, String separator) {
-        if (isEmpty(c)) {
-            return "";
-        }
-        if (separator == null) {
-            separator = DEFAULT_JOIN_SEPARATOR;
-        }
-
-        StringBuilder joinStr = new StringBuilder();
-        int count = 0, lastIndex = c.size() - 1;
-        Boolean isString = null;
-
-        for (T item : c) {
-            if (isString == null) {
-                isString = item instanceof String;
-            }
-
-            if (item == null) {
-                joinStr.append("");
-            } else {
-                joinStr.append(isString ? (String)item : item.toString());
-            }
-
-            if (count != lastIndex) {
-                joinStr.append(separator);
-            }
-            count++;
-        }
-
-        return joinStr.toString();
+    public static String join(Iterable collection) {
+        return collection == null ? "" : TextUtils.join(DEFAULT_JOIN_SEPARATOR, collection);
     }
 }
