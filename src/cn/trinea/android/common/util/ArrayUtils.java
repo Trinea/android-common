@@ -20,6 +20,10 @@ package cn.trinea.android.common.util;
  */
 public class ArrayUtils {
 
+    private ArrayUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * is null or its length is 0
      * 

@@ -49,13 +49,18 @@ import cn.trinea.android.common.util.ShellUtils.CommandResult;
  */
 public class PackageUtils {
 
-    public static final String TAG                  = "PackageUtils";
+    public static final String TAG = "PackageUtils";
+
+    private PackageUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * App installation location settings values, same to {@link #PackageHelper}
      */
-    public static final int    APP_INSTALL_AUTO     = 0;
-    public static final int    APP_INSTALL_INTERNAL = 1;
-    public static final int    APP_INSTALL_EXTERNAL = 2;
+    public static final int APP_INSTALL_AUTO     = 0;
+    public static final int APP_INSTALL_INTERNAL = 1;
+    public static final int APP_INSTALL_EXTERNAL = 2;
 
     /**
      * install according conditions

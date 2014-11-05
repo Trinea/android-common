@@ -15,6 +15,10 @@ import android.content.Context;
  */
 public class ResourceUtils {
 
+    private ResourceUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * get an asset using ACCESS_STREAMING mode. This provides access to files that have been bundled with an
      * application as assets -- that is, files placed in to the "assets" directory.

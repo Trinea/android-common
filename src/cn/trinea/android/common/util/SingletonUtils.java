@@ -8,6 +8,7 @@ package cn.trinea.android.common.util;
  * @param <T>
  */
 public abstract class SingletonUtils<T> {
+
     private T instance;
 
     protected abstract T newInstance();

@@ -18,6 +18,10 @@ import android.content.Context;
  */
 public class AppUtils {
 
+    private AppUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * whether this process is named with processName
      * 

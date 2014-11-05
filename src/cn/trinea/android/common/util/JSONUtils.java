@@ -19,6 +19,10 @@ public class JSONUtils {
 
     public static boolean isPrintException = true;
 
+    private JSONUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * get Long from jsonObject
      * 

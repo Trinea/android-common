@@ -7,6 +7,10 @@ package cn.trinea.android.common.util;
  */
 public class ObjectUtils {
 
+    private ObjectUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * compare two object
      * 
@@ -19,6 +23,22 @@ public class ObjectUtils {
      */
     public static boolean isEquals(Object actual, Object expected) {
         return actual == expected || (actual == null ? expected == null : actual.equals(expected));
+    }
+
+    /**
+     * null Object to empty string
+     * 
+     * <pre>
+     * nullStrToEmpty(null) = &quot;&quot;;
+     * nullStrToEmpty(&quot;&quot;) = &quot;&quot;;
+     * nullStrToEmpty(&quot;aa&quot;) = &quot;aa&quot;;
+     * </pre>
+     * 
+     * @param str
+     * @return
+     */
+    public static String nullStrToEmpty(Object str) {
+        return (str == null ? "" : (str instanceof String ? (String)str : str.toString()));
     }
 
     /**

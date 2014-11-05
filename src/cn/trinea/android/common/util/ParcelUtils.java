@@ -14,6 +14,10 @@ import android.os.Parcelable;
  */
 public class ParcelUtils {
 
+    private ParcelUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * read boolean
      * 

@@ -10,6 +10,10 @@ public class SystemUtils {
     /** recommend default thread pool size according to system available processors, {@link #getDefaultThreadPoolSize()} **/
     public static final int DEFAULT_THREAD_POOL_SIZE = getDefaultThreadPoolSize();
 
+    private SystemUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * get recommend default thread pool size
      * 

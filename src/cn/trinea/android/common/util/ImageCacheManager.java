@@ -27,6 +27,10 @@ public class ImageCacheManager {
     private static ImageCache       imageCache       = null;
     private static ImageSDCardCache imageSDCardCache = null;
 
+    private ImageCacheManager() {
+        throw new AssertionError();
+    }
+
     /**
      * get the singleton instance of {@link ImageCache}
      * 
@@ -184,6 +188,4 @@ public class ImageCacheManager {
             }
         };
     }
-
-    private ImageCacheManager() {}
 }

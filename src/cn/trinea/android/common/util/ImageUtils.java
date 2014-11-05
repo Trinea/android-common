@@ -41,6 +41,10 @@ import android.graphics.drawable.Drawable;
  */
 public class ImageUtils {
 
+    private ImageUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * convert Bitmap to byte array
      * 

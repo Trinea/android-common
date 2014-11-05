@@ -14,6 +14,10 @@ import java.io.ObjectOutputStream;
  */
 public class SerializeUtils {
 
+    private SerializeUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * deserialization from file
      * 

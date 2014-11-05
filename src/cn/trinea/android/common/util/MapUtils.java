@@ -16,7 +16,10 @@ public class MapUtils {
     public static final String DEFAULT_KEY_AND_VALUE_SEPARATOR      = ":";
     /** default separator between key-value pairs **/
     public static final String DEFAULT_KEY_AND_VALUE_PAIR_SEPARATOR = ",";
-
+    
+    private MapUtils() {
+        throw new AssertionError();
+    }
     /**
      * is null or its size is 0
      * 

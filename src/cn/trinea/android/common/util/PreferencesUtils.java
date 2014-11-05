@@ -32,6 +32,10 @@ public class PreferencesUtils {
 
     public static String PREFERENCE_NAME = "TrineaAndroidCommon";
 
+    private PreferencesUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * put string preferences
      * 

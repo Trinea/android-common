@@ -13,6 +13,10 @@ public class ListUtils {
     /** default join separator **/
     public static final String DEFAULT_JOIN_SEPARATOR = ",";
 
+    private ListUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * get size of list
      * 

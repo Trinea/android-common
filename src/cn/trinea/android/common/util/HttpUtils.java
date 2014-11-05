@@ -57,6 +57,10 @@ public class HttpUtils {
     /** equal sign **/
     public static final String EQUAL_SIGN             = "=";
 
+    private HttpUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * http get synchronous
      * <ul>

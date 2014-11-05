@@ -42,6 +42,10 @@ import android.widget.TextView;
  */
 public class ViewUtils {
 
+    private ViewUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * get ListView height according to every children
      * 

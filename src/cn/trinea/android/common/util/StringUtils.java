@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
+    private StringUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * is null or its length is 0 or it is made by space
      * 
@@ -44,7 +48,7 @@ public class StringUtils {
      * @param str
      * @return if string is null or its size is 0, return true, else return false.
      */
-    public static boolean isEmpty(String str) {
+    public static boolean isEmpty(CharSequence str) {
         return (str == null || str.length() == 0);
     }
 
@@ -61,7 +65,7 @@ public class StringUtils {
     }
 
     /**
-     * null string to empty string
+     * null Object to empty string
      * 
      * <pre>
      * nullStrToEmpty(null) = &quot;&quot;;
@@ -72,8 +76,8 @@ public class StringUtils {
      * @param str
      * @return
      */
-    public static String nullStrToEmpty(String str) {
-        return (str == null ? "" : str);
+    public static String nullStrToEmpty(Object str) {
+        return (str == null ? "" : (str instanceof String ? (String)str : str.toString()));
     }
 
     /**

@@ -48,6 +48,10 @@ public class FileUtils {
 
     public final static String FILE_EXTENSION_SEPARATOR = ".";
 
+    private FileUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * read file
      * 

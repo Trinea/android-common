@@ -10,6 +10,10 @@ import android.widget.Toast;
  */
 public class ToastUtils {
 
+    private ToastUtils() {
+        throw new AssertionError();
+    }
+
     public static void show(Context context, int resId) {
         show(context, context.getResources().getText(resId), Toast.LENGTH_SHORT);
     }

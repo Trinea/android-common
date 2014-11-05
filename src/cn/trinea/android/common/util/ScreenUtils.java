@@ -14,6 +14,10 @@ import android.content.Context;
  */
 public class ScreenUtils {
 
+    private ScreenUtils() {
+        throw new AssertionError();
+    }
+
     public static float dpToPx(Context context, float dp) {
         if (context == null) {
             return -1;

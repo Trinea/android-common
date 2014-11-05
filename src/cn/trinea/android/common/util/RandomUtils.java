@@ -41,6 +41,10 @@ public class RandomUtils {
     public static final String CAPITAL_LETTERS     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static final String LOWER_CASE_LETTERS  = "abcdefghijklmnopqrstuvwxyz";
 
+    private RandomUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * get a fixed-length random string, its a mixture of uppercase, lowercase letters and numbers
      * 

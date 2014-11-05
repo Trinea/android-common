@@ -31,6 +31,10 @@ public class ShellUtils {
     public static final String COMMAND_EXIT     = "exit\n";
     public static final String COMMAND_LINE_END = "\n";
 
+    private ShellUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * check whether has root permission
      * 

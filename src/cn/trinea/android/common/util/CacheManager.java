@@ -16,7 +16,7 @@ public class CacheManager {
     private static HttpCache httpCache = null;
 
     private CacheManager() {
-
+        throw new AssertionError();
     }
 
     /**
