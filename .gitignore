@@ -1,6 +1,7 @@
 # built application files
 # *.apk
 *.ap_
+lint.xml
 
 # files for the dex VM
 *.dex
@@ -11,6 +12,9 @@
 # generated files
 bin/
 gen/
+
+# maven
+target/
 
 # Local configuration file (sdk path, etc)
 local.properties
