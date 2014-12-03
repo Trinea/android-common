@@ -87,13 +87,9 @@ Api Guide：[TrineaAndroidCommon API Guide](http://trinea.github.io/doc/trinea_a
 ```
 
 ### Download
-Maven:
+Gradle:  
 ``` xml
-<dependency>
-    <groupId>cn.trinea.android.common</groupId>
-    <artifactId>trinea-android-common</artifactId>
-    <version>4.2.15</version>
-</dependency>
+compile 'cn.trinea.android.common:trinea-android-common:4.2.15'
 ```
 
 ## License
