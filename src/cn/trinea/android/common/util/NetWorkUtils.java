@@ -30,7 +30,20 @@ public class NetWorkUtils {
      * @param context
      * @return
      */
-    public static String getNetWorkType(Context context) {
+    public static int getNetworkType(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager)context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager == null ? null : connectivityManager.getActiveNetworkInfo();
+        return networkInfo == null ? -1 : networkInfo.getType();
+    }
+
+    /**
+     * Get network type name
+     * 
+     * @param context
+     * @return
+     */
+    public static String getNetworkTypeName(Context context) {
         ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo;
         String type = NETWORK_TYPE_DISCONNECT;

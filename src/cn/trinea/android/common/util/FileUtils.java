@@ -13,6 +13,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
+
 /**
  * File Utils
  * <ul>
@@ -30,6 +32,7 @@ import java.util.List;
  * </ul>
  * <ul>
  * Operate file
+ * <li>{@link #moveFile(File, File)} or {@link #moveFile(String, String)}</li>
  * <li>{@link #copyFile(String, String)}</li>
  * <li>{@link #getFileExtension(String)}</li>
  * <li>{@link #getFileName(String)}</li>
@@ -260,6 +263,33 @@ public class FileUtils {
                     throw new RuntimeException("IOException occurred. ", e);
                 }
             }
+        }
+    }
+
+    /**
+     * move file
+     * 
+     * @param sourceFilePath
+     * @param destFilePath
+     */
+    public static void moveFile(String sourceFilePath, String destFilePath) {
+        if (TextUtils.isEmpty(sourceFilePath) || TextUtils.isEmpty(destFilePath)) {
+            throw new RuntimeException("Both sourceFilePath and destFilePath cannot be null.");
+        }
+        moveFile(new File(sourceFilePath), new File(destFilePath));
+    }
+
+    /**
+     * move file
+     * 
+     * @param srcFile
+     * @param destFile
+     */
+    public static void moveFile(File srcFile, File destFile) {
+        boolean rename = srcFile.renameTo(destFile);
+        if (!rename) {
+            copyFile(srcFile.getAbsolutePath(), destFile.getAbsolutePath());
+            deleteFile(srcFile.getAbsolutePath());
         }
     }
 

@@ -65,6 +65,22 @@ public class StringUtils {
     }
 
     /**
+     * get length of CharSequence
+     * 
+     * <pre>
+     * length(null) = 0;
+     * length(\"\") = 0;
+     * length(\"abc\") = 3;
+     * </pre>
+     * 
+     * @param str
+     * @return if str is null or empty, return 0, else return {@link CharSequence#length()}.
+     */
+    public static int length(CharSequence str) {
+        return str == null ? 0 : str.length();
+    }
+
+    /**
      * null Object to empty string
      * 
      * <pre>

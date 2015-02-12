@@ -43,12 +43,13 @@ public class AppUtils {
         int pid = android.os.Process.myPid();
         ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningAppProcessInfo> processInfoList = manager.getRunningAppProcesses();
-        if (processInfoList == null) {
-            return true;
+        if (ListUtils.isEmpty(processInfoList)) {
+            return false;
         }
 
-        for (RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
-            if (processInfo.pid == pid && ObjectUtils.isEquals(processName, processInfo.processName)) {
+        for (RunningAppProcessInfo processInfo : processInfoList) {
+            if (processInfo != null && processInfo.pid == pid
+                    && ObjectUtils.isEquals(processName, processInfo.processName)) {
                 return true;
             }
         }
