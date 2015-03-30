@@ -348,6 +348,10 @@ public class DropDownListView extends ListView implements OnScrollListener {
      * @param onBottomListener
      */
     public void setOnBottomListener(OnClickListener onBottomListener) {
+        if (!isDropDownStyle) {
+            throw new RuntimeException(
+                    "isDropDownStyle is false, cannot call setOnBottomListener, you can call setDropDownStyle(true) at fitst.");
+        }
         footerButton.setOnClickListener(onBottomListener);
     }
 
