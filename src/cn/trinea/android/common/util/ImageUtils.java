@@ -145,10 +145,10 @@ public class ImageUtils {
             }
             stream = con.getInputStream();
         } catch (MalformedURLException e) {
-            closeInputStream(stream);
+            IOUtils.close(stream);
             throw new RuntimeException("MalformedURLException occurred. ", e);
         } catch (IOException e) {
-            closeInputStream(stream);
+            IOUtils.close(stream);
             throw new RuntimeException("IOException occurred. ", e);
         }
         return stream;
@@ -178,7 +178,7 @@ public class ImageUtils {
             Map<String, String> requestProperties) {
         InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOutMillis, requestProperties);
         Drawable d = Drawable.createFromStream(stream, "src");
-        closeInputStream(stream);
+        IOUtils.close(stream);
         return d;
     }
 
@@ -204,7 +204,7 @@ public class ImageUtils {
     public static Bitmap getBitmapFromUrl(String imageUrl, int readTimeOut, Map<String, String> requestProperties) {
         InputStream stream = getInputStreamFromUrl(imageUrl, readTimeOut, requestProperties);
         Bitmap b = BitmapFactory.decodeStream(stream);
-        closeInputStream(stream);
+        IOUtils.close(stream);
         return b;
     }
 
@@ -217,7 +217,7 @@ public class ImageUtils {
      * @return
      */
     public static Bitmap scaleImageTo(Bitmap org, int newWidth, int newHeight) {
-        return scaleImage(org, (float)newWidth / org.getWidth(), (float)newHeight / org.getHeight());
+        return scaleImage(org, (float) newWidth / org.getWidth(), (float) newHeight / org.getHeight());
     }
 
     /**
@@ -238,20 +238,4 @@ public class ImageUtils {
         return Bitmap.createBitmap(org, 0, 0, org.getWidth(), org.getHeight(), matrix, true);
     }
 
-    /**
-     * close inputStream
-     * 
-     * @param s
-     */
-    private static void closeInputStream(InputStream s) {
-        if (s == null) {
-            return;
-        }
-
-        try {
-            s.close();
-        } catch (IOException e) {
-            throw new RuntimeException("IOException occurred. ", e);
-        }
-    }
 }

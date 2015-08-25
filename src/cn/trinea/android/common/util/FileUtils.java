@@ -19,8 +19,8 @@ import android.text.TextUtils;
  * File Utils
  * <ul>
  * Read or write file
- * <li>{@link #readFile(String)} read file</li>
- * <li>{@link #readFileToList(String)} read file to string list</li>
+ * <li>{@link #readFile(String, String)} read file</li>
+ * <li>{@link #readFileToList(String, String)} read file to string list</li>
  * <li>{@link #writeFile(String, String, boolean)} write file from String</li>
  * <li>{@link #writeFile(String, String)} write file from String</li>
  * <li>{@link #writeFile(String, List, boolean)} write file from String List</li>
@@ -81,18 +81,11 @@ public class FileUtils {
                 }
                 fileContent.append(line);
             }
-            reader.close();
             return fileContent;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(reader);
         }
     }
 
@@ -115,18 +108,11 @@ public class FileUtils {
             makeDirs(filePath);
             fileWriter = new FileWriter(filePath, append);
             fileWriter.write(content);
-            fileWriter.close();
             return true;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (fileWriter != null) {
-                try {
-                    fileWriter.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(fileWriter);
         }
     }
 
@@ -155,18 +141,11 @@ public class FileUtils {
                 }
                 fileWriter.write(line);
             }
-            fileWriter.close();
             return true;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (fileWriter != null) {
-                try {
-                    fileWriter.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(fileWriter);
         }
     }
 
@@ -255,14 +234,8 @@ public class FileUtils {
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (o != null) {
-                try {
-                    o.close();
-                    stream.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(o);
+            IOUtils.close(stream);
         }
     }
 
@@ -334,18 +307,11 @@ public class FileUtils {
             while ((line = reader.readLine()) != null) {
                 fileContent.add(line);
             }
-            reader.close();
             return fileContent;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(reader);
         }
     }
 
