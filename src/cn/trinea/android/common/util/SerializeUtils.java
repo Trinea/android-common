@@ -19,10 +19,10 @@ public class SerializeUtils {
     }
 
     /**
-     * deserialization from file
+     * Deserialization object from file.
      * 
-     * @param filePath
-     * @return
+     * @param filePath file path
+     * @return de-serialized object
      * @throws RuntimeException if an error occurs
      */
     public static Object deserialization(String filePath) {
@@ -39,22 +39,15 @@ public class SerializeUtils {
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(in);
         }
     }
 
     /**
-     * serialize to file
+     * Serialize object to file.
      * 
-     * @param filePath
-     * @param obj
-     * @return
+     * @param filePath file path
+     * @param obj object
      * @throws RuntimeException if an error occurs
      */
     public static void serialization(String filePath, Object obj) {
@@ -68,13 +61,8 @@ public class SerializeUtils {
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
-                }
-            }
+            IOUtils.close(out);
         }
     }
+
 }

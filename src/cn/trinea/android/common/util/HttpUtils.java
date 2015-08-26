@@ -101,13 +101,7 @@ public class HttpUtils {
             e1.printStackTrace();
         } finally {
             // close buffered
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(input);
             // disconnecting releases the resources held by a connection so they may be closed or reused
             if (con != null) {
                 con.disconnect();
@@ -230,13 +224,7 @@ public class HttpUtils {
             e1.printStackTrace();
         } finally {
             // close buffered
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(input);
             // disconnecting releases the resources held by a connection so they may be closed or reused
             if (con != null) {
                 con.disconnect();
