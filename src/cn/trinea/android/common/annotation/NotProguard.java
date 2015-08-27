@@ -5,11 +5,11 @@ package cn.trinea.android.common.annotation;
  *
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2015-08-07
  */
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 @Retention(RetentionPolicy.CLASS)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD})
 public @interface NotProguard {
