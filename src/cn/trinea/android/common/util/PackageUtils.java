@@ -149,7 +149,7 @@ public class PackageUtils {
          * if context is system app, don't need root permission, but should add <uses-permission
          * android:name="android.permission.INSTALL_PACKAGES" /> in mainfest
          **/
-        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install ")
+        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib*:/system/lib* pm install ")
                 .append(pmParams == null ? "" : pmParams).append(" ").append(filePath.replace(" ", "\\ "));
         CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
         if (commandResult.successMsg != null
@@ -348,7 +348,7 @@ public class PackageUtils {
          * if context is system app, don't need root permission, but should add <uses-permission
          * android:name="android.permission.DELETE_PACKAGES" /> in mainfest
          **/
-        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm uninstall")
+        StringBuilder command = new StringBuilder().append("LD_LIBRARY_PATH=/vendor/lib*:/system/lib* pm uninstall")
                 .append(isKeepData ? " -k " : " ").append(packageName.replace(" ", "\\ "));
         CommandResult commandResult = ShellUtils.execCommand(command.toString(), !isSystemApplication(context), true);
         if (commandResult.successMsg != null
@@ -486,7 +486,7 @@ public class PackageUtils {
      */
     public static int getInstallLocation() {
         CommandResult commandResult = ShellUtils.execCommand(
-                "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location", false, true);
+                "LD_LIBRARY_PATH=/vendor/lib*:/system/lib* pm get-install-location", false, true);
         if (commandResult.result == 0 && commandResult.successMsg != null && commandResult.successMsg.length() > 0) {
             try {
                 int location = Integer.parseInt(commandResult.successMsg.substring(0, 1));
