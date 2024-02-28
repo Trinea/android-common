@@ -192,7 +192,7 @@ public class ShellUtils {
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     isTimeout = process.waitFor(timeoutInMills, TimeUnit.MILLISECONDS);
-                    result = isTimeout ? -1 : 0;
+                    result = isTimeout ? 0 : -1;
                 }
             }
             // get command result
