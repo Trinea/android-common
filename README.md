@@ -20,7 +20,7 @@ Trinea Android Common is a collection of cache components, UI widgets, and utili
     -keepclassmembers class cn.trinea.android.** { *; }
     -dontwarn cn.trinea.android.**
     ```   
-3. Review the [API Guide](http://trinea.github.io/doc/trinea_android_common/index.html) and [sample app](https://github.com/Trinea/AndroidDemo) for usage patterns.
+3. Review the [API Guide](https://trinea.github.io/doc/trinea_android_common/index.html) and [sample app](https://github.com/Trinea/AndroidDemo) for usage patterns.
 4. When integrating as a library project, open *Project Properties → Android → Library* and add **TrineaAndroidCommon**.
 
 ## Maintenance & Roadmap
